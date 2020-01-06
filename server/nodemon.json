@@ -1,0 +1,12 @@
+{
+  "exec": "npm run dev",
+  "watch": [
+    "*"
+  ],
+  "ignore": [
+    "node_modules",
+    "src/test/*.js",
+    "src/api/**/test/*.spec.js"
+  ],
+  "ext": "js, html, css, json, graphql, ts"
+}

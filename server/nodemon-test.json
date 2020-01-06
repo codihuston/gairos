@@ -1,0 +1,8 @@
+{
+  "exec": "npm run test",
+  "watch": [
+    "src/*",
+    "public/*"
+  ],
+  "ext": "js, html, css, json, graphql, ts"
+}
