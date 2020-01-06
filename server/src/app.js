@@ -1,13 +1,16 @@
-import { createError } from "http-errors";
+import createError from "http-errors";
 import express from "express";
 import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
+import passport from "passport";
+import googleStrategy from "./services/auth/strategies/google";
 
 const { ApolloServer, gql } = require("apollo-server-express");
 
 import { router as indexRouter } from "./routes/index";
 import { router as usersRouter } from "./routes/users";
+import { router as authRouter } from "./routes/auth";
 
 var app = express();
 
@@ -21,6 +24,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+app.use(passport.initialize());
+// app.use(passport.session()); // not implemented
+
+// required to prevent err: "failed to serialize user into session"
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(user, done) {
+  done(null, user);
+});
 
 // TODO: configure graphql typedefs and resolvers!
 const typeDefs = gql`
@@ -42,6 +56,7 @@ server.applyMiddleware({ app });
 // routes
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+app.use("/auth", authRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
