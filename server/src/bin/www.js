@@ -4,9 +4,13 @@
  * Module dependencies.
  */
 
+import config from "../config";
 import app from "../app";
 import debugLib from "debug";
 import http from "http";
+
+// initialize environment variables
+config();
 
 const debug = debugLib("server:server");
 
@@ -14,7 +18,7 @@ const debug = debugLib("server:server");
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || "3000");
+var port = normalizePort(process.env.APP_PORT || "3000");
 app.set("port", port);
 
 /**
