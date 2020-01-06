@@ -3,6 +3,7 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+const { ApolloServer, gql } = require("apollo-server-express");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
@@ -13,12 +14,31 @@ var app = express();
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
 
+// middleware
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+// TODO: configure graphql typedefs and resolvers!
+const typeDefs = gql`
+  type Query {
+    hello: String
+  }
+`;
+
+const resolvers = {
+  Query: {
+    hello: () => "Hello world!"
+  }
+};
+
+// inject graphql server into express
+const server = new ApolloServer({ typeDefs, resolvers });
+server.applyMiddleware({ app });
+
+// routes
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 
