@@ -8,10 +8,9 @@ var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 passport.use(
   new GoogleStrategy(
     {
-      clientID:
-        "***REMOVED***",
-      clientSecret: "***REMOVED***",
-      callbackURL: "http://localhost:8000/auth/google/cb"
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: process.env.GOOGLE_CALLBACK_URL
     },
     function(token, tokenSecret, profile, done) {
       console.log(token, tokenSecret, profile, done);
