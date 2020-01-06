@@ -29,11 +29,11 @@ app.use(passport.initialize());
 
 // required to prevent err: "failed to serialize user into session"
 passport.serializeUser(function(user, done) {
-  done(null, user);
+  done(null, user.profile.id);
 });
 
 passport.deserializeUser(function(user, done) {
-  done(null, user);
+  done(null, user.profile.id);
 });
 
 // TODO: configure graphql typedefs and resolvers!
