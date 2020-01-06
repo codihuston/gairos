@@ -12,9 +12,9 @@ passport.use(
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: process.env.GOOGLE_CALLBACK_URL
     },
-    function(token, tokenSecret, profile, done) {
-      console.log(token, tokenSecret, profile, done);
-      return done(null, { data: "COMPLETED!" });
+    function(token, refreshToken, params, profile, done) {
+      // NOTE: should normalize the user obj here, across all strategies
+      return done(null, { token, profile });
     }
   )
 );
