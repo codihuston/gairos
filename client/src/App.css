@@ -1,3 +1,7 @@
+body{
+  font-family: "Lato", sans-serif;
+}
+
 .App {
   text-align: center;
 }
@@ -35,4 +39,29 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+a.btn-google{
+  text-decoration: none;
+  color: #777;
+}
+
+a.btn-google:visited{
+  text-decoration: none;
+  color: #777;
+}
+
+.btn-google__content{
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+  background: #ffffff;
+  padding: .2rem 1rem;
+  border-radius: 0.2rem;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.btn-google__content img{
+  padding: 0;
 }
