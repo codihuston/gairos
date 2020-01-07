@@ -26,6 +26,12 @@ router.get("/google/cb", async function(req, res) {
 
   oauth2Client.setCredentials(tokens);
 
+  // if no errors, init a session
+  req.session.isAuthenticated = true;
+  req.session.tokens = tokens;
+
+  console.log("session", req.session);
+
   // test getting calendars
   res.json({
     calendars: await calender.calendarList.list()

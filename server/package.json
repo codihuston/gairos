@@ -26,6 +26,7 @@
     "debug": "~2.6.9",
     "dotenv": "^8.2.0",
     "express": "~4.16.1",
+    "express-session": "^1.17.0",
     "googleapis": "39",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
@@ -34,7 +35,8 @@
     "passport": "^0.4.1",
     "passport-google-oauth": "^2.0.0",
     "regenerator-runtime": "^0.13.3",
-    "rimraf": "^3.0.0"
+    "rimraf": "^3.0.0",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "@babel/cli": "^7.7.7",
