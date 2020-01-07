@@ -1,7 +1,7 @@
 import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
-const x = 0;
+import GoogleSignInButton from "./components/GoogleSignInButton";
 
 function App() {
   return (
@@ -19,6 +19,7 @@ function App() {
         >
           Learn React
         </a>
+        <GoogleSignInButton />
       </header>
     </div>
   );
