@@ -4,7 +4,7 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
 import passport from "passport";
-import googleStrategy from "./services/auth/strategies/google";
+import googleStrategy from "./services/auth/google";
 
 const { ApolloServer, gql } = require("apollo-server-express");
 

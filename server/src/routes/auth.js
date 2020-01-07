@@ -1,42 +1,35 @@
 import express from "express";
-import passport from "passport";
+import { calendar_v3 } from "googleapis";
+import { oauth2Client, url } from "../services/auth/google";
+const calender = new calendar_v3.Calendar({
+  auth: oauth2Client
+});
 
 const router = express.Router();
 
-// GET /auth/google
-//   Use passport.authenticate() as route middleware to authenticate the
-//   request.  The first step in Google authentication will involve
-//   redirecting the user to google.com.  After authorization, Google
-//   will redirect the user back to this application at /auth/google/callback
-router.get(
-  "/google",
-  passport.authenticate("google", {
-    session: false, // does not prevent serializing error (described in app)
-    scope: [
-      "https://www.googleapis.com/auth/calendar",
-      // required in order to prevent "invalid credentials" error
-      "https://www.googleapis.com/auth/userinfo.email",
-      "https://www.googleapis.com/auth/userinfo.profile"
-    ],
-    // get refresh token
-    accessType: "offline"
-  })
-);
+/**
+ *  GET /auth/google
+ */
+router.get("/google", function(req, res) {
+  console.log(oauth2Client, url);
+  res.redirect(url);
+});
 
-// GET /auth/google/callback
-//   Use passport.authenticate() as route middleware to authenticate the
-//   request.  If authentication fails, the user will be redirected back to the
-//   login page.  Otherwise, the primary route function function will be called,
-//   which, in this example, will redirect the user to the home page.
-router.get(
-  "/google/cb",
-  // TODO: handle failure
-  passport.authenticate("google", { failureRedirect: "/login" }),
-  function(req, res) {
-    // TODO: on successful login, return the JWT to the client side!
-    console.log("TODO: return token to client", req.user.token);
-    res.redirect("/");
-  }
-);
+/**
+ *  GET /auth/google/callback
+ */
+router.get("/google/cb", async function(req, res) {
+  // TODO: handle errors
+  const { code } = req.query;
+
+  const { tokens } = await oauth2Client.getToken(code);
+
+  oauth2Client.setCredentials(tokens);
+
+  // test getting calendars
+  res.json({
+    calendars: await calender.calendarList.list()
+  });
+});
 
 export { router };
