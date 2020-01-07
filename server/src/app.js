@@ -1,9 +1,9 @@
+import { createError as apolloError } from "apollo-errors";
 import createError from "http-errors";
 import express from "express";
 import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
-import passport from "passport";
 import session from "express-session";
 import uuid from "uuid/v4";
 
@@ -42,18 +42,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-app.use(passport.initialize());
-// app.use(passport.session()); // not implemented
 
-// required to prevent err: "failed to serialize user into session"
-passport.serializeUser(function(user, done) {
-  done(null, user.profile.id);
-});
+// routes
+app.use("/", indexRouter);
+app.use("/users", usersRouter);
+app.use("/auth", authRouter);
 
-passport.deserializeUser(function(user, done) {
-  done(null, user.profile.id);
-});
-
+// init graphql
 // TODO: configure graphql typedefs and resolvers!
 const typeDefs = gql`
   type Query {
@@ -63,18 +58,43 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    hello: () => "Hello world!"
+    // get access to context
+    hello: (parent, args, context, info) => {
+      const { session } = context;
+
+      console.log("Session in resolvers:", context.session);
+
+      // Handle unauthorized requests
+      // TODO: move into its own /errors file?
+      const isAuthenticated = session.isAuthenticated || false;
+      const hasAccessToken =
+        (session.tokens && session.tokens.access_token) || false;
+
+      const UnauthenticatedError = apolloError("UnauthenticatedError", {
+        message: "You must log in to do that."
+      });
+
+      if (!isAuthenticated || !hasAccessToken) {
+        throw new UnauthenticatedError();
+      }
+
+      return "Hello world!";
+    }
   }
 };
 
 // inject graphql server into express
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: ({ req, res }) => {
+    // pass context into our resolvers
+    return {
+      session: req.session
+    };
+  }
+});
 server.applyMiddleware({ app });
-
-// routes
-app.use("/", indexRouter);
-app.use("/users", usersRouter);
-app.use("/auth", authRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -89,7 +109,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render("error");
+  res.json(err);
 });
 
 export default app;
