@@ -1,9 +1,6 @@
 import express from "express";
-import { calendar_v3 } from "googleapis";
 import { oauth2Client, url } from "../services/auth/google";
-const calender = new calendar_v3.Calendar({
-  auth: oauth2Client
-});
+import { calendar } from "../api/google";
 
 const router = express.Router();
 
@@ -34,7 +31,7 @@ router.get("/google/cb", async function(req, res) {
 
   // test getting calendars
   res.json({
-    calendars: await calender.calendarList.list()
+    calendars: await calendar.calendarList.list()
   });
 });
 

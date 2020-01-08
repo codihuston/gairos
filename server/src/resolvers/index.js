@@ -1,10 +1,5 @@
 import { createError } from "apollo-errors";
-// TODO: provide a better way of fetching the google calendar api obj
-import { calendar_v3 } from "googleapis";
-import { oauth2Client } from "../services/auth/google";
-const calender = new calendar_v3.Calendar({
-  auth: oauth2Client
-});
+import { calendar } from "../api/google";
 
 export default {
   Query: {
@@ -32,7 +27,7 @@ export default {
     },
     getCalendars: async (parent, args, context, info) => {
       // TODO: handle bad response?
-      const res = await calender.calendarList.list();
+      const res = await calendar.calendarList.list();
 
       return res.data.items;
     }
