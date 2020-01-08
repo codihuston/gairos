@@ -12,6 +12,11 @@ const { ApolloServer, gql } = require("apollo-server-express");
 import { router as indexRouter } from "./routes/index";
 import { router as usersRouter } from "./routes/users";
 import { router as authRouter } from "./routes/auth";
+import { calendar_v3 } from "googleapis";
+import { oauth2Client, url } from "./services/auth/google";
+const calender = new calendar_v3.Calendar({
+  auth: oauth2Client
+});
 
 var app = express();
 
@@ -53,6 +58,13 @@ app.use("/auth", authRouter);
 const typeDefs = gql`
   type Query {
     hello: String
+    getCalendars: [Calendar]
+  }
+
+  type Calendar {
+    id: String
+    summary: String
+    description: String
   }
 `;
 
@@ -79,6 +91,14 @@ const resolvers = {
       }
 
       return "Hello world!";
+    },
+    getCalendars: async (parent, args, context, info) => {
+      const { session } = context;
+
+      // TODO: handle bad response?
+      const res = await calender.calendarList.list();
+
+      return res.data.items;
     }
   }
 };
