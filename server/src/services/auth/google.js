@@ -14,13 +14,18 @@ export const oauth2Client = new google.auth.OAuth2(
 );
 
 export const url = oauth2Client.generateAuthUrl({
-  access_type: "offline",
-  scope: scopes
+  scope: scopes,
+  // request access token
+  access_type: "offline"
+  /*force end-user to see the consent screen, even if they've auth'd before
+  this is the only way to get a refresh token if access_type=offline was
+  not set during that first auth.*/
+  // prompt: "consent"
 });
 
 oauth2Client.on("tokens", tokens => {
   if (tokens.refresh_token) {
-    console.log("TODO: Store refresh token in database");
+    console.log("TODO: Store refresh token in database", tokens.refresh_token);
   }
 
   console.log(
