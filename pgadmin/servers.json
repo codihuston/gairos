@@ -1,0 +1,13 @@
+{
+  "Servers": {
+      "1": {
+          "Name": "Gairos",
+          "Group": "Server Group 1",
+          "Port": 5432,
+          "Username": "postgres",
+          "Host": "172.25.0.3",
+          "SSLMode": "prefer",
+          "MaintenanceDB": "postgres"
+      }
+  }
+}
