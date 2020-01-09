@@ -27,6 +27,10 @@ var server = http.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.
+ *
+ * TODO:
+ *  [ ] make eraseDatabaseOnSync dependent on NODE_ENV
+ *  [ ] replace createUsesWithMessages with seeders / remove entirely
  */
 const eraseDatabaseOnSync = true;
 sequelize.sync({ force: eraseDatabaseOnSync }).then(async () => {
