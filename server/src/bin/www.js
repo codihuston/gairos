@@ -43,7 +43,7 @@ sequelize.sync({ force: eraseDatabaseOnSync }).then(async () => {
 });
 
 const createUsersWithMessages = async () => {
-  await models.User.create(
+  await models.user.create(
     {
       username: "rwieruch",
       messages: [
@@ -53,10 +53,10 @@ const createUsersWithMessages = async () => {
       ]
     },
     {
-      include: [models.Message]
+      include: [models.message]
     }
   );
-  await models.User.create(
+  await models.user.create(
     {
       username: "ddavids",
       messages: [
@@ -69,7 +69,7 @@ const createUsersWithMessages = async () => {
       ]
     },
     {
-      include: [models.Message]
+      include: [models.message]
     }
   );
 };
