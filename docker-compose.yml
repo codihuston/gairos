@@ -1,0 +1,37 @@
+version: '3.7'
+
+services:
+  postgres:
+    container_name: gairos-db01
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-root}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-root}
+    ports:
+      - "54320:5432"
+    networks:
+      default:
+        ipv4_address: 172.25.0.2
+    restart: unless-stopped
+
+  pgadmin:
+    container_name: gairos-pgadmin01
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+    volumes:
+      - ./pgadmin/servers.json/:/pgadmin4/servers.json
+    ports:
+      - "${PGADMIN_PORT:-54321}:80"
+    networks:
+      default:
+        ipv4_address: 172.25.0.3
+    restart: unless-stopped
+
+networks:
+  default:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.25.0.0/24
