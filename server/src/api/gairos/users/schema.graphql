@@ -1,0 +1,18 @@
+# Note: at least one type Query{} must be initialized somewhere in order
+# for the typedefs to form a valid graphql schema
+type Query {
+  hello: String
+  getCalendars: [Calendar]
+  me: User
+}
+
+type Calendar {
+  id: String
+  summary: String
+  description: String
+}
+
+type User {
+  id: ID!
+  username: String!
+}

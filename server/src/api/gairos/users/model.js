@@ -1,4 +1,4 @@
-const user = (sequelize, DataTypes) => {
+const model = (sequelize, DataTypes) => {
   const User = sequelize.define("user", {
     username: {
       type: DataTypes.STRING
@@ -6,7 +6,7 @@ const user = (sequelize, DataTypes) => {
   });
 
   User.associate = models => {
-    User.hasMany(models.Message, { onDelete: "CASCADE" });
+    User.hasMany(models.message, { onDelete: "CASCADE" });
   };
 
   User.findByLogin = async login => {
@@ -23,4 +23,4 @@ const user = (sequelize, DataTypes) => {
 
   return User;
 };
-export default user;
+export default model;
