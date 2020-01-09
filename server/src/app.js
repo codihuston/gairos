@@ -13,6 +13,7 @@ import resolvers from "./resolvers";
 import { router as indexRouter } from "./routes/index";
 import { router as usersRouter } from "./routes/users";
 import { router as authRouter } from "./routes/auth";
+import models from "./api/gairos";
 
 var app = express();
 
@@ -53,10 +54,12 @@ app.use("/auth", authRouter);
 const server = new ApolloServer({
   typeDefs: schema,
   resolvers,
-  context: ({ req, res }) => {
+  context: async ({ req, res }) => {
     // pass context into our resolvers
     return {
-      session: req.session
+      models,
+      session: req.session,
+      me: models.User.findByLogin("rwieruch")
     };
   }
 });

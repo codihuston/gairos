@@ -8,6 +8,7 @@ import config from "../config";
 import app from "../app";
 import debugLib from "debug";
 import http from "http";
+import models, { sequelize } from "../api/gairos";
 
 const debug = debugLib("server:server");
 
@@ -27,10 +28,47 @@ var server = http.createServer(app);
 /**
  * Listen on provided port, on all network interfaces.
  */
+const eraseDatabaseOnSync = true;
+sequelize.sync({ force: eraseDatabaseOnSync }).then(async () => {
+  if (eraseDatabaseOnSync) {
+    createUsersWithMessages();
+  }
+  server.listen(port);
+  server.on("error", onError);
+  server.on("listening", onListening);
+});
 
-server.listen(port);
-server.on("error", onError);
-server.on("listening", onListening);
+const createUsersWithMessages = async () => {
+  await models.User.create(
+    {
+      username: "rwieruch",
+      messages: [
+        {
+          text: "Published the Road to learn React"
+        }
+      ]
+    },
+    {
+      include: [models.Message]
+    }
+  );
+  await models.User.create(
+    {
+      username: "ddavids",
+      messages: [
+        {
+          text: "Happy to release ..."
+        },
+        {
+          text: "Published a complete ..."
+        }
+      ]
+    },
+    {
+      include: [models.Message]
+    }
+  );
+};
 
 /**
  * Normalize a port into a number, string, or false.
