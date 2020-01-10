@@ -14,20 +14,19 @@ const debug = debugLib("server:server");
 
 // console.log("WHA TIS A", app);
 
-app.then(result => {
-  console.log("GOT RES", result);
+app.then(appInstance => {
   /**
    * Get port from environment and store in Express.
    */
 
   var port = normalizePort(process.env.APP_PORT || "3000");
-  result.set("port", port);
+  appInstance.set("port", port);
 
   /**
    * Create HTTP server.
    */
 
-  var server = http.createServer(result);
+  var server = http.createServer(appInstance);
 
   /**
    * Listen on provided port, on all network interfaces.

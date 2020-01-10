@@ -12,11 +12,10 @@ import { router as indexRouter } from "./routes/index";
 import { router as usersRouter } from "./routes/users";
 import { router as authRouter } from "./routes/auth";
 import { models } from "./api/gairos";
-import { compileGraphql } from "./api/gairos";
+import { resolveGraphqlDefinitions } from "./api/gairos";
 
-export default compileGraphql()
+export default resolveGraphqlDefinitions()
   .then(result => {
-    console.log("GOT RESULT 1", result);
     const { typeDefs, resolvers } = result;
     var app = express();
 
@@ -54,9 +53,6 @@ export default compileGraphql()
     app.use("/auth", authRouter);
 
     // inject graphql server into express
-    console.log("WHAT IS SCHEMA", typeDefs);
-    console.log("WHAT IS RESOLVERS", resolvers);
-    console.log("WHAT IS MODELS", models);
     const server = new ApolloServer({
       typeDefs: typeDefs,
       resolvers: resolvers,
@@ -90,5 +86,5 @@ export default compileGraphql()
     return app;
   })
   .catch(e => {
-    console.error("APP FAILED TO COMPILE", e);
+    console.error("Failed to build the application:", e);
   });

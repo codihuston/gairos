@@ -48,7 +48,17 @@ for (const modelName of Object.keys(models)) {
 
 export { sequelize, models };
 
-export const compileGraphql = () =>
+/**
+ * Dynamically import all `.grapqhl` schema (typeDefs) and their resolvers and
+ * format them as required by the graphql server. This is required to ensure
+ * that the schema is fully built before initializing the graphql server.
+ *
+ * @returns {
+ *  typeDef: string
+ *  resolvers: object
+ * }
+ */
+export const resolveGraphqlDefinitions = () =>
   new Promise(function(resolve, reject) {
     const promises = [];
 
@@ -61,9 +71,10 @@ export const compileGraphql = () =>
             console.warn(
               "WARNING: module does not exist for:",
               dir,
-              ". An index file MUST exist, and MUST export typeDefs and resolvers\
-              in order to dynamically import said typeDefs and resolvers.\
-              This is optional if you do not want to import a module\
+              ". An index file MUST exist, and its default exports MUSt contain\
+              `typeDefs` and `resolvers` in order to dynamically import said\
+              typeDefs and resolvers. This is optional if you do not want to\
+              import a module for any given model\
               -- skipping..."
             );
           }
