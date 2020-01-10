@@ -28,6 +28,7 @@
     "dotenv": "^8.2.0",
     "express": "~4.16.1",
     "express-session": "^1.17.0",
+    "glob": "^7.1.6",
     "googleapis": "39",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",

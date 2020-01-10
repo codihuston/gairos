@@ -11,8 +11,8 @@ const { ApolloServer } = require("apollo-server-express");
 import { router as indexRouter } from "./routes/index";
 import { router as usersRouter } from "./routes/users";
 import { router as authRouter } from "./routes/auth";
-import { models } from "./api/gairos";
-import { resolveGraphqlDefinitions } from "./api/gairos";
+import { models } from "./api";
+import { resolveGraphqlDefinitions } from "./api";
 
 export default resolveGraphqlDefinitions()
   .then(result => {

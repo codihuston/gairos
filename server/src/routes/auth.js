@@ -1,6 +1,6 @@
 import express from "express";
 import { oauth2Client, url } from "../services/auth/google";
-import { calendar } from "../api/google";
+import { calendar } from "../api";
 
 const router = express.Router();
 

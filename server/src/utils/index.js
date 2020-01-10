@@ -10,20 +10,6 @@ export const loadGQLFile = (fileDirectory, filePath) => {
   return fs.readFileSync(join(fileDirectory, filePath), "utf-8");
 };
 
-export const getDirectories = (
-  source,
-  getAsFullPath = true,
-  withFileTypes = true
-) =>
-  readdirSync(source, { withFileTypes })
-    .filter(dirent => dirent.isDirectory())
-    .map(dirent => {
-      if (getAsFullPath) {
-        return resolve(source, dirent.name);
-      }
-      return dirent.name;
-    });
-
 export const normalizePort = val => {
   var port = parseInt(val, 10);
 
