@@ -1,4 +1,5 @@
-import { createError } from "apollo-errors";
+import { UnauthenticatedError } from "../../../errors/graphql";
+import SequelizeErrorHandler from "../../../errors/sequelize";
 
 export default {
   Query: {
@@ -13,10 +14,6 @@ export default {
       const isAuthenticated = session.isAuthenticated || false;
       const hasAccessToken =
         (session.tokens && session.tokens.access_token) || false;
-
-      const UnauthenticatedError = createError("UnauthenticatedError", {
-        message: "You must log in to do that."
-      });
 
       if (!isAuthenticated || !hasAccessToken) {
         throw new UnauthenticatedError();
@@ -35,10 +32,7 @@ export default {
         const user = await context.models.user.create(args);
         return user;
       } catch (e) {
-        const SequelizeError = createError("UserAlreadyExistsError", {
-          message: "User already exists!"
-        });
-        throw new SequelizeError();
+        throw SequelizeErrorHandler(e);
       }
     }
   }

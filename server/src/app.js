@@ -10,7 +10,6 @@ import debugLib from "debug";
 const { ApolloServer } = require("apollo-server-express");
 
 import { router as indexRouter } from "./routes/index";
-import { router as usersRouter } from "./routes/users";
 import { router as authRouter } from "./routes/auth";
 import { models } from "./api";
 import { resolveGraphqlDefinitions } from "./api";
@@ -52,7 +51,6 @@ export default resolveGraphqlDefinitions()
 
     // routes
     app.use("/", indexRouter);
-    app.use("/users", usersRouter);
     app.use("/auth", authRouter);
 
     // inject graphql server into express
