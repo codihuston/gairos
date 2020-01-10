@@ -23,6 +23,7 @@ const dirs = getDirectories(__dirname, true, true);
 
 // import sequelize models
 for (const dir of dirs) {
+  // TODO: make this file name customizable?
   const modelPath = join(dir, "model.js");
   if (existsSync(modelPath)) {
     const model = sequelize.import(modelPath);
@@ -40,7 +41,6 @@ for (const dir of dirs) {
 // associate the sequelize models (as needeD)
 for (const modelName of Object.keys(models)) {
   const model = models[modelName];
-  console.log("working with model", modelName, model);
   if (typeof model.associate === "function") {
     model.associate(models);
   }
@@ -52,25 +52,30 @@ export const compileGraphql = () =>
   new Promise(function(resolve, reject) {
     const promises = [];
 
+    // immediately invoked async function (required use to import() dynamically)
     (async function() {
       for (let dir of dirs) {
         try {
           // warn devs if a module containing gql requirements couldn't be loaded
           if (!existsSync(join(dir, "index.js"))) {
             console.warn(
-              "WARNING: module does not exist for: ",
+              "WARNING: module does not exist for:",
               dir,
-              " an index file MUST exist, and MUST export typeDefs and resolvers\
-              in order to dynamically import said typeDefs and resolvers\
+              ". An index file MUST exist, and MUST export typeDefs and resolvers\
+              in order to dynamically import said typeDefs and resolvers.\
+              This is optional if you do not want to import a module\
               -- skipping..."
             );
           }
           // dynamically import the typeDefs and resolvers
           else {
-            console.log("QQQ Pushing on ", dir);
             promises.push(
-              // NOTE: import() is async; that is why this is promisified
-              // see: https://nodejs.org/api/esm.html
+              /*
+                NOTE: import() is async; that is why this is promisified.
+                It is also NOT a function (like super()), and cannot be assigned
+                to a variable.
+                See: https://nodejs.org/api/esm.html for implementation
+              */
               await import(dir).then(module => {
                 return {
                   module,
@@ -78,8 +83,6 @@ export const compileGraphql = () =>
                 };
               })
             );
-            console.log("QQQ Pushing on ", promises);
-            console.log("QQQ COMPARE ", promises[0] === promises[1]);
           }
         } catch (e) {
           console.warn("Cannot dynamically load module:", e);
@@ -89,15 +92,8 @@ export const compileGraphql = () =>
       // only resolve when all promises are done
       Promise.all(promises)
         .then(values => {
-          console.log(
-            "QQQ COMPARE ALL PROMISE VALUES ",
-            values[0] === values[1]
-          );
-          console.log("QQQ promise values", values);
-
           for (const value of values) {
             const { typeDefs, resolvers } = value.module.default;
-            console.log("QQQ v.m.d", value.module.default);
             if (typeDefs) {
               gqlSchemas.push(typeDefs);
             }
