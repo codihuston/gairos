@@ -8,6 +8,7 @@ import { oauth2Client } from "../services/auth/google";
 import glob from "glob";
 
 const debug = debugLib("server:api");
+const modules = [];
 const gqlSchemas = [];
 const gqlResolvers = [];
 // fetch the modules in each sub-directory under /api
@@ -33,60 +34,34 @@ export { sequelize, models };
  */
 export const resolveGraphqlDefinitions = () =>
   new Promise(function(resolve, reject) {
-    const promises = [];
+    // import api modules dynamically
+    for (let dir of dirs) {
+      try {
+        debug("Loading API module: ", dir);
 
-    // immediately invoked async function (required use to import() dynamically)
-    (async function() {
-      for (let dir of dirs) {
-        try {
-          debug("Loading API module: ", dir);
-          promises.push(
-            /*
-                NOTE: import() is async; that is why this is promisified.
-                It is also NOT a function (like super()), and cannot be assigned
-                to a variable.
-                See: https://nodejs.org/api/esm.html for implementation
-              */
-            await import(dir).then(module => {
-              return {
-                module,
-                dir
-              };
-            })
-          );
-          // }
-        } catch (e) {
-          console.warn("SKIPPING: Cannot dynamically load module:", e);
-        }
-      }
+        // using require, as it is sync (and cleaner than the import() solution)
+        const m = require(dir);
 
-      // only resolve when all promises are done
-      Promise.all(promises)
-        .then(values => {
-          // compile the gql defs onto separate arrays
-          for (const value of values) {
-            if (value.module && value.module.default) {
-              const { typeDefs, resolvers } = value.module.default;
-              if (typeDefs) {
-                gqlSchemas.push(typeDefs);
-              }
-              if (resolvers) {
-                gqlResolvers.push(resolvers);
-              }
-            } else {
-              console.warn("SKIPPING: no typeDefs or resolvers specified");
-            }
+        if (m && m.default) {
+          const { typeDefs, resolvers } = m.default;
+          if (typeDefs) {
+            gqlSchemas.push(typeDefs);
           }
+          if (resolvers) {
+            gqlResolvers.push(resolvers);
+          }
+        } else {
+          console.warn("SKIPPING: no typeDefs or resolvers specified");
+        }
+      } catch (e) {
+        console.warn("SKIPPING: Cannot dynamically load module:", e);
+      }
+    }
 
-          // ... and then shape said defs as required by gql server
-          resolve({
-            models,
-            resolvers: merge({}, ...gqlResolvers),
-            typeDefs: gqlSchemas.join(" ")
-          });
-        })
-        .catch(e => {
-          reject(e);
-        });
-    })();
+    // ... and then shape said defs as required by gql server
+    resolve({
+      models,
+      resolvers: merge({}, ...gqlResolvers),
+      typeDefs: gqlSchemas.join(" ")
+    });
   });
