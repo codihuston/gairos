@@ -1,5 +1,4 @@
 import { createError } from "apollo-errors";
-import { calendar } from "../../google";
 
 export default {
   Query: {
@@ -24,12 +23,6 @@ export default {
       }
 
       return "Hello world!";
-    },
-    getCalendars: async (parent, args, context, info) => {
-      // TODO: handle bad response?
-      const res = await calendar.calendarList.list();
-
-      return res.data.items;
     },
     me: async (parent, args, context, info) => {
       // TODO: handle bad response?

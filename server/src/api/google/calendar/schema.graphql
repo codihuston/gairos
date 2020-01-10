@@ -1,0 +1,9 @@
+extend type Query {
+  getCalendars: [Calendar]
+}
+
+type Calendar {
+  id: String
+  summary: String
+  description: String
+}

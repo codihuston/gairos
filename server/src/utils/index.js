@@ -1,6 +1,3 @@
-// import config from "../config";
-import { readdirSync } from "fs";
-import { resolve } from "path";
 import Debug from "debug";
 import * as fs from "fs";
 import { join } from "path";
