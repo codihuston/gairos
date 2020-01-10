@@ -8,7 +8,7 @@ import config from "../config";
 import app from "../app";
 import debugLib from "debug";
 import http from "http";
-import models, { sequelize } from "../api/gairos";
+import { models, sequelize } from "../api/gairos";
 
 const debug = debugLib("server:server");
 

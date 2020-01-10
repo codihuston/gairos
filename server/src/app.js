@@ -7,14 +7,11 @@ import session from "express-session";
 import uuid from "uuid/v4";
 
 const { ApolloServer } = require("apollo-server-express");
-// import schema from "./schema";
-// import resolvers from "./resolvers";
 
 import { router as indexRouter } from "./routes/index";
 import { router as usersRouter } from "./routes/users";
 import { router as authRouter } from "./routes/auth";
-// import models from "./api/gairos";
-import models, { schema, resolvers } from "./api/gairos";
+import { models, resolvers, schema } from "./api/gairos";
 
 var app = express();
 
@@ -54,9 +51,10 @@ app.use("/auth", authRouter);
 // inject graphql server into express
 console.log("WHAT IS SCHEMA", schema);
 console.log("WHAT IS RESOLVERS", resolvers);
+console.log("WHAT IS MODELS", models);
 const server = new ApolloServer({
   typeDefs: schema,
-  resolvers,
+  resolvers: resolvers,
   context: async ({ req, res }) => {
     // pass context into our resolvers
     return {

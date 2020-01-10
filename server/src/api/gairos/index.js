@@ -1,10 +1,21 @@
+/**
+ * This is an example of using static imports for modrularized graphql
+ * resolvers / typedefs, as opposed to having them defined in only one file.
+ *
+ * For each model's resolvers + schema, you would have to manually import them
+ * here and add them to the exports below.
+ *
+ * See:
+ *  - example/gql-single-file-typedefs-and-resolvers
+ *  - example/gql-dynamically-import-typedefs-and-resolvers
+ */
 import Sequelize from "sequelize";
 import { getDirectories } from "../../utils";
-import { existsSync } from "fs";
 import { join } from "path";
-import { merge, forEach } from "lodash";
+import { merge } from "lodash";
 import users from "./users";
 
+const models = {};
 const sequelize = new Sequelize(
   process.env.DB_NAME,
   process.env.DB_USER,
@@ -16,52 +27,21 @@ const sequelize = new Sequelize(
   }
 );
 
-// const gqlSchemas = [];
-// const gqlResolvers = [];
-const models = {};
-
+// import sequelize models
 getDirectories(__dirname, true).forEach(path => {
-  // TODO: import sequelize models
   const modelPath = join(path, "model");
   const model = sequelize.import(modelPath);
   models[model.name] = model;
-
-  // TODO: import gql resolvers + schemas dynamically?
-  // note: had to implement babel-eslint in .eslintrc.json for this to compile
-  // IMPORTANT: cannot seem to import graphql schema dynamically due to async nature
-  // of Import()
-  // if (!existsSync(join(path, "index.js"))) {
-  //   console.warn(
-  //     "WARNING: module does not exist for: ",
-  //     path,
-  //     " - skipping..."
-  //   );
-  // } else {
-  //   import(path)
-  //     .then(({ typeDefs, resolvers }) => {
-  //       if (schema) {
-  //         gqlSchemas.push(schema);
-  //       }
-  //       if (resolvers) {
-  //         gqlResolvers.push(resolvers);
-  //       }
-  //       console.log("Schemas", gqlSchemas);
-  //       console.log("ResolverS", gqlResolvers);
-  //     })
-  //     .catch(e => {
-  //       console.error(e);
-  //     });
-  // }
 });
 
-// associate the sequelize models (as needeD)
-forEach(models, function(model) {
+// associate the sequelize models (as needed)
+for (const modelName of Object.keys(models)) {
+  const model = models[modelName];
   if (typeof model.associate === "function") {
     model.associate(models);
   }
-});
+}
 
-export { sequelize };
-export default models;
+export { sequelize, models };
 export const resolvers = merge({}, users.resolvers);
 export const schema = [users.typeDefs].join(" ");
