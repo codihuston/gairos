@@ -12,8 +12,6 @@ import { models, sequelize } from "../api/gairos";
 
 const debug = debugLib("server:server");
 
-// console.log("WHA TIS A", app);
-
 app.then(appInstance => {
   /**
    * Get port from environment and store in Express.
