@@ -27,7 +27,7 @@ export default resolveGraphqlDefinitions()
           return uuid();
         },
         name: `${process.env.APP_NAME}.${process.env.NODE_ENV}`,
-        secret: "qwe qwe",
+        secret: process.env.APP_SESSION_SECRET,
         resave: false,
         saveUninitialized: true,
         // store: ??? // TODO: implement a persistent datastore for sessions

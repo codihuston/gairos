@@ -12,120 +12,125 @@ import { models, sequelize } from "../api/gairos";
 
 const debug = debugLib("server:server");
 
-app.then(appInstance => {
-  /**
-   * Get port from environment and store in Express.
-   */
+app
+  .then(appInstance => {
+    /**
+     * Get port from environment and store in Express.
+     */
 
-  var port = normalizePort(process.env.APP_PORT || "3000");
-  appInstance.set("port", port);
+    var port = normalizePort(process.env.APP_PORT || "3000");
+    appInstance.set("port", port);
 
-  /**
-   * Create HTTP server.
-   */
+    /**
+     * Create HTTP server.
+     */
 
-  var server = http.createServer(appInstance);
+    var server = http.createServer(appInstance);
 
-  /**
-   * Listen on provided port, on all network interfaces.
-   *
-   * TODO:
-   *  [ ] make eraseDatabaseOnSync dependent on NODE_ENV
-   *  [ ] replace createUsesWithMessages with seeders / remove entirely
-   */
-  const eraseDatabaseOnSync = true;
-  sequelize.sync({ force: eraseDatabaseOnSync }).then(async () => {
-    if (eraseDatabaseOnSync) {
-      createUsersWithMessages();
-    }
-    server.listen(port);
-    server.on("error", onError);
-    server.on("listening", onListening);
-  });
-
-  const createUsersWithMessages = async () => {
-    await models.user.create(
-      {
-        username: "rwieruch",
-        messages: [
-          {
-            text: "Published the Road to learn React"
-          }
-        ]
-      },
-      {
-        include: [models.message]
+    /**
+     * Listen on provided port, on all network interfaces.
+     *
+     * TODO:
+     *  [ ] make eraseDatabaseOnSync dependent on NODE_ENV
+     *  [ ] replace createUsesWithMessages with seeders / remove entirely
+     */
+    const eraseDatabaseOnSync = true;
+    sequelize.sync({ force: eraseDatabaseOnSync }).then(async () => {
+      if (eraseDatabaseOnSync) {
+        createUsersWithMessages();
       }
-    );
-    await models.user.create(
-      {
-        username: "ddavids",
-        messages: [
-          {
-            text: "Happy to release ..."
-          },
-          {
-            text: "Published a complete ..."
-          }
-        ]
-      },
-      {
-        include: [models.message]
+      server.listen(port);
+      server.on("error", onError);
+      server.on("listening", onListening);
+    });
+
+    const createUsersWithMessages = async () => {
+      await models.user.create(
+        {
+          username: "rwieruch",
+          messages: [
+            {
+              text: "Published the Road to learn React"
+            }
+          ]
+        },
+        {
+          include: [models.message]
+        }
+      );
+      await models.user.create(
+        {
+          username: "ddavids",
+          messages: [
+            {
+              text: "Happy to release ..."
+            },
+            {
+              text: "Published a complete ..."
+            }
+          ]
+        },
+        {
+          include: [models.message]
+        }
+      );
+    };
+
+    /**
+     * Normalize a port into a number, string, or false.
+     */
+
+    function normalizePort(val) {
+      var port = parseInt(val, 10);
+
+      if (isNaN(port)) {
+        // named pipe
+        return val;
       }
-    );
-  };
 
-  /**
-   * Normalize a port into a number, string, or false.
-   */
+      if (port >= 0) {
+        // port number
+        return port;
+      }
 
-  function normalizePort(val) {
-    var port = parseInt(val, 10);
-
-    if (isNaN(port)) {
-      // named pipe
-      return val;
+      return false;
     }
 
-    if (port >= 0) {
-      // port number
-      return port;
-    }
+    /**
+     * Event listener for HTTP server "error" event.
+     */
 
-    return false;
-  }
-
-  /**
-   * Event listener for HTTP server "error" event.
-   */
-
-  function onError(error) {
-    if (error.syscall !== "listen") {
-      throw error;
-    }
-
-    var bind = typeof port === "string" ? "Pipe " + port : "Port " + port;
-
-    // handle specific listen errors with friendly messages
-    switch (error.code) {
-      case "EACCES":
-        console.error(bind + " requires elevated privileges");
-        process.exit(1);
-      case "EADDRINUSE":
-        console.error(bind + " is already in use");
-        process.exit(1);
-      default:
+    function onError(error) {
+      if (error.syscall !== "listen") {
         throw error;
+      }
+
+      var bind = typeof port === "string" ? "Pipe " + port : "Port " + port;
+
+      // handle specific listen errors with friendly messages
+      switch (error.code) {
+        case "EACCES":
+          console.error(bind + " requires elevated privileges");
+          process.exit(1);
+        case "EADDRINUSE":
+          console.error(bind + " is already in use");
+          process.exit(1);
+        default:
+          throw error;
+      }
     }
-  }
 
-  /**
-   * Event listener for HTTP server "listening" event.
-   */
+    /**
+     * Event listener for HTTP server "listening" event.
+     */
 
-  function onListening() {
-    var addr = server.address();
-    var bind = typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
-    debug("Listening on " + bind);
-  }
-});
+    function onListening() {
+      var addr = server.address();
+      var bind =
+        typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
+      debug("Listening on " + bind);
+    }
+  })
+  .catch(e => {
+    console.log("Failed www", e);
+  });
