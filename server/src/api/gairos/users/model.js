@@ -14,9 +14,9 @@ const model = (sequelize, DataTypes) => {
       where: { username: login }
     });
     if (!user) {
-      user = await User.findOne({
-        where: { email: login }
-      });
+      // user = await User.findOne({
+      //   where: { email: login }
+      // });
     }
     return user;
   };

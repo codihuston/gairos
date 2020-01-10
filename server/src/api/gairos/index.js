@@ -3,7 +3,6 @@ import { getDirectories } from "../../utils";
 import { existsSync } from "fs";
 import { join } from "path";
 import { merge, forEach } from "lodash";
-import users from "./users";
 
 const sequelize = new Sequelize(
   process.env.DB_NAME,
@@ -16,52 +15,105 @@ const sequelize = new Sequelize(
   }
 );
 
-// const gqlSchemas = [];
-// const gqlResolvers = [];
+const gqlSchemas = [];
+const gqlResolvers = [];
 const models = {};
 
-getDirectories(__dirname, true).forEach(path => {
-  // TODO: import sequelize models
-  const modelPath = join(path, "model");
-  const model = sequelize.import(modelPath);
-  models[model.name] = model;
+const dirs = getDirectories(__dirname, true, true);
 
-  // TODO: import gql resolvers + schemas dynamically?
-  // note: had to implement babel-eslint in .eslintrc.json for this to compile
-  // IMPORTANT: cannot seem to import graphql schema dynamically due to async nature
-  // of Import()
-  // if (!existsSync(join(path, "index.js"))) {
-  //   console.warn(
-  //     "WARNING: module does not exist for: ",
-  //     path,
-  //     " - skipping..."
-  //   );
-  // } else {
-  //   import(path)
-  //     .then(({ typeDefs, resolvers }) => {
-  //       if (schema) {
-  //         gqlSchemas.push(schema);
-  //       }
-  //       if (resolvers) {
-  //         gqlResolvers.push(resolvers);
-  //       }
-  //       console.log("Schemas", gqlSchemas);
-  //       console.log("ResolverS", gqlResolvers);
-  //     })
-  //     .catch(e => {
-  //       console.error(e);
-  //     });
-  // }
-});
+// import sequelize models
+for (const dir of dirs) {
+  const modelPath = join(dir, "model.js");
+  if (existsSync(modelPath)) {
+    const model = sequelize.import(modelPath);
+    models[model.name] = model;
+  }
+  // if a model is not found; warn and skip it...
+  else {
+    console.warn(
+      "WARNING: A model could not be dynamically imported:",
+      modelPath
+    );
+  }
+}
 
 // associate the sequelize models (as needeD)
-forEach(models, function(model) {
+for (const modelName of Object.keys(models)) {
+  const model = models[modelName];
+  console.log("working with model", modelName, model);
   if (typeof model.associate === "function") {
     model.associate(models);
   }
-});
+}
 
-export { sequelize };
-export default models;
-export const resolvers = merge({}, users.resolvers);
-export const schema = [users.typeDefs].join(" ");
+export { sequelize, models };
+
+export const compileGraphql = () =>
+  new Promise(function(resolve, reject) {
+    const promises = [];
+
+    (async function() {
+      for (let dir of dirs) {
+        try {
+          // warn devs if a module containing gql requirements couldn't be loaded
+          if (!existsSync(join(dir, "index.js"))) {
+            console.warn(
+              "WARNING: module does not exist for: ",
+              dir,
+              " an index file MUST exist, and MUST export typeDefs and resolvers\
+              in order to dynamically import said typeDefs and resolvers\
+              -- skipping..."
+            );
+          }
+          // dynamically import the typeDefs and resolvers
+          else {
+            console.log("QQQ Pushing on ", dir);
+            promises.push(
+              // NOTE: import() is async; that is why this is promisified
+              // see: https://nodejs.org/api/esm.html
+              await import(dir).then(module => {
+                return {
+                  module,
+                  dir
+                };
+              })
+            );
+            console.log("QQQ Pushing on ", promises);
+            console.log("QQQ COMPARE ", promises[0] === promises[1]);
+          }
+        } catch (e) {
+          console.warn("Cannot dynamically load module:", e);
+        }
+      }
+
+      // only resolve when all promises are done
+      Promise.all(promises)
+        .then(values => {
+          console.log(
+            "QQQ COMPARE ALL PROMISE VALUES ",
+            values[0] === values[1]
+          );
+          console.log("QQQ promise values", values);
+
+          for (const value of values) {
+            const { typeDefs, resolvers } = value.module.default;
+            console.log("QQQ v.m.d", value.module.default);
+            if (typeDefs) {
+              gqlSchemas.push(typeDefs);
+            }
+            if (resolvers) {
+              gqlResolvers.push(resolvers);
+            }
+          }
+
+          resolve({
+            models,
+            resolvers: merge({}, ...gqlResolvers),
+            typeDefs: gqlSchemas.join(" ")
+          });
+        })
+        .catch(e => {
+          reject(e);
+        });
+    })();
+  });
