@@ -14,7 +14,7 @@
     "server": "babel-node ./src/bin/www",
     "watch": "nodemon --config nodemon.json",
     "dev:debug": "npm run server:dev:debug",
-    "server:dev:debug": "cross-env NODE_ENV=development DEBUG=* npm-run-all lint server",
+    "server:dev:debug": "cross-env NODE_ENV=development DEBUG=server:* npm-run-all lint server",
     "watch:debug": "nodemon --exec \"npm run server:dev:debug\"",
     "test": "cross-env NODE_ENV=test mocha --exit",
     "watch:test": "cross-env DEBUG=server:*,test:* nodemon --config nodemon-test.json",

@@ -1,16 +1,19 @@
 import { calendar_v3 } from "googleapis";
 import { merge } from "lodash";
 import { join } from "path";
+import debugLib from "debug";
+
 import { sequelize, models } from "./gairos/index";
 import { oauth2Client } from "../services/auth/google";
 import glob from "glob";
 
+const debug = debugLib("server:api");
+const gqlSchemas = [];
+const gqlResolvers = [];
 // fetch the modules in each sub-directory under /api
 const dirs = glob.sync(join(__dirname, "**/**/index.js"), {
   ignore: [join(__dirname, "index.js"), join(__dirname, "*/index.js")]
 });
-const gqlSchemas = [];
-const gqlResolvers = [];
 
 export const calendar = new calendar_v3.Calendar({
   auth: oauth2Client
@@ -36,7 +39,7 @@ export const resolveGraphqlDefinitions = () =>
     (async function() {
       for (let dir of dirs) {
         try {
-          console.log("Loading API module: ", dir);
+          debug("Loading API module: ", dir);
           promises.push(
             /*
                 NOTE: import() is async; that is why this is promisified.
@@ -53,7 +56,7 @@ export const resolveGraphqlDefinitions = () =>
           );
           // }
         } catch (e) {
-          console.warn("Cannot dynamically load module:", e);
+          console.warn("SKIPPING: Cannot dynamically load module:", e);
         }
       }
 
@@ -70,6 +73,8 @@ export const resolveGraphqlDefinitions = () =>
               if (resolvers) {
                 gqlResolvers.push(resolvers);
               }
+            } else {
+              console.warn("SKIPPING: no typeDefs or resolvers specified");
             }
           }
 

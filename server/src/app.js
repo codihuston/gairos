@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import logger from "morgan";
 import session from "express-session";
 import uuid from "uuid/v4";
+import debugLib from "debug";
 
 const { ApolloServer } = require("apollo-server-express");
 
@@ -13,6 +14,8 @@ import { router as usersRouter } from "./routes/users";
 import { router as authRouter } from "./routes/auth";
 import { models } from "./api";
 import { resolveGraphqlDefinitions } from "./api";
+
+const debug = debugLib("server:app");
 
 export default resolveGraphqlDefinitions()
   .then(result => {
@@ -53,6 +56,8 @@ export default resolveGraphqlDefinitions()
     app.use("/auth", authRouter);
 
     // inject graphql server into express
+    debug("GraphQL typeDefs:", typeDefs);
+    debug("GraphQL resolvers:", resolvers);
     const server = new ApolloServer({
       typeDefs: typeDefs,
       resolvers: resolvers,
