@@ -1,6 +1,6 @@
 import express from "express";
 import { oauth2Client, url } from "../services/auth/google";
-import { calendar } from "../api";
+import { calendar, people } from "../api";
 
 const router = express.Router();
 
@@ -15,11 +15,11 @@ router.get("/google", function(req, res) {
 /**
  *  GET /auth/google/callback
  */
-router.get("/google/cb", async function(req, res) {
+router.get("/google/cb", async function(req, response) {
   // TODO: handle errors
   const { code } = req.query;
 
-  const { tokens } = await oauth2Client.getToken(code);
+  const { tokens, res } = await oauth2Client.getToken(code);
 
   oauth2Client.setCredentials(tokens);
 
@@ -30,7 +30,12 @@ router.get("/google/cb", async function(req, res) {
   console.log("session", req.session);
 
   // test getting calendars
-  res.json({
+  response.json({
+    // TODO: store user info in session?
+    people: await people.people.get({
+      resourceName: "people/me",
+      personFields: ["names", "emailAddresses"]
+    }),
     calendars: await calendar.calendarList.list()
   });
 });

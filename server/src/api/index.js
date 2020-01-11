@@ -1,4 +1,4 @@
-import { calendar_v3 } from "googleapis";
+import { calendar_v3, people_v1 } from "googleapis";
 import { merge } from "lodash";
 import { join } from "path";
 import debugLib from "debug";
@@ -8,7 +8,6 @@ import { oauth2Client } from "../services/auth/google";
 import glob from "glob";
 
 const debug = debugLib("server:api");
-const modules = [];
 const gqlSchemas = [];
 const gqlResolvers = [];
 // fetch the modules in each sub-directory under /api
@@ -17,6 +16,10 @@ const dirs = glob.sync(join(__dirname, "**/**/index.js"), {
 });
 
 export const calendar = new calendar_v3.Calendar({
+  auth: oauth2Client
+});
+
+export const people = new people_v1.People({
   auth: oauth2Client
 });
 
