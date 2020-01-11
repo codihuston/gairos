@@ -1,6 +1,4 @@
 import { resolve } from "path";
-import debugLib from "debug";
-const debug = debugLib("server:sequelize-cli:");
 let opts = {};
 
 try {
@@ -33,8 +31,7 @@ try {
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
-    // TODO: port dialect to .env
-    dialect: "postgres"
+    dialect: process.env.DB_DIALECT
   };
 
   if (!env.includes("prod")) {
