@@ -1,4 +1,4 @@
-.env
 .env-ci
 .env-development
 .env-test
+.env-production

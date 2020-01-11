@@ -9,16 +9,18 @@
     "build": "babel ./src --out-dir dist --copy-files",
     "server:prod": "node ./dist/bin/www",
     "dev": "npm run server:dev",
-    "server:dev": "cross-env NODE_ENV=development npm-run-all lint server",
+    "server:dev": "cross-env NODE_ENV=development npm-run-all lint db:init:dev --continue-on-error server",
     "lint": "eslint .",
     "server": "babel-node ./src/bin/www",
     "watch": "nodemon --config nodemon.json",
     "dev:debug": "npm run server:dev:debug",
-    "server:dev:debug": "cross-env NODE_ENV=development DEBUG=server:* npm-run-all lint server",
+    "server:dev:debug": "cross-env NODE_ENV=development DEBUG=server:* npm-run-all lint db:init:dev --continue-on-error server",
     "watch:debug": "nodemon --exec \"npm run server:dev:debug\"",
     "test": "cross-env NODE_ENV=test mocha --exit",
     "watch:test": "cross-env DEBUG=server:*,test:* nodemon --config nodemon-test.json",
-    "ci": "cross-env NODE_ENV=ci mocha --exit"
+    "ci": "cross-env NODE_ENV=ci mocha --exit",
+    "db:init:dev": "sequelize-cli db:create --env development",
+    "db:seed:dev": "sequelize-cli db:seed:all --env development"
   },
   "dependencies": {
     "apollo-errors": "^1.9.0",

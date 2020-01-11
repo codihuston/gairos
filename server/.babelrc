@@ -1,6 +1,13 @@
 {
-  "presets": [
-    "@babel/preset-env"
-  ],
-  "ignore": []
+  "presets": [[
+    "@babel/preset-env",
+    {
+      "targets": {
+        "node": "current"
+      }
+    }
+  ]],
+  "ignore": [
+    ".gitignore"
+  ]
 }
