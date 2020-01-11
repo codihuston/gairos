@@ -3,7 +3,7 @@ import { merge } from "lodash";
 import { join } from "path";
 import debugLib from "debug";
 
-import { sequelize, models } from "./gairos/index";
+import { models } from "./gairos/index";
 import { oauth2Client } from "../services/auth/google";
 import glob from "glob";
 
@@ -23,7 +23,7 @@ export const people = new people_v1.People({
   auth: oauth2Client
 });
 
-export { sequelize, models };
+export { models };
 
 /**
  * Dynamically import all `.grapqhl` schema (typeDefs) and their resolvers and

@@ -11,6 +11,7 @@ import http from "http";
 import { resolve } from "path";
 import { exec } from "child_process";
 import { sequelize } from "../api/gairos";
+import DatabaseConnector from "../db";
 
 const debug = debugLib("server:www");
 const port = normalizePort(process.env.APP_PORT || "3000");
@@ -73,56 +74,21 @@ function onListening() {
 (async function init() {
   try {
     const appInstance = await app;
+
     /**
      * Get port from environment and store in Express.
      */
     appInstance.set("port", port);
+
     /**
      * Create HTTP server.
      */
-
     server = http.createServer(appInstance);
 
     /**
-     * For developer experience, if this option is on, the database will be
-     * re-built on every build EXCEPT FOR when the environment is PRODUCTION!
-     *
-     * If the database is wiped, seeders will also be ran.
+     * Connect to the database.
      */
-    const eraseDatabaseOnSync =
-      process.env.DB_SYNC_WITH_SEQUELIZE.toLowerCase() == "true" &&
-      !process.env.NODE_ENV.toLowerCase().includes("prod");
-
-    console.log("Please wait while connecting to the database...");
-    console.log("Sequelize sync option is set to", eraseDatabaseOnSync);
-
-    await sequelize.sync({
-      force: eraseDatabaseOnSync
-    });
-
-    // execute seeders if the database was emptied
-    if (
-      eraseDatabaseOnSync &&
-      !process.env.NODE_ENV.toLowerCase().includes("prod")
-    ) {
-      console.log("Please wait while executing database seeders *ASYNC*...");
-      exec(
-        "yarn run db:seed:dev",
-        {
-          cwd: resolve(__dirname, "..", "..") // server root
-        },
-        (err, stdout, stderr) => {
-          if (err) {
-            console.error(err);
-          } else {
-            // the *entire* stdout and stderr (buffered)
-            console.log("Finished executing seeders! See output below:");
-            debug(`seeder:stderr: ${stderr}`);
-            debug(`seeder:stdout: ${stdout}`);
-          }
-        }
-      );
-    }
+    await DatabaseConnector();
 
     /**
      * Listen on provided port, on all network interfaces.
@@ -131,7 +97,7 @@ function onListening() {
     server.on("error", onError);
     server.on("listening", onListening);
   } catch (e) {
-    console.error("FATAL: Failed at building the server", e);
+    console.error("FATAL: Failed building the server", e);
     process.exit(1);
   }
 })();
