@@ -90,8 +90,8 @@ function onListening() {
      * If the database is wiped, seeders will also be ran.
      */
     const eraseDatabaseOnSync =
-      process.env.DB_SYNC_WITH_SEQUELIZE == "true" &&
-      !process.env.NODE_ENV.includes("prod");
+      process.env.DB_SYNC_WITH_SEQUELIZE.toLowerCase() == "true" &&
+      !process.env.NODE_ENV.toLowerCase().includes("prod");
 
     console.log("Please wait while connecting to the database...");
     console.log("Sequelize sync option is set to", eraseDatabaseOnSync);
@@ -101,7 +101,10 @@ function onListening() {
     });
 
     // execute seeders if the database was emptied
-    if (eraseDatabaseOnSync && !process.env.NODE_ENV.includes("prod")) {
+    if (
+      eraseDatabaseOnSync &&
+      !process.env.NODE_ENV.toLowerCase().includes("prod")
+    ) {
       console.log("Please wait while executing database seeders *ASYNC*...");
       exec(
         "yarn run db:seed:dev",

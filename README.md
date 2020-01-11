@@ -53,6 +53,25 @@ click "APIs & services" > Dashboard
     1. Record these in your `.env-development` where appropriate
         1. IMPORANT: callback urls must match here and in the server
 
+Lastly, as an attempt to approve developer experience, you can either set
+`DB_SYNC_WITH_SEQUELIZE` to `true` or `false`.
+
+`Note:` This option will be set forcibly to `false` if the `NODE_ENV` matches
+`*prod*`
+
+1. If `true`:
+    1. When the server boots up the database will be completely emptied, and
+    the seeders will be executed to populate the database with any default rows
+    `FOR NON-PRODUCTION ENVIRONMENTS ONLY`
+1. If `false`:
+    1. The tables should still be automatically created, and they `WILL NOT` be
+    truncated, nor will the seeders be ran
+        1. You can run the seeders manually in the commandline yourself
+    1. `NOTE:` if you make changes to a `model definition`, the change
+    `WILL NOT` be reflected in the database unless you either:
+        1. Set this option to `true`, or...
+        1. Delete the existing table yourself and restart the server
+
 #### Database Setup
 The database must be running in order for the server to start.
 
@@ -71,20 +90,43 @@ container upon starting. Therefore, you may need to provide a server
 connection in the `pgadmin4` web app upon initial setup after logging in.
 You may use either:
 
-1. Your `host IP address; NOT localhost!` and the port `54320` as defined in `docker-compose.yml` to connect. Since your IP address may change, I suggest
+1. Your `host IP address; NOT localhost!` and the port `54320` as defined in
+`docker-compose.yml` to connect. Since your IP address may change, I suggest
 the following option...
 2. You may use the static ip address configured by a custom network for this
-setup, which also defined in `docker-compose.yml`, the static ip is defaulted to `172.25.0.2`. Since you are using the static ip in the containerized network, you
-will need to use the internal port being `5432` instead of the port mapped from
-the host. These two values are default, and cannot be configured by custom
-environment variables reliably at this moment
+setup, which also defined in `docker-compose.yml`, the static ip is defaulted to
+`172.25.0.2`. Since you are using the static ip in the containerized network,
+you will need to use the internal port being `5432` instead of the port mapped
+from the host. These two values are default, and cannot be configured by custom
+environment variables reliably at this moment.
 
 #### Running the Server for Development
 
-The recommended way to run the server is to use `yarn run watch:debug`,
-which will automatically re-run the server when you change any file in
-`server/src`, as well as log your debug messages. Otherwise, you may use
-`yarn run watch`.
+The recommended way to run the server is to use:
+
+1. `yarn run watch:debug`
+    1. will automatically re-run the server when you change any file in
+    `server/src` (see `nodemon.json` to see which files are watched), as well as
+    log your debug messages (implemented with the `debug()` npm module)
+1. `yarn run watch`
+    1. this option does not print your debug messages
+
+If you do not want the server to restart automatically on your changes, run
+either:
+
+1. `yarn run dev`
+1. or `yarn run dev:debug` to see your debug mesages
+
+The order in which the server is built looks like this
+(initialized by the commands mentioned above):
+
+1. lint (via `eslint`)
+1. create database using `sequelize-cli` (may error out if db exists, but does
+not stop build process. This is expected behavior)
+1. run server with babel-node (`server/bin/www.js`) to support `import/export` 
+in the node environment
+    1. in that file, conditionally truncate/sync database and execute seeders
+    asynchronously based on `DB_SYNC_WITH_SEQUELIZE`
 
 #### Debugging the Server
 
