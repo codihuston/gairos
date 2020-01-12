@@ -73,7 +73,7 @@ Lastly, as an attempt to approve developer experience, you can either set
         1. Delete the existing table yourself and restart the server
 
 #### Database Setup
-The database must be running in order for the server to start.
+The database server must be running in order for the server to start.
 
 To start the database, run: `docker-compose up` in the root of this project. View
 the `docker-compose.yml` file for details on the database services. If you are
@@ -91,7 +91,10 @@ connection in the `pgadmin4` web app upon initial setup after logging in.
 You may use either:
 
 1. Your `host IP address; NOT localhost!` and the port `54320` as defined in
-`docker-compose.yml` to connect. Since your IP address may change, I suggest
+`docker-compose.yml` to connect. This is due to how the container network has
+been configured. The containers are not bridged to the host network, so
+specifying `localhost` here refers to the `pgadmin4` container itself, not
+your machine. Since your IP address may change, I suggest
 the following option...
 2. You may use the static ip address configured by a custom network for this
 setup, which also defined in `docker-compose.yml`, the static ip is defaulted to
@@ -99,6 +102,7 @@ setup, which also defined in `docker-compose.yml`, the static ip is defaulted to
 you will need to use the internal port being `5432` instead of the port mapped
 from the host. These two values are default, and cannot be configured by custom
 environment variables reliably at this moment.
+3. Maybe later I will bridge the network config, but for now, this works...
 
 #### Running the Server for Development
 
@@ -121,18 +125,17 @@ The order in which the server is built looks like this
 (initialized by the commands mentioned above):
 
 1. lint (via `eslint`)
-1. create database using `sequelize-cli` (may error out if db exists, but does
+1. create database, see `server/src/db` for details (may error out if db exists, but does
 not stop build process. This is expected behavior)
 1. run server with babel-node (`server/bin/www.js`) to support `import/export` 
 in the node environment
-    1. in that file, conditionally truncate/sync database and execute seeders
+    1. in `server/src/db`, conditionally truncate/sync database and execute seeders
     asynchronously based on `DB_SYNC_WITH_SEQUELIZE`
 
 #### Debugging the Server
 
 It is recommended to use the `debug npm module` in your files, with the `server:`
-prefix, followed by an identifier of your choosing. These are only printed to
-the log when using the `watch:debug` command.
+prefix, followed by an identifier of your choosing (i.e. `server:my-feature`). These are only printed to the log when using the `watch:debug` command.
 
 If you are having build issues, I suggest setting an environment variable
 `DEBUG=*` and running `yarn run dev` to see the full debug information from each
@@ -140,31 +143,46 @@ If you are having build issues, I suggest setting an environment variable
 
 #### Testing the Server
 
-If you want to run unit tests, run either of the following commands:
+If you want to run unit tests, first create the `.env-test` file in
+`server/src/config`, similarly to how you created `.env-development`.
+
+Then run either of the following commands:
 
 1. `yarn run test`
 1. `yarn run watch:test` will re-run tests when you make file changes; see
 `nodemon-test.json` for which files are being watched
 
-`Note:` either of the above testing options will print debug messages that use
+Note:
+
+1. if your development server is currently running when attempting to run tests,
+and if your `.env-test` has your test server listening on the same port, the
+tests cannot run. It is recommended to run only one environment at a time at
+this moment; otherwise, configure your `.env-test` differently. 
+
+    `Note: they may use the same DB_* credentials, it is just the APP_*
+    variables that I am referring to`
+
+1. either of the above testing options will print debug messages that use
 the `debug npm module`. The messages, when printed, will include the
 test suite name, and name of the test itself in hopes to make the logs more
-readable, assisting with debugging. See `server/test` for how that utilize this.
+readable, assisting with debugging. See `server/test` for how that utilize this
+logger.
 
 #### Actually Developing
 
 I recommend the following workflow when creating a new API resource:
 
-1. create the sequelize `model` using `sequelize-cli`
-1. move the outputted `model` to a new folder, corresponding to the model name,
-under the `gairos` api: `server/api/gairos` (or the other API directories as
-needed), and rename the file to `model.js`
-1. convert the sequelize `model` to ES6+ syntax (as needed) and complete its
-schema (for the database)
-1. create and complete the `schema.graphql` for the `model` (for the resource /
-graphql response). The schema does not necessarily have to match the sequelize
-model. It would be ideal to have the relationships between this `model`
+1. create the sequelize `model` either way::
+    1. Via `sequelize-cli`
+        1. move the outputted `model` to a new folder, corresponding to the model name under the `gairos` api: `server/api/gairos` (or the other API directories as needed), and rename the file to `model.js`
+    1. Manually under `server/api/gairos/<NEW_MODEL|RESOURCE>/model.js` directory
+1. convert the sequelize `model` to ES6+ syntax (as needed), as is consitent
+with this project, and complete its schema in this file (used for the database)
+    1. It would be ideal to have the relationships between this `model`
 and the others completed as well
+1. create and complete the `schema.graphql` for the `model` (used for the
+graphql API response ). The schema does not necessarily have to match the
+sequelize model
 1. create the `resolvers.js` for the `model`; don't complete this yet!
 1. create an `index.js` file for the resource, and export the `model`,
 `typeDefs`, and `resolvers`
@@ -177,4 +195,9 @@ functionality in the `model` and `resolvers` files
     1. test any resolver functionality in `int.spec.js`
 
 Remember, that once you fulfill the `index.js` file for the resource, the
-`model`, `typeDefs` and `resolvers` are dynamically loaded into the application.
+`model`, `typeDefs` and `resolvers` are dynamically loaded into the application,
+and you can immediately begin querying the new resource after the server
+restarts.
+
+In your browser, go to your app URL `localhost:APP_PORT/graphql` to test the
+graphql API.
