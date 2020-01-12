@@ -16,7 +16,7 @@ try {
   // protect production from accidental dropping of database...
   if (cmd.includes("db:drop") && env.includes("prod")) {
     throw new Error(
-      `For your projection, you cannot drop a database for this environment: ${env}`
+      `For your protection, you cannot drop a database for this environment: ${env}`
     );
   }
 
@@ -45,8 +45,7 @@ try {
 } catch (e) {
   console.error(e);
   console.error(
-    "If you are expecting this behaviour, then it is safe to ignore" +
-      "(i.e. if the database already exists when attempting to create)"
+    "If you are expecting this behaviour, then it is safe to ignore"
   );
   process.exit(1);
 }
