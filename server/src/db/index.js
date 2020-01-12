@@ -3,6 +3,7 @@ import { exec } from "child_process";
 import { resolve } from "path";
 import debugLib from "debug";
 import config from "../config";
+import { isProductionEnvironment } from "../utils";
 
 const debug = debugLib("server:db-init");
 
@@ -47,9 +48,6 @@ export default async () => {
   }
 
   try {
-    const isProductionEnvironment = process.env.NODE_ENV.toLowerCase().includes(
-      "prod"
-    );
     const eraseDatabaseOnSync =
       process.env.DB_SYNC_WITH_SEQUELIZE.toLowerCase() == "true" &&
       !process.env.NODE_ENV.toLowerCase().includes("prod");
