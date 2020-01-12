@@ -1,28 +1,35 @@
 {
   "parser": "babel-eslint",
-    "env": {
-        "browser": true,
-        "es6": true
-    },
-    "extends": [
-        "eslint:recommended",
-        "plugin:node/recommended",
-        "plugin:prettier/recommended"
-    ],
-    "globals": {
-        "Atomics": "readonly",
-        "SharedArrayBuffer": "readonly"
-    },
-    "parserOptions": {
-        "ecmaVersion": 2018,
-        "sourceType": "module",
-        "allowImportExportEverywhere": true
-    },
-    "rules": {
-        "node/no-unsupported-features/es-syntax": ["off"],
-        "node/shebang": ["off"],
-        "no-process-exit": ["off"],
-        "prettier/prettier": ["error"],
-        "no-unused-vars": ["warn"]
-    }
+  "env": {
+      "node": true,
+      "es6": true
+  },
+  "extends": [
+      "eslint:recommended",
+      "plugin:node/recommended",
+      "plugin:prettier/recommended"
+  ],
+  "globals": {
+      "Atomics": "readonly",
+      "SharedArrayBuffer": "readonly"
+  },
+  "parserOptions": {
+      "ecmaVersion": 2018,
+      "sourceType": "module",
+      "allowImportExportEverywhere": true
+  },
+  "rules": {
+      "node/no-unsupported-features/es-syntax": ["off"],
+      "node/shebang": ["off"],
+      "no-process-exit": ["off"],
+      "prettier/prettier": ["error"],
+      "no-unused-vars": ["warn"]
+  },
+  "ignorePatterns": [
+    "node_modules",
+    "dist",
+    "db",
+    "src/test/*",
+    "src/api/**/**/*.spec.js"
+  ]
 }

@@ -1,5 +1,0 @@
-node_modules
-dist
-db
-src/api/**/**/*.spec.js
-src/test/*.js
