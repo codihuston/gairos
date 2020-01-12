@@ -107,7 +107,7 @@ The recommended way to run the server is to use:
 1. `yarn run watch:debug`
     1. will automatically re-run the server when you change any file in
     `server/src` (see `nodemon.json` to see which files are watched), as well as
-    log your debug messages (implemented with the `debug()` npm module)
+    log your debug messages (implemented with the `debug npm module`)
 1. `yarn run watch`
     1. this option does not print your debug messages
 
@@ -130,10 +130,51 @@ in the node environment
 
 #### Debugging the Server
 
-It is recommended to use the `debug()` library in your files, with the `server:`
+It is recommended to use the `debug npm module` in your files, with the `server:`
 prefix, followed by an identifier of your choosing. These are only printed to
 the log when using the `watch:debug` command.
 
 If you are having build issues, I suggest setting an environment variable
 `DEBUG=*` and running `yarn run dev` to see the full debug information from each
 3rd party library.
+
+#### Testing the Server
+
+If you want to run unit tests, run either of the following commands:
+
+1. `yarn run test`
+1. `yarn run watch:test` will re-run tests when you make file changes; see
+`nodemon-test.json` for which files are being watched
+
+`Note:` either of the above testing options will print debug messages that use
+the `debug npm module`. The messages, when printed, will include the
+test suite name, and name of the test itself in hopes to make the logs more
+readable, assisting with debugging. See `server/test` for how that utilize this.
+
+#### Actually Developing
+
+I recommend the following workflow when creating a new API resource:
+
+1. create the sequelize `model` using `sequelize-cli`
+1. move the outputted `model` to a new folder, corresponding to the model name,
+under the `gairos` api: `server/api/gairos` (or the other API directories as
+needed), and rename the file to `model.js`
+1. convert the sequelize `model` to ES6+ syntax (as needed) and complete its
+schema (for the database)
+1. create and complete the `schema.graphql` for the `model` (for the resource /
+graphql response). The schema does not necessarily have to match the sequelize
+model. It would be ideal to have the relationships between this `model`
+and the others completed as well
+1. create the `resolvers.js` for the `model`; don't complete this yet!
+1. create an `index.js` file for the resource, and export the `model`,
+`typeDefs`, and `resolvers`
+1. create the `int.spec.js` (stands for integration tests) and
+`unit.spec.js` files for this resource
+1. execute a Test Driven Design (TDD) approach by coding the tests before the
+functionality in the `model` and `resolvers` files
+  
+    1. test any individual methods on the `model` in `unit.spec.js`
+    1. test any resolver functionality in `int.spec.js`
+
+Remember, that once you fulfill the `index.js` file for the resource, the
+`model`, `typeDefs` and `resolvers` are dynamically loaded into the application.
