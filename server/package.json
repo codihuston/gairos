@@ -34,6 +34,7 @@
   "dependencies": {
     "apollo-errors": "^1.9.0",
     "apollo-server-express": "^2.9.15",
+    "connect-session-sequelize": "^6.0.0",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "dotenv": "^8.2.0",

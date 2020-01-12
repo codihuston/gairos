@@ -6,15 +6,17 @@ import logger from "morgan";
 import session from "express-session";
 import uuid from "uuid/v4";
 import debugLib from "debug";
-
-const { ApolloServer } = require("apollo-server-express");
+import ConnectSessionStore from "connect-session-sequelize";
+import { ApolloServer } from "apollo-server-express";
 
 import { router as indexRouter } from "./routes/index";
 import { router as authRouter } from "./routes/auth";
-import { models } from "./api";
-import { resolveGraphqlDefinitions } from "./api";
+import { models, resolveGraphqlDefinitions } from "./api";
+import { sequelize } from "./db";
+import { isProductionEnvironment } from "./utils";
 
 const debug = debugLib("server:app");
+const SequelizeStore = ConnectSessionStore(session.Store);
 
 export default resolveGraphqlDefinitions()
   .then(result => {
@@ -32,9 +34,11 @@ export default resolveGraphqlDefinitions()
         secret: process.env.APP_SESSION_SECRET,
         resave: false,
         saveUninitialized: true,
-        // store: ??? // TODO: implement a persistent datastore for sessions
-        // TODO: enable secure cookies in prod
-        cookie: { secure: false }
+        // TODO: use redis store for access token (to not persist them on disk)?
+        store: new SequelizeStore({
+          db: sequelize
+        }),
+        cookie: { secure: isProductionEnvironment }
       })
     );
 

@@ -2,6 +2,10 @@ import Debug from "debug";
 import * as fs from "fs";
 import { join } from "path";
 
+export const isProductionEnvironment = process.env.NODE_ENV.toLowerCase().includes(
+  "prod"
+);
+
 // there should be a webpack loader for this: https://www.npmjs.com/package/graphql-tag
 export const loadGQLFile = (fileDirectory, filePath) => {
   return fs.readFileSync(join(fileDirectory, filePath), "utf-8");
