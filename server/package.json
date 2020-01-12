@@ -16,11 +16,14 @@
     "dev:debug": "npm run server:dev:debug",
     "server:dev:debug": "cross-env NODE_ENV=development DEBUG=server:* npm-run-all lint db:init:dev --continue-on-error server",
     "watch:debug": "nodemon --exec \"npm run server:dev:debug\"",
-    "test": "cross-env NODE_ENV=test mocha --exit",
-    "watch:test": "cross-env DEBUG=server:*,test:* nodemon --config nodemon-test.json",
-    "ci": "cross-env NODE_ENV=ci mocha --exit",
+    "test": "npm-run-all db:init:test --continue-on-error test:run",
+    "test:run": "cross-env NODE_ENV=test DEBUG=server:*,test:* mocha --require @babel/register --exit",
+    "watch:test": "nodemon --config nodemon-test.json",
+    "ci": "cross-env NODE_ENV=ci mocha --require @babel/register --exit",
     "db:init:dev": "sequelize-cli db:create --env development",
-    "db:seed:dev": "sequelize-cli db:seed:all --env development"
+    "db:seed:dev": "sequelize-cli db:seed:all --env development",
+    "db:init:test": "sequelize-cli db:create --env test",
+    "db:seed:test": "sequelize-cli db:seed:all --env test"
   },
   "dependencies": {
     "apollo-errors": "^1.9.0",
@@ -52,6 +55,7 @@
     "@babel/preset-env": "^7.7.7",
     "@babel/register": "^7.7.7",
     "babel-eslint": "^10.0.3",
+    "chai": "^4.2.0",
     "cross-env": "^6.0.3",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.9.0",
