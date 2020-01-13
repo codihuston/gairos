@@ -2,6 +2,10 @@ extend type Query {
   getCalendars: [Calendar]
 }
 
+extend type Mutation{
+  createCalendar(summary: String!, description: String): Calendar
+}
+
 type Calendar {
   kind: String,
   etag: String,

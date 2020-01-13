@@ -1,5 +1,9 @@
 import { DataSource } from "apollo-datasource";
+import debugLib from "debug";
 import { GoogleCalendar } from "../../";
+import resolvers from "./resolvers";
+
+const debug = debugLib("server:calendar api");
 
 /**
  * TODO: possibly revert to OAuth2 web requests instead of nodejs client for
@@ -22,9 +26,20 @@ export default {
     }
 
     async list() {
-      return GoogleCalendar.calendarList
-        .list()
-        .map(calendar => this.reducer(calendar));
+      const res = await GoogleCalendar.calendarList.list();
+
+      if (res.data && res.data.items) {
+        return res.data.items.map(calendar => this.reducer(calendar));
+      }
+      return res.data.items;
+    }
+
+    async createCalendar(opts) {
+      const res = await GoogleCalendar.calendars.insert({
+        resource: opts
+      });
+      debug("create calendar result", res);
+      return this.reducer(res.data);
     }
   }
 };

@@ -30,5 +30,25 @@ export default {
         }
       }
     ]
+  },
+  calendars: {
+    insert: {
+      raw: {
+        kind: "calendar#calendar",
+        etag: '"lO1DEZXES82bm5FrxtzDShzbXNs"',
+        id: "umvpabki1joae0vm1jh7ie43vg@group.calendar.google.com",
+        summary: "test calendar",
+        timeZone: "UTC",
+        conferenceProperties: { allowedConferenceSolutionTypes: [] }
+      },
+      reduced: {
+        kind: "calendar#calendar",
+        etag: '"lO1DEZXES82bm5FrxtzDShzbXNs"',
+        id: "umvpabki1joae0vm1jh7ie43vg@group.calendar.google.com",
+        summary: "test calendar",
+        timeZone: "UTC",
+        conferenceProperties: { allowedConferenceSolutionTypes: [] }
+      }
+    }
   }
 };

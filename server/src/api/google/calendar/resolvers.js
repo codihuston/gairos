@@ -1,10 +1,20 @@
 export default {
   Query: {
-    getCalendars: async (parent, args, { dataSources }, info) => {
+    getCalendars: async (parent, args, { dataSources }) => {
       // TODO: handle bad response?
-      const res = await dataSources.CalendarAPI.list();
-
-      return res.data.items;
+      return await dataSources.CalendarAPI.list();
+    }
+  },
+  Mutation: {
+    createCalendar: async (
+      parent,
+      { summary, description },
+      { dataSources }
+    ) => {
+      return await dataSources.CalendarAPI.createCalendar({
+        summary,
+        description
+      });
     }
   }
 };
