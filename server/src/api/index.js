@@ -10,6 +10,8 @@ import glob from "glob";
 const debug = debugLib("server:api");
 const gqlSchemas = [];
 const gqlResolvers = [];
+const gqlDataSources = {};
+
 // fetch the modules in each sub-directory under /api
 const dirs = glob.sync(join(__dirname, "**/**/index.js"), {
   ignore: [join(__dirname, "index.js"), join(__dirname, "*/index.js")]
@@ -46,12 +48,16 @@ export const resolveGraphqlDefinitions = () =>
         const m = require(dir);
 
         if (m && m.default) {
-          const { typeDefs, resolvers } = m.default;
+          const { typeDefs, resolvers, dataSource } = m.default;
           if (typeDefs) {
             gqlSchemas.push(typeDefs);
           }
           if (resolvers) {
             gqlResolvers.push(resolvers);
+          }
+          if (dataSource) {
+            // pass models into this api (removes need for import)
+            gqlDataSources[dataSource.name] = new dataSource.class({ models });
           }
         } else {
           console.warn("SKIPPING: no typeDefs or resolvers specified");
@@ -65,6 +71,7 @@ export const resolveGraphqlDefinitions = () =>
     resolve({
       models,
       resolvers: merge({}, ...gqlResolvers),
-      typeDefs: gqlSchemas.join(" ")
+      typeDefs: gqlSchemas.join(" "),
+      dataSources: () => gqlDataSources
     });
   });

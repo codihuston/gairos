@@ -20,7 +20,7 @@ const SequelizeStore = ConnectSessionStore(session.Store);
 
 export default resolveGraphqlDefinitions()
   .then(result => {
-    const { typeDefs, resolvers } = result;
+    const { typeDefs, resolvers, dataSources } = result;
     var app = express();
 
     // init session
@@ -60,13 +60,14 @@ export default resolveGraphqlDefinitions()
     // inject graphql server into express
     debug("GraphQL typeDefs:", typeDefs);
     debug("GraphQL resolvers:", resolvers);
+    debug("GraphQL dataSources:", dataSources);
     const server = new ApolloServer({
-      typeDefs: typeDefs,
-      resolvers: resolvers,
+      typeDefs,
+      resolvers,
+      dataSources,
       context: async ({ req, res }) => {
         // pass context into our resolvers
         return {
-          models,
           session: req.session,
           me: models.user.findByLogin("rwieruch")
         };

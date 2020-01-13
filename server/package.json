@@ -32,6 +32,7 @@
     "db:seed:ci": "sequelize-cli db:seed:all --env ci"
   },
   "dependencies": {
+    "apollo-datasource": "^0.6.4",
     "apollo-errors": "^1.9.0",
     "apollo-server-express": "^2.9.15",
     "connect-session-sequelize": "^6.0.0",

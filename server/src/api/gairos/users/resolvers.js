@@ -21,15 +21,15 @@ export default {
 
       return "Hello world!";
     },
-    me: async (parent, args, context) => {
+    me: async (parent, args, { dataSources }) => {
       // TODO: handle bad response?
-      return context.models.user.findByPk(1);
+      return dataSources.UserAPI.findByPk(1);
     }
   },
   Mutation: {
-    createUser: async (parent, args, context) => {
+    createUser: async (parent, args, { dataSources }) => {
       try {
-        const user = await context.models.user.create(args);
+        const user = await dataSources.UserAPI.create(args);
         return user;
       } catch (e) {
         throw SequelizeErrorHandler(e);
