@@ -49,15 +49,33 @@ export const resolveGraphqlDefinitions = () =>
 
         if (m && m.default) {
           const { typeDefs, resolvers, dataSource } = m.default;
+
+          // load typdefs
           if (typeDefs) {
             gqlSchemas.push(typeDefs);
+          } else {
+            debug(
+              "\tWARNING: Graphql Schema not found for this resource (optional)"
+            );
           }
+
+          // load resolvers
           if (resolvers) {
             gqlResolvers.push(resolvers);
+          } else {
+            debug(
+              "\tWARNING: Graphql Resolvers not found for this resource (optional)"
+            );
           }
+
+          // load datasource
           if (dataSource) {
             // pass models into this api (removes need for import)
             gqlDataSources[dataSource.name] = new dataSource.class({ models });
+          } else {
+            debug(
+              "\tWARNING: Graphql Data Source not found for this resource (optional)"
+            );
           }
         } else {
           console.warn("SKIPPING: no typeDefs or resolvers specified");
