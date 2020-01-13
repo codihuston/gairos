@@ -23,8 +23,10 @@
     "db:seed:development": "sequelize-cli db:seed:all --env development",
     "TESTING    ": "----------------------------------------------------------",
     "lint:test": "eslint ./src/api/**/**/*.spec.js --config .eslintrc-test.json",
-    "test": "npm-run-all lint:test test:run",
-    "test:run": "cross-env NODE_ENV=test DEBUG=server:*,test:* mocha --require @babel/register --exit",
+    "test": "npm-run-all lint:test test:unit test:int test:e2e",
+    "test:unit": "cross-env NODE_ENV=test DEBUG=server:*,test:* mocha --config ./.mocharc-unit.json --require @babel/register --exit",
+    "test:int": "cross-env NODE_ENV=test DEBUG=server:*,test:* mocha --config ./.mocharc-int.json --require @babel/register --exit",
+    "test:e2e": "cross-env NODE_ENV=test DEBUG=server:*,test:* mocha --config ./.mocharc-e2e.json --require @babel/register --exit",
     "watch:test": "nodemon --config nodemon-test.json",
     "db:seed:test": "sequelize-cli db:seed:all --env test",
     "CI-CD      ": "----------------------------------------------------------",
@@ -54,6 +56,7 @@
     "regenerator-runtime": "^0.13.3",
     "rimraf": "^3.0.0",
     "sequelize": "^5.21.3",
+    "sinon": "^8.0.4",
     "uuid": "^3.3.3"
   },
   "devDependencies": {

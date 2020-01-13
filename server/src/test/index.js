@@ -6,7 +6,12 @@ before(function() {
 });
 
 beforeEach(function(done) {
-  // prefix for debug() logger
+  /**
+   * prefix for debug() logger;
+   *
+   * NOTE: env DEBUG= in package.json must match in order to see log output
+   * printed to the console!
+   */
   this.prefix = "test";
 
   /**
@@ -26,11 +31,7 @@ beforeEach(function(done) {
    */
   this.initTestLog = function() {
     const log = debugLib(
-      [this.prefix, this.test.parent.title, this.test.title].join(":")
-    );
-    console.log(
-      "EE",
-      [this.prefix, this.test.parent.title, this.test.title].join(":")
+      ["test", this.test.parent.title, this.test.title].join(":")
     );
     log("Starting test");
     return log;
