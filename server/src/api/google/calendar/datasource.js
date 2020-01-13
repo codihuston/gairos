@@ -18,7 +18,6 @@ export default {
      * (i.e. rename fields to match a name in the GraphQL Schema, etc.)
      */
     reducer(res) {
-      console.log("INVOKED RES", res);
       return res;
     }
 
