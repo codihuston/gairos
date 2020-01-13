@@ -1,30 +1,21 @@
-import { calendar_v3, people_v1 } from "googleapis";
 import { merge } from "lodash";
 import { join } from "path";
 import debugLib from "debug";
-
-import { models } from "./gairos/index";
-import { oauth2Client } from "../services/auth/google";
 import glob from "glob";
+
+import { models } from "./gairos";
+import { calendar, people } from "./google";
 
 const debug = debugLib("server:api");
 const gqlSchemas = [];
 const gqlResolvers = [];
 const gqlDataSources = {};
 
+export { calendar, people };
 // fetch the modules in each sub-directory under /api
 const dirs = glob.sync(join(__dirname, "**/**/index.js"), {
   ignore: [join(__dirname, "index.js"), join(__dirname, "*/index.js")]
 });
-
-export const calendar = new calendar_v3.Calendar({
-  auth: oauth2Client
-});
-
-export const people = new people_v1.People({
-  auth: oauth2Client
-});
-
 export { models };
 
 /**

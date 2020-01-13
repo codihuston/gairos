@@ -1,4 +1,4 @@
-const { DataSource } = require("apollo-datasource");
+import { DataSource } from "apollo-datasource";
 
 export default {
   name: "UserAPI",
