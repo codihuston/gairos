@@ -12,7 +12,7 @@ describe("google calendar unit tests", function() {
     sandbox.stub(api, "list").returns(mockResponses.list.reduced);
     sandbox
       .stub(api, "createCalendar")
-      .returns(mockResponses.calendars.insert.reduced);
+      .returns(mockResponses.createCalendar.reduced);
     sandbox.spy(api, "reducer");
   });
 
@@ -44,7 +44,7 @@ describe("google calendar unit tests", function() {
         summary: "test calendar",
         description: "some description"
       }),
-      mockResponses.calendars.insert.reduced,
+      mockResponses.createCalendar.reduced,
       "api lists calendars"
     );
     sandbox.assert.calledOnce(api.createCalendar);
