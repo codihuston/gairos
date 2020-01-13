@@ -7,9 +7,19 @@ import { GoogleCalendar } from "../../";
  */
 export default {
   name: "CalendarAPI",
-  class: class CalendarAPI extends DataSource {
+  Class: class CalendarAPI extends DataSource {
     constructor() {
       super();
+    }
+
+    /**
+     * Shapes the response into what our GraphQL schema expects. Use this if
+     * you intend on changing the response data from the External API in anyway
+     * (i.e. rename fields to match a name in the GraphQL Schema, etc.)
+     */
+    reducer(res) {
+      console.log("INVOKED RES", res);
+      return res;
     }
 
     async list() {

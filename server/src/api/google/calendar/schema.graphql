@@ -3,7 +3,16 @@ extend type Query {
 }
 
 type Calendar {
-  id: String
-  summary: String
-  description: String
+  kind: String,
+  etag: String,
+  id: String,
+  summary: String,
+  description: String,
+  location: String,
+  timeZone: String,
+   conferenceProperties: ConferenceProperties
+}
+
+type ConferenceProperties{
+  allowedConferenceSolutionTypes: [String]
 }

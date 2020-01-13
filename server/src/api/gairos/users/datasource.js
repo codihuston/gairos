@@ -2,7 +2,7 @@ import { DataSource } from "apollo-datasource";
 
 export default {
   name: "UserAPI",
-  class: class UserAPI extends DataSource {
+  Class: class UserAPI extends DataSource {
     constructor({ models }) {
       super();
       this.models = models;

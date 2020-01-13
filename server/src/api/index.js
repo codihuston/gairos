@@ -63,7 +63,7 @@ export const resolveGraphqlDefinitions = () =>
           // load datasource
           if (dataSource) {
             // pass models into this api (removes need for import)
-            gqlDataSources[dataSource.name] = new dataSource.class({ models });
+            gqlDataSources[dataSource.name] = new dataSource.Class({ models });
           } else {
             debug(
               "\tWARNING: Graphql Data Source not found for this resource (optional)"

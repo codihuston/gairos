@@ -7,7 +7,7 @@ import { GooglePeople } from "../../";
  */
 export default {
   name: "PeopleAPI",
-  class: class PeopleAPI extends DataSource {
+  Class: class PeopleAPI extends DataSource {
     constructor() {
       super();
     }
