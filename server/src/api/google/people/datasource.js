@@ -1,19 +1,19 @@
 import { DataSource } from "apollo-datasource";
-import { GoogleCalendar } from "../../";
+import { GooglePeople } from "../../";
 
 /**
  * TODO: possibly revert to OAuth2 web requests instead of nodejs client for
  * apollo RESTDataSource caching support?
  */
 export default {
-  name: "CalendarAPI",
-  class: class CalendarAPI extends DataSource {
+  name: "PeopleAPI",
+  class: class PeopleAPI extends DataSource {
     constructor() {
       super();
     }
 
-    async list() {
-      return GoogleCalendar.calendarList.list();
+    async get(opts) {
+      return await GooglePeople.people.get(opts);
     }
   }
 };

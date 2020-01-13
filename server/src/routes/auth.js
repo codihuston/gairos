@@ -1,6 +1,6 @@
 import express from "express";
 import { oauth2Client, url } from "../services/auth/google";
-import { calendar, people } from "../api";
+import { GooglePeople, GoogleCalendar } from "../api";
 
 const router = express.Router();
 
@@ -32,11 +32,11 @@ router.get("/google/cb", async function(req, response) {
   // test getting calendars
   response.json({
     // TODO: store user info in session?
-    people: await people.people.get({
+    people: await GooglePeople.people.get({
       resourceName: "people/me",
       personFields: ["names", "emailAddresses"]
     }),
-    calendars: await calendar.calendarList.list()
+    calendars: await GoogleCalendar.calendarList.list()
   });
 });
 

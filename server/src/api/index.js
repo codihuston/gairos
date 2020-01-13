@@ -4,18 +4,19 @@ import debugLib from "debug";
 import glob from "glob";
 
 import { models } from "./gairos";
-import { calendar, people } from "./google";
+import { GooglePeople, GoogleCalendar } from "./google";
 
 const debug = debugLib("server:api");
 const gqlSchemas = [];
 const gqlResolvers = [];
 const gqlDataSources = {};
 
-export { calendar, people };
 // fetch the modules in each sub-directory under /api
 const dirs = glob.sync(join(__dirname, "**/**/index.js"), {
   ignore: [join(__dirname, "index.js"), join(__dirname, "*/index.js")]
 });
+
+export { GooglePeople, GoogleCalendar };
 export { models };
 
 /**
