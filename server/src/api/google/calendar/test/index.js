@@ -38,6 +38,7 @@ export default {
         etag: '"lO1DEZXES82bm5FrxtzDShzbXNs"',
         id: "umvpabki1joae0vm1jh7ie43vg@group.calendar.google.com",
         summary: "test calendar",
+        description: "some description",
         timeZone: "UTC",
         conferenceProperties: { allowedConferenceSolutionTypes: [] }
       },
@@ -46,6 +47,7 @@ export default {
         etag: '"lO1DEZXES82bm5FrxtzDShzbXNs"',
         id: "umvpabki1joae0vm1jh7ie43vg@group.calendar.google.com",
         summary: "test calendar",
+        description: "some description",
         timeZone: "UTC",
         conferenceProperties: { allowedConferenceSolutionTypes: [] }
       }

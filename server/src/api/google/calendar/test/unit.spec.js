@@ -10,10 +10,15 @@ const api = new DataSource.Class();
 describe("google calendar unit tests", function() {
   before(function() {
     sandbox.stub(api, "list").returns(mockResponses.list.reduced);
+    sandbox
+      .stub(api, "createCalendar")
+      .returns(mockResponses.calendars.insert.reduced);
     sandbox.spy(api, "reducer");
   });
 
-  after(function() {});
+  after(function() {
+    sandbox.restore();
+  });
 
   it("reducer_validInput_returnsObject", async function() {
     assert.deepEqual(
@@ -31,5 +36,17 @@ describe("google calendar unit tests", function() {
       "api lists calendars"
     );
     sandbox.assert.calledOnce(api.list);
+  });
+
+  it("createCalendar_requiredInput_returnsArray", async function() {
+    assert.deepEqual(
+      api.createCalendar({
+        summary: "test calendar",
+        description: "some description"
+      }),
+      mockResponses.calendars.insert.reduced,
+      "api lists calendars"
+    );
+    sandbox.assert.calledOnce(api.createCalendar);
   });
 });
