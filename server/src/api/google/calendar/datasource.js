@@ -22,7 +22,9 @@ export default {
     }
 
     async list() {
-      return GoogleCalendar.calendarList.list();
+      return GoogleCalendar.calendarList
+        .list()
+        .map(calendar => this.reducer(calendar));
     }
   }
 };
