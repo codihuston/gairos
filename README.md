@@ -172,27 +172,93 @@ logger.
 
 I recommend the following workflow when creating a new API resource:
 
-1. create the sequelize `model` either way::
+1. create the sequelize `model` either way:
     1. Via `sequelize-cli`
         1. move the outputted `model` to a new folder, corresponding to the model name under the `gairos` api: `server/api/gairos` (or the other API directories as needed), and rename the file to `model.js`
     1. Manually under `server/api/gairos/<NEW_MODEL|RESOURCE>/model.js` directory
 1. convert the sequelize `model` to ES6+ syntax (as needed), as is consitent
 with this project, and complete its schema in this file (used for the database)
     1. It would be ideal to have the relationships between this `model`
-and the others completed as well
+and the others completed here at this point as well
 1. create and complete the `schema.graphql` for the `model` (used for the
 graphql API response ). The schema does not necessarily have to match the
 sequelize model
 1. create the `resolvers.js` for the `model`; don't complete this yet!
-1. create an `index.js` file for the resource, and export the `model`,
-`typeDefs`, and `resolvers`
-1. create the `int.spec.js` (stands for integration tests) and
-`unit.spec.js` files for this resource
-1. execute a Test Driven Design (TDD) approach by coding the tests before the
-functionality in the `model` and `resolvers` files
+1. create the `datasource.js` for the `model`; this will encapsulate the 
+   business logic, and is ultimately used by the  `resolvers` and `*.spec.js`
+   files
+   
+   This file should `export default` a `name` and `Class` property; the `Class`
+   needs to be equal to a class that extends the `apollo-datasource` class,
+   called `DataSource`. If the `datasource` that you are creating is fetching
+   data from an external `REST API`, use `import` the `apollo-datasource-rest` 
+   and extend the `RESTDataSource` class. The exports are used to dynamically
+   load this this resource with less work on your part.
+   
+   Note: The `resolvers` only need to worry about whether or not they
+   are getting data, not on 'how' they are doing it. You can think of the
+   `datasource` as being the `API` to your model, or a `controller` in a
+   `model-view-controller` app.
+   
+   `Data Sources` are  also implemented here in attempt to be forward-thinking,
+   and will hopefully implement caching of `database requests` in the future
+2. create an `index.js` file for the resource, and `import` + `export default`
+   the `model`, `typeDefs`, `resolvers`, and `dataSource`
+3. create the `server/api/gairos/MODEL/test` directory
+4. in this directory, create the following files for this resource: `unit.spec.js` and `int.spec.js` (stands 
+   for integration tests), and `e2e.spec.js` (stands for end-to-end tests).These
+   are used to execute a Test Driven Design (TDD) development approach. I will
+   refer you to the `Practical Test Pyramid | Unit testing pyramid`.
   
-    1. test any individual methods on the `model` in `unit.spec.js`
-    1. test any resolver functionality in `int.spec.js`
+    1. `index.js` the index file in the test directory for this resource should
+       export any `mock data` used in your tests. The `mock data` should be
+       exactly what your tests should expect in the results in order to pass. 
+       This file is purely a tool for organization purposes
+
+       This file should exports:
+       1. `mockQueries`, which are mapped to the graphql query in your schema
+       that this is meant for. The way they are mapped is purely for 
+       organizational purposes
+       1. `mockMutations`, which are mapped to the graphql mutation in your
+       schema that it is meant for
+       1. `mockResponses`, which are mapped to the `API` methods that you're 
+       testing in your `datasource`. They should include a `raw` and `reduced`
+       property, in case we ever decide to re-shape how external data looks
+       on our end. The values for these two properties can be the same,
+       otherwise!
+
+    2. `unit.spec.js` should test individual methods of the class in the 
+       `datasource`. 
+       
+       You should use `sinon` to `spy` and `stub` out any methods
+       that execute class to `external systems`; the point of unit testing is
+       to test a small unit of code (like a `function`), and that it returns
+       an expected value for a given input
+
+       1. your test should `import` the `API` that you are testing
+       2. `stub` out the method your are testing so that it 
+       returns the expected `mock data` (as defined in the index file)
+       3. verify that the now-stubbed method, when invoked, will return
+       your expected `mockResponses`
+
+       This might look a little useless, but this workflow makes more sense
+       when the units you are testing has multiple codepaths which are
+       influenced by your input values. You should test each path for expected
+       results and errors.
+
+    3. `int.spec.js` should test the `datasources` and `resolvers` by way of
+       using only `graphql` queries and the API you've defined in the
+       `datasource`
+       
+       You should should:
+
+        1. start a graphql server for testing
+        2. fetch the API that you are going to test
+        3. stub the method in the API that you are testing to return pre-defined
+            `mock data`
+        4. fetch the `mock graphql query` from your mocks fi
+        5. send the server a `graphql` query
+        6. verify the results match your expecte `mockResponses`
 
 Remember, that once you fulfill the `index.js` file for the resource, the
 `model`, `typeDefs` and `resolvers` are dynamically loaded into the application,
