@@ -1,6 +1,6 @@
 import { assert } from "chai";
 import sinon from "sinon";
-import mockResponses from ".";
+import { mockResponses } from ".";
 import DataSource from "../datasource";
 
 const sandbox = sinon.createSandbox();

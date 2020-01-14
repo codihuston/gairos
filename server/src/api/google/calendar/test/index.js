@@ -1,3 +1,20 @@
+/**
+ * This file should contain any mock responses and/or mock graphQL queries +
+ * mutations. These are used only for testing.abs
+ *
+ * mockQueries: These can be copied directly from graphiQL in used with the
+ * `gql` tool to make the query usable in the integration tests
+ *
+ * mockMutations: Same as mockQueries
+ *
+ * mockResponses: The root properties should be mappable to the corresponding
+ * `datasource.js` file for this model (i.e. should match the `method names` used
+ * in testing for the sake of clarity). The `METHOD_NAME.raw` should contain a
+ * raw response from the external datasource (be it 1st or 3rd party). The
+ * `METHOD_NAME.reduced` should contain a formatted response that we expect our
+ * graphQL resolvers to return. It is OK for `.raw` and `.reduced` to yeild the
+ * same result. This design pattern is just intended to be forward-thinking.
+ */
 import gql from "graphql-tag";
 
 export const mockQueries = {
@@ -19,9 +36,10 @@ export const mockQueries = {
   `
 };
 
-export default {
+export const mockMutations = {};
+
+export const mockResponses = {
   list: {
-    // sample of a raw response from the 3rd party API
     raw: [
       {
         kind: "calendar#calendarListEntry",

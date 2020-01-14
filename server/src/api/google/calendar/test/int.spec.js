@@ -1,8 +1,9 @@
 import { createTestClient } from "apollo-server-testing";
 import sinon from "sinon";
 import { assert } from "chai";
+
 import { buildApolloServer } from "../../../../test";
-import mockResponses, { mockQueries } from ".";
+import { mockResponses, mockQueries } from ".";
 
 describe("GraphQL Queries", function() {
   it("fetches a list of calendars", async function() {
