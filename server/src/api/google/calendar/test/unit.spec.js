@@ -1,4 +1,3 @@
-import { assert } from "chai";
 import sinon from "sinon";
 import { mockResponses } from ".";
 import DataSource from "../datasource";
@@ -8,45 +7,37 @@ const sandbox = sinon.createSandbox();
 const api = new DataSource.Class();
 
 describe("google calendar unit tests", function() {
-  before(function() {
-    sandbox.stub(api, "list").returns(mockResponses.list.reduced);
-    sandbox
-      .stub(api, "createCalendar")
-      .returns(mockResponses.createCalendar.reduced);
-    sandbox.spy(api, "reducer");
+  beforeAll(function() {
+    api.list = jest.fn().mockReturnValue(mockResponses.list.reduced);
+    api.createCalendar = jest
+      .fn()
+      .mockReturnValue(mockResponses.createCalendar.reduced);
   });
 
-  after(function() {
+  afterEach(function() {
     sandbox.restore();
   });
 
   it("reducer_validInput_returnsObject", async function() {
-    assert.deepEqual(
-      api.reducer(mockResponses.list.raw),
-      mockResponses.list.reduced,
-      "api response is reduced correctly"
+    const spy = jest.spyOn(api, "reducer");
+    expect(api.reducer(mockResponses.list.raw)).toEqual(
+      mockResponses.list.reduced
     );
-    sandbox.assert.calledOnce(api.reducer);
+    expect(spy).toHaveBeenCalled();
   });
 
   it("list_noInput_returnsArray", async function() {
-    assert.deepEqual(
-      api.list(),
-      mockResponses.list.reduced,
-      "api lists calendars"
-    );
-    sandbox.assert.calledOnce(api.list);
+    expect(await api.list()).toEqual(mockResponses.list.reduced);
+    expect(api.list).toHaveBeenCalled();
   });
 
   it("createCalendar_requiredInput_returnsArray", async function() {
-    assert.deepEqual(
+    expect(
       api.createCalendar({
         summary: "test calendar",
         description: "some description"
-      }),
-      mockResponses.createCalendar.reduced,
-      "api lists calendars"
-    );
-    sandbox.assert.calledOnce(api.createCalendar);
+      })
+    ).toEqual(mockResponses.createCalendar.reduced);
+    expect(api.createCalendar).toHaveBeenCalled();
   });
 });

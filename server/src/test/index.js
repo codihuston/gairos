@@ -39,7 +39,7 @@ export const buildApolloServer = async ({ context = defaultContext } = {}) => {
   return { server, typeDefs, resolvers, dataSources: dataSources() };
 };
 
-before(function() {
+beforeAll(function() {
   return DatabaseConnector();
 });
 

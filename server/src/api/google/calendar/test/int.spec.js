@@ -1,13 +1,11 @@
 import { createTestClient } from "apollo-server-testing";
 import sinon from "sinon";
-import { assert } from "chai";
 
 import { buildApolloServer } from "../../../../test";
 import { mockResponses, mockQueries } from ".";
 
 describe("GraphQL Queries", function() {
   it("fetches a list of calendars", async function() {
-    const log = this.initTestLog();
     /**
      * Create an instance of the ApolloServer, mocking out its context,
      * and reusing the defined dataSources, resolvers, and typeDefs.
@@ -34,7 +32,7 @@ describe("GraphQL Queries", function() {
     const { query } = createTestClient(server);
     const res = await query({ query: mockQueries.getCalendars });
 
-    assert.notExists(res.errors);
-    assert.deepEqual(res.data.getCalendars, mockResponses.list.reduced);
+    expect(res.errors).not.toBeDefined();
+    expect(res.data.getCalendars).toEqual(mockResponses.list.reduced);
   });
 });
