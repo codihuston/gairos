@@ -2,6 +2,7 @@ import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import "./config/globals";
+import { component as ExampleComponent } from "./components/ExampleComponent";
 import GoogleSignInButton from "./components/GoogleSignInButton";
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
         >
           Learn React
         </a>
+        <ExampleComponent />
         <GoogleSignInButton />
       </header>
     </div>
