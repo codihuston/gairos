@@ -1,56 +1,8 @@
 import { createTestClient } from "apollo-server-testing";
-import gql from "graphql-tag";
-import nock from "nock";
-import { resolveGraphqlDefinitions } from "../../../";
-import mockResponses from ".";
-import { ApolloServer } from "apollo-server-express";
 import sinon from "sinon";
 import { assert } from "chai";
-
-const mockQueries = {
-  getCalendars: gql`
-    query {
-      getCalendars {
-        kind
-        etag
-        id
-        summary
-        description
-        location
-        timeZone
-        conferenceProperties {
-          allowedConferenceSolutionTypes
-        }
-      }
-    }
-  `
-};
-
-const defaultContext = async ({ req, res }) => {
-  // pass context into our resolvers
-  return {
-    session: req.session
-    // me: models.user.findByLogin("rwieruch")
-  };
-};
-
-// set the destructured value to a default value (if not specified)
-const constructServer = async ({ context } = {}) => {
-  const {
-    typeDefs,
-    resolvers,
-    dataSources
-  } = await resolveGraphqlDefinitions();
-
-  const server = new ApolloServer({
-    typeDefs,
-    resolvers,
-    dataSources,
-    context
-  });
-
-  return { server, typeDefs, resolvers, dataSources: dataSources() };
-};
+import { buildApolloServer } from "../../../../test";
+import mockResponses, { mockQueries } from ".";
 
 describe("GraphQL Queries", function() {
   it("fetches a list of calendars", async function() {
@@ -63,7 +15,7 @@ describe("GraphQL Queries", function() {
      * this function returns as erve rinstance, as well as our dataStore
      * instances, so we can overwrite the underlying fetchers
      */
-    const { server, typeDefs, dataSources } = await constructServer({
+    const { server, typeDefs, dataSources } = await buildApolloServer({
       context: () => ({
         user: {
           id: 1,

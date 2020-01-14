@@ -1,3 +1,24 @@
+import gql from "graphql-tag";
+
+export const mockQueries = {
+  getCalendars: gql`
+    query {
+      getCalendars {
+        kind
+        etag
+        id
+        summary
+        description
+        location
+        timeZone
+        conferenceProperties {
+          allowedConferenceSolutionTypes
+        }
+      }
+    }
+  `
+};
+
 export default {
   list: {
     // sample of a raw response from the 3rd party API
