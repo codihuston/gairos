@@ -1,8 +1,17 @@
 extend type Query {
   getTasks: [Task]
+  getUserTasks(userId: ID!): [User]
 }
 
 type Task {
   id: ID!
   name: ID!
+  userTask: UserTask
+}
+
+type UserTask{
+  userId: ID!
+  task: Task
+  description: String,
+  isPublic: Boolean
 }

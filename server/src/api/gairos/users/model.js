@@ -23,7 +23,12 @@ const model = (sequelize, DataTypes) => {
   });
 
   User.associate = models => {
-    User.hasMany(models.message, { onDelete: "CASCADE" });
+    models.user.hasMany(models.message, { onDelete: "CASCADE" });
+
+    models.user.belongsToMany(models.task, {
+      through: models.userTask,
+      foreignKey: "userId"
+    });
   };
 
   User.findByLogin = async login => {

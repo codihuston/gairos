@@ -9,6 +9,14 @@ const model = (sequelize, DataTypes) => {
       type: DataTypes.STRING
     }
   });
+
+  Model.associate = models => {
+    models.task.belongsToMany(models.user, {
+      through: models.userTask,
+      foreignKey: "taskId"
+    });
+  };
+
   return Model;
 };
 export default model;

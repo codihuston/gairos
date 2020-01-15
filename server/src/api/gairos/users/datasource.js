@@ -30,5 +30,14 @@ export default {
     async create(opts) {
       return await this.models.user.create(opts);
     }
+
+    async getTasks(userId) {
+      return await this.models.user.findAll({
+        // where: {
+        //   userId
+        // },
+        include: [this.models.task]
+      });
+    }
   }
 };

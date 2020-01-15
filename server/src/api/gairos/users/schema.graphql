@@ -16,4 +16,5 @@ type User {
   email: String,
   isFirstSetupCompleted: Boolean,
   calendarId: ID
+  tasks: [Task]
 }
