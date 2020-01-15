@@ -36,7 +36,8 @@ export default resolveGraphqlDefinitions()
         saveUninitialized: true,
         // TODO: use redis store for access token (to not persist them on disk)?
         store: new SequelizeStore({
-          db: sequelize
+          db: sequelize,
+          table: "session"
         }),
         cookie: { secure: isProductionEnvironment }
       })
