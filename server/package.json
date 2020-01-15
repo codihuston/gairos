@@ -67,6 +67,7 @@
     "@babel/register": "^7.7.7",
     "apollo-server-testing": "^2.9.16",
     "babel-eslint": "^10.0.3",
+    "babel-jest": "^24.9.0",
     "cross-env": "^6.0.3",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.9.0",
