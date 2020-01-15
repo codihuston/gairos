@@ -26,28 +26,20 @@ export default {
     }
 
     async list() {
-      try {
-        const res = await GoogleCalendar.calendarList.list();
+      const res = await GoogleCalendar.calendarList.list();
 
-        if (res.data && res.data.items) {
-          return res.data.items.map(calendar => this.reducer(calendar));
-        }
-        return res.data.items;
-      } catch (e) {
-        throw e;
+      if (res.data && res.data.items) {
+        return res.data.items.map(calendar => this.reducer(calendar));
       }
+      return res.data.items;
     }
 
     async createCalendar(opts) {
-      try {
-        const res = await GoogleCalendar.calendars.insert({
-          resource: opts
-        });
-        debug("create calendar result", res);
-        return this.reducer(res.data);
-      } catch (e) {
-        throw e;
-      }
+      const res = await GoogleCalendar.calendars.insert({
+        resource: opts
+      });
+      debug("create calendar result", res);
+      return this.reducer(res.data);
     }
   }
 };

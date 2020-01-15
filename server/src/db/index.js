@@ -1,5 +1,5 @@
 import Sequelize from "sequelize";
-import { exec } from "child_process";
+import { execSync } from "child_process";
 import { resolve } from "path";
 import debugLib from "debug";
 import config from "../config";
@@ -85,37 +85,10 @@ export default async () => {
     if (eraseDatabaseOnSync && !isProductionEnvironment) {
       console.log("Please wait while executing database seeders *ASYNC*...");
 
-      exec(
-        `yarn run db:seed:${process.env.NODE_ENV}`,
-        {
-          cwd: resolve(__dirname, "..", "..") // server root
-        },
-        (err, stdout, stderr) => {
-          if (err) {
-            console.error("seeder:stderr:", err);
-
-            if (exitIfSeedersFail) {
-              console.error(
-                "ERROR: Seeder failed to execute; the database may",
-                "have been partially seeded, or not at all!",
-                "STOPPING the server because 'FAIL_BUILD_IF_SEEDERS_FAIL' is",
-                "enabled!"
-              );
-              process.exit(1);
-            } else {
-              console.warn(
-                "WARNING: Seeder failed to execute; the database may",
-                "have been partially seeded, or not at all!"
-              );
-            }
-          } else {
-            // the *entire* stdout and stderr (buffered)
-            console.log("Finished executing seeders! See output below:");
-            debug(`seeder:stderr: ${stderr}`);
-            debug(`seeder:stdout: ${stdout}`);
-          }
-        }
-      );
+      const res = execSync(`yarn run db:seed:${process.env.NODE_ENV}`, {
+        cwd: resolve(__dirname, "..", "..") // server root
+      });
+      console.log("Seeder result:", res.toString());
     }
   } catch (e) {
     throw e;
