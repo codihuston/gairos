@@ -1,7 +1,7 @@
 import { createTestClient } from "apollo-server-testing";
 import sinon from "sinon";
 
-import { buildApolloServer } from "../../../../test";
+import { buildApolloServer } from "../../../../test/utils";
 import { mockResponses, mockQueries } from ".";
 
 describe("GraphQL Queries", function() {

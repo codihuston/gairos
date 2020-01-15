@@ -1,8 +1,5 @@
-import sinon from "sinon";
 import { mockResponses } from ".";
 import DataSource from "../datasource";
-
-const sandbox = sinon.createSandbox();
 
 const api = new DataSource.Class();
 
@@ -12,10 +9,6 @@ describe("google calendar unit tests", function() {
     api.createCalendar = jest
       .fn()
       .mockReturnValue(mockResponses.createCalendar.reduced);
-  });
-
-  afterEach(function() {
-    sandbox.restore();
   });
 
   it("reducer_validInput_returnsObject", async function() {

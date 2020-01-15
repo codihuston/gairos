@@ -1,0 +1,10 @@
+{
+  "verbose": true,
+  "setupFiles": [
+    "./src/test/index.js"
+  ],
+  "testEnvironment": "node",
+  "transform": {
+    "^.+\\.js$": "babel-jest"
+  }
+}
