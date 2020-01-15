@@ -1,6 +1,23 @@
 const model = (sequelize, DataTypes) => {
   const User = sequelize.define("user", {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true
+    },
+    googleId: {
+      type: DataTypes.STRING
+    },
     username: {
+      type: DataTypes.STRING
+    },
+    email: {
+      type: DataTypes.STRING
+    },
+    isFirstSetupCompleted: {
+      type: DataTypes.STRING
+    },
+    calendarId: {
       type: DataTypes.STRING
     }
   });

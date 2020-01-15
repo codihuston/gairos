@@ -11,5 +11,9 @@ type Mutation {
 
 type User {
   id: ID!
+  googleId: ID!
   username: String!
+  email: String,
+  isFirstSetupCompleted: Boolean,
+  calendarId: ID
 }
