@@ -8,6 +8,7 @@ import uuid from "uuid/v4";
 import debugLib from "debug";
 import ConnectSessionStore from "connect-session-sequelize";
 import { ApolloServer } from "apollo-server-express";
+import cors from "cors";
 
 import { router as indexRouter } from "./routes/index";
 import { router as authRouter } from "./routes/auth";
@@ -22,6 +23,14 @@ export default resolveGraphqlDefinitions()
   .then(result => {
     const { typeDefs, resolvers, dataSources } = result;
     var app = express();
+
+    app.use(
+      cors({
+        // TODO: configure for prod environment
+        credentials: true,
+        origin: true
+      })
+    );
 
     // init session
     app.use(
