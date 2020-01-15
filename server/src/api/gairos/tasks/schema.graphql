@@ -1,0 +1,8 @@
+extend type Query {
+  getTasks: [Task]
+}
+
+type Task {
+  id: ID!
+  name: ID!
+}
