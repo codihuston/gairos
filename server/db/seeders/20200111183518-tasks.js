@@ -1,42 +1,35 @@
 import uuid from "uuid/v4";
-import { models } from "../../src/api/gairos";
+import { models } from "../../src/db";
 
 export default {
   up: async (queryInterface, Sequelize) => {
     /*
-      Add altering commands here.
-      Return a promise to correctly handle asynchronicity.
-
-      Example:
-      return queryInterface.bulkInsert('People', [{
-        name: 'John Doe',
-        isBetaMember: false
-      }], {});
+      Create tasks
     */
-    return queryInterface.bulkInsert(
-      "tasks",
-      [
-        {
-          id: uuid(),
-          name: "study",
-          createdAt: new Date(),
-          updatedAt: new Date()
-        },
-        {
-          id: uuid(),
-          name: "work out",
-          createdAt: new Date(),
-          updatedAt: new Date()
-        },
-        {
-          id: uuid(),
-          name: "clean",
-          createdAt: new Date(),
-          updatedAt: new Date()
-        }
-      ],
-      {}
-    );
+    const tasks = [
+      {
+        id: uuid(),
+        name: "study",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        id: uuid(),
+        name: "work out",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        id: uuid(),
+        name: "clean",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
+    ];
+
+    for (const task of tasks) {
+      await models.task.create(task);
+    }
   },
 
   down: (queryInterface, Sequelize) => {

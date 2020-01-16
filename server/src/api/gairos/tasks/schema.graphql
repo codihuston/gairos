@@ -1,6 +1,6 @@
 extend type Query {
   getTasks: [Task]
-  getUserTasks(userId: ID!): [User]
+  getUserTasks(userId: ID!): [UserTask]
 }
 
 type Task {
@@ -10,8 +10,8 @@ type Task {
 }
 
 type UserTask{
-  userId: ID!
-  task: Task
-  description: String,
+  id: ID!
+  name: String!
+  description: String
   isPublic: Boolean
 }

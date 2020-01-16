@@ -1,4 +1,5 @@
 import { DataSource } from "apollo-datasource";
+import { map } from "lodash";
 
 export default {
   name: "UserAPI",
@@ -32,12 +33,24 @@ export default {
     }
 
     async getTasks(userId) {
-      return await this.models.user.findAll({
-        // where: {
-        //   userId
-        // },
+      // fetch data
+      const res = await this.models.user.findOne({
+        where: {
+          id: userId
+        },
         include: [this.models.task]
       });
+
+      // return data shaped to what the graphql schema expects
+      return map(
+        res.tasks,
+        ({ id, name, userTask: { isPublic, description } }) => ({
+          id,
+          name,
+          isPublic,
+          description
+        })
+      );
     }
   }
 };

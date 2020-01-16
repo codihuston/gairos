@@ -27,14 +27,6 @@ export default {
     },
     getUserTasks: async (parent, { userId }, { dataSources }) => {
       const res = await dataSources.UserAPI.getTasks(userId);
-      console.log(
-        "getUserTasks res",
-        JSON.stringify(
-          res.map(x => x.toJSON()),
-          null,
-          4
-        )
-      );
       return res;
     }
   },

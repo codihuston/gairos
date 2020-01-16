@@ -12,8 +12,8 @@ import cors from "cors";
 
 import { router as indexRouter } from "./routes/index";
 import { router as authRouter } from "./routes/auth";
-import { models, resolveGraphqlDefinitions } from "./api";
-import { sequelize } from "./db";
+import { resolveGraphqlDefinitions } from "./api";
+import { sequelize, models } from "./db";
 import { isProductionEnvironment } from "./utils";
 
 const debug = debugLib("server:app");

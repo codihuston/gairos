@@ -1,7 +1,9 @@
 import Sequelize from "sequelize";
 import { execSync } from "child_process";
-import { resolve } from "path";
+import { join, resolve } from "path";
 import debugLib from "debug";
+import glob from "glob";
+
 import config from "../config";
 import { isProductionEnvironment } from "../utils";
 
@@ -20,6 +22,25 @@ export const sequelize = new Sequelize(
     dialect: process.env.DB_DIALECT
   }
 );
+
+const models = {};
+const modelPaths = glob.sync(join(__dirname, "../api/**/model.js"));
+
+// import sequelize models
+for (const modelPath of modelPaths) {
+  const model = sequelize.import(modelPath);
+  models[model.name] = model;
+}
+
+// associate the sequelize models (as needeD)
+for (const modelName of Object.keys(models)) {
+  const model = models[modelName];
+  if (typeof model.associate === "function") {
+    model.associate(models);
+  }
+}
+
+export { models };
 
 export default async () => {
   try {
@@ -64,7 +85,8 @@ export default async () => {
     console.log("Sequelize sync option is set to", eraseDatabaseOnSync);
 
     await sequelize.sync({
-      force: eraseDatabaseOnSync
+      force: eraseDatabaseOnSync,
+      logging: true
     });
 
     console.log("Database connection succeeded!");

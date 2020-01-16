@@ -3,7 +3,7 @@ import { join } from "path";
 import debugLib from "debug";
 import glob from "glob";
 
-import { models } from "./gairos";
+import { models } from "../db";
 import { GooglePeople, GoogleCalendar } from "./google";
 
 const debug = debugLib("server:api");

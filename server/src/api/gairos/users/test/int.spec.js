@@ -1,13 +1,11 @@
 import DatabaseConnector from "../../../../db";
 
 describe("user integration tests", function() {
-  beforeAll(async done => {
+  beforeAll(async () => {
     await DatabaseConnector();
-    done();
   });
 
-  it("creates a user", async function(done) {
+  it("creates a user", function() {
     expect(true);
-    done();
   });
 });
