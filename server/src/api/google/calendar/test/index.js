@@ -10,10 +10,12 @@
  * mockResponses: The root properties should be mappable to the corresponding
  * `datasource.js` file for this model (i.e. should match the `method names` used
  * in testing for the sake of clarity). The `METHOD_NAME.raw` should contain a
- * raw response from the external datasource (be it 1st or 3rd party). The
- * `METHOD_NAME.reduced` should contain a formatted response that we expect our
- * graphQL resolvers to return. It is OK for `.raw` and `.reduced` to yeild the
- * same result. This design pattern is just intended to be forward-thinking.
+ * raw response from the external datasource (3rd party API; not required from
+ * 1st party API since we should already be in control of this).
+ * The `METHOD_NAME.reduced` should contain a formatted response that we expect
+ * our * graphQL resolvers to return. It is OK for `.raw` and `.reduced` to
+ * yeild the * same result. This design pattern is just intended to be
+ * forward-thinking.
  */
 import gql from "graphql-tag";
 

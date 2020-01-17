@@ -42,8 +42,12 @@ export default {
       });
 
       // return data shaped to what the graphql schema expects
+      return this.reduceTasks(res.tasks);
+    }
+
+    reduceTasks(tasks) {
       return map(
-        res.tasks,
+        tasks,
         ({ id, name, userTask: { isPublic, description } }) => ({
           id,
           name,
