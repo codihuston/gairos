@@ -6,7 +6,7 @@ extend type Query {
 type Task {
   id: ID!
   name: ID!
-  userTask: UserTask
+  users: [User]
 }
 
 type TaskUser{
