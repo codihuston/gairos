@@ -1,5 +1,4 @@
 import { DataSource } from "apollo-datasource";
-import { map } from "lodash";
 
 export default {
   name: "UserAPI",
@@ -46,15 +45,12 @@ export default {
     }
 
     reduceTasks(tasks) {
-      return map(
-        tasks,
-        ({ id, name, userTask: { isPublic, description } }) => ({
-          id,
-          name,
-          isPublic,
-          description
-        })
-      );
+      return tasks.map(({ id, name, userTask: { isPublic, description } }) => ({
+        id,
+        name,
+        isPublic,
+        description
+      }));
     }
   }
 };
