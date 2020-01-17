@@ -7,4 +7,5 @@ extend type Query {
 type Tag {
   id: ID!
   name: ID!
+  users: [User]
 }

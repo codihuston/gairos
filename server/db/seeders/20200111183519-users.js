@@ -3,8 +3,18 @@ import { models } from "../../src/db";
 export default {
   up: async (queryInterface, Sequelize) => {
     /*
-      Create tasks, users, and userTasks
+      Create tasks, users, userTasks, tags, and userTags
     */
+    const users = [
+      {
+        id: "0bdc487a-8ad7-4264-b28d-d02dbbef787b",
+        username: "sample user A"
+      },
+      {
+        id: "0bdc487a-8ad7-4264-b28d-d02dbbef787c",
+        username: "sample user B"
+      }
+    ];
     const tasks = await models.task.findAll();
 
     let userTasks = [];
@@ -27,24 +37,22 @@ export default {
       name: "Sample Tag"
     });
 
-    const user = await models.user.create({
-      id: "0bdc487a-8ad7-4264-b28d-d02dbbef787b",
-      username: "rwieruch"
-    });
+    for (const user of users) {
+      let tempUser = await models.user.create(user);
+      await tempUser.addTask(task, {
+        through: {
+          description: "some description",
+          isPublic: true
+        }
+      });
 
-    const userTask = await user.addTask(task, {
-      through: {
-        description: "some description",
-        isPublic: true
-      }
-    });
-
-    const userTag = await user.addTag(tag, {
-      through: {
-        description: "my example activities",
-        isPublic: true
-      }
-    });
+      await tempUser.addTag(tag, {
+        through: {
+          description: "my example activities",
+          isPublic: true
+        }
+      });
+    }
 
     return;
   },

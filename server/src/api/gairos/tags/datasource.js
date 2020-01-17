@@ -33,13 +33,12 @@ export default {
       return res.users[0];
     }
 
-    async getAllTagsAndUsers(id) {
-      return await this.models.tag.findAll({
-        where: {
-          id
-        },
+    async getAllTagsAndUsers() {
+      const res = await this.models.tag.findAll({
         include: [this.models.user]
       });
+
+      return res;
     }
 
     async create(opts) {
