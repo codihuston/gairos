@@ -23,7 +23,7 @@ export default {
      * have to be. If the user is already on the context, it will use that user
      * instead
      */
-    async findAll(id) {
+    async get(id) {
       return await this.models.task.findAll(id);
     }
 
