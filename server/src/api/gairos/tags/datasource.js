@@ -23,9 +23,14 @@ export default {
     }
 
     async getUsers(id) {
-      return await this.models.tag.findAll({
+      const res = await this.models.tag.findOne({
+        where: {
+          id
+        },
         include: [this.models.user]
       });
+
+      return res.users[0];
     }
 
     async getAllTagsAndUsers(id) {
