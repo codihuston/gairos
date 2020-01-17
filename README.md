@@ -202,6 +202,7 @@ sequelize model
    
    `Data Sources` are  also implemented here in attempt to be forward-thinking,
    and will hopefully implement caching of `database requests` in the future
+
 2. create an `index.js` file for the resource, and `import` + `export default`
    the `model`, `typeDefs`, `resolvers`, and `dataSource`
 3. create the `server/api/gairos/MODEL/test` directory
@@ -209,6 +210,10 @@ sequelize model
    for integration tests), and `e2e.spec.js` (stands for end-to-end tests).These
    are used to execute a Test Driven Design (TDD) development approach. I will
    refer you to the `Practical Test Pyramid | Unit testing pyramid`.
+
+   NOTE: only create these files if you are going to put tests in them, since
+   the test runner expects the test files to have at least one test, otherwise
+   the tests will fail.
   
     1. `index.js` the index file in the test directory for this resource should
        export any `mock data` used in your tests. The `mock data` should be
@@ -220,25 +225,37 @@ sequelize model
        that this is meant for. The way they are mapped is purely for 
        organizational purposes
        1. `mockMutations`, which are mapped to the graphql mutation in your
-       schema that it is meant for
+       schema that it is meant for (like `mockQueries`)
        1. `mockResponses`, which are mapped to the `API` methods that you're 
-       testing in your `datasource`. They should include a `raw` and `reduced`
-       property, in case we ever decide to re-shape how external data looks
-       on our end. The values for these two properties can be the same,
-       otherwise!
+       testing in your `datasource`. 
+           1. If this `datasource` is referencing a `3rd party API`, then you
+           should test the actual response from their API against how we shape
+           it afterwards. I do this by using a custom `reducer` method, which
+           simply maps only the fields I intend on using from the
+           `3rd party API`
+           1. If this `datasource` is referencing a `1st party API`, this
+           is not a requirement
+           1. The methods that are used by the `graphql resolvers` should simply
+           fetch the data; if the data is being processed, that logic should be
+           `methodized` so that you can `unit test` them; see the 
+           `userAPI.reduce*()` and its corresponding unit test for an example
 
     2. `unit.spec.js` should test individual methods of the class in the 
        `datasource`. 
        
-       You should use `sinon` to `spy` and `stub` out any methods
-       that execute class to `external systems`; the point of unit testing is
-       to test a small unit of code (like a `function`), and that it returns
-       an expected value for a given input
+       You should use `jest` to `jest.spyOn()` and 
+       `jest().fn().returnsMockValue()` to spy on how the function is used and 
+       to bypass any calls to `external systems`, respectively;
+       the point of unit testing is to test a small unit of code
+       (like a `function`), and that it returns an expected value for a
+       given input (if any).
+
+       View more on `jest` in their documentation.
 
        1. your test should `import` the `API` that you are testing
-       2. `stub` out the method your are testing so that it 
+       2. `mock` out the method your are testing so that it 
        returns the expected `mock data` (as defined in the index file)
-       3. verify that the now-stubbed method, when invoked, will return
+       1. verify that the now-stubbed method, when invoked, will return
        your expected `mockResponses`
 
        This might look a little useless, but this workflow makes more sense
@@ -246,24 +263,36 @@ sequelize model
        influenced by your input values. You should test each path for expected
        results and errors.
 
+       If a `function/method` does not have any logic in it, then you don't
+       really need to unit test it.
+
     3. `int.spec.js` should test the `datasources` and `resolvers` by way of
        using only `graphql` queries and the API you've defined in the
-       `datasource`
+       `datasource`. You may also test the functionality of the relevant
+       `1st party API` if you want, but you'll get essentually the same results
+       if you test it through the `graphql query`, as the `resolvers` are
+       currently intended to only act as an interface to said API
        
        You should should:
 
-        1. start a graphql server for testing
-        2. fetch the API that you are going to test
-        3. stub the method in the API that you are testing to return pre-defined
-            `mock data`
-        4. fetch the `mock graphql query` from your mocks fi
-        5. send the server a `graphql` query
-        6. verify the results match your expecte `mockResponses`
+        1. start a graphql server for testing (in code, see the
+        `google calendar` API for an example)
+        3. fetch the API that you are going to test
+        4. If you are using a `3rd party API`, stub the method in the API that
+        you are testing to return pre-defined `mock data` . If you are using a 
+        `1st party API`, then you may opt to test using the database; that
+        is up to you (preferred).
+        1. fetch the `mock graphql query` from your mock file
+        2. send the server a `graphql` query
+        3. verify the results match your expecte `mockResponses`
+     1. You may find it useful to create a `seeder` for this model. See the
+     `README` in the `server/db/` directory, and reference the seeders under
+     `server/db/seeders` for examples on implementation 
 
 Remember, that once you fulfill the `index.js` file for the resource, the
-`model`, `typeDefs` and `resolvers` are dynamically loaded into the application,
-and you can immediately begin querying the new resource after the server
-restarts.
+`model`, `typeDefs`, `resolvers`, and `datasource` are dynamically loaded into
+the application, and you can immediately begin querying the new resource
+after the server restarts.
 
 In your browser, go to your app URL `localhost:APP_PORT/graphql` to test the
 graphql API.

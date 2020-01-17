@@ -27,6 +27,17 @@ export default {
       return await this.models.task.findAll(id);
     }
 
+    async getUsers(id) {
+      const res = await this.models.task.findOne({
+        where: {
+          id
+        },
+        include: [this.models.user]
+      });
+
+      return res.users;
+    }
+
     async create(opts) {
       return await this.models.task.create(opts);
     }

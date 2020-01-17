@@ -8,19 +8,19 @@ export default {
     */
     const tasks = [
       {
-        id: uuid(),
+        id: "0bdc487a-8ad7-4264-b28d-d02dbbef622a",
         name: "study",
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        id: uuid(),
+        id: "0bdc487a-8ad7-4264-b28d-d02dbbef622b",
         name: "work out",
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        id: uuid(),
+        id: "0bdc487a-8ad7-4264-b28d-d02dbbef622c",
         name: "clean",
         createdAt: new Date(),
         updatedAt: new Date()
