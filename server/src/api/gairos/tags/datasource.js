@@ -19,7 +19,9 @@ export default {
     }
 
     async get() {
-      return await this.models.tag.findAll();
+      return await this.models.tag.findAll({
+        include: [this.models.user]
+      });
     }
 
     async getUsers(id) {
