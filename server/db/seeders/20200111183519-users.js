@@ -18,8 +18,13 @@ export default {
     }
 
     const task = await models.task.create({
-      id: "1bdc487a-8ad7-4264-b28d-d02dbbef787a",
+      id: "1bdc487a-8ad7-4264-b28d-d02dbbef786a",
       name: "Sample Task"
+    });
+
+    const tag = await models.tag.create({
+      id: "1bdc487a-8ad7-4264-b28d-d02dbbef786b",
+      name: "Sample Tag"
     });
 
     const user = await models.user.create({
@@ -30,6 +35,13 @@ export default {
     const userTask = await user.addTask(task, {
       through: {
         description: "some description",
+        isPublic: true
+      }
+    });
+
+    const userTag = await user.addTag(tag, {
+      through: {
+        description: "my example activities",
         isPublic: true
       }
     });
