@@ -34,6 +34,12 @@ const model = (sequelize, DataTypes) => {
       through: models.userTag,
       foreignKey: "userId"
     });
+
+    // models.user.belongsToMany(models.userTaskHistory, {
+    //   through: models.userTask,
+    //   foreignKey: "userId",
+    //   as: "userTaskHistory"
+    // });
   };
 
   User.findByLogin = async login => {

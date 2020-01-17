@@ -39,7 +39,7 @@ export default {
 
     for (const user of users) {
       let tempUser = await models.user.create(user);
-      await tempUser.addTask(task, {
+      const userTask = await tempUser.addTask(task, {
         through: {
           description: "some description",
           isPublic: true
@@ -52,6 +52,12 @@ export default {
           isPublic: true
         }
       });
+
+      // await tempUser.addUserTaskHistory({
+      //   userTaskId: userTask.id,
+      //   startTime: new Date(),
+      //   endTime: new Date()
+      // });
     }
 
     return;
