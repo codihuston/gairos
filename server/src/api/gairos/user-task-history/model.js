@@ -22,4 +22,3 @@ const model = (sequelize, DataTypes) => {
 };
 
 export default model;
-11;
