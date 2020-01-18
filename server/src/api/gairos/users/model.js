@@ -30,7 +30,6 @@ const model = (sequelize, DataTypes) => {
       foreignKey: "userId",
       unique: false
     });
-
     models.user.belongsToMany(models.tag, {
       through: models.userTag,
       foreignKey: "userId"

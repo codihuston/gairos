@@ -2,7 +2,6 @@ const model = (sequelize, DataTypes) => {
   const Model = sequelize.define("userTaskHistory", {
     userTaskId: {
       type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
       primaryKey: true
     },
     startTime: {
@@ -16,10 +15,11 @@ const model = (sequelize, DataTypes) => {
   });
 
   Model.associate = models => {
-    models.userTaskHistory.hasOne(models.userTask);
+    models.userTaskHistory.belongsTo(models.userTask);
   };
 
   return Model;
 };
 
 export default model;
+11;

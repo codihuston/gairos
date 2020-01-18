@@ -30,6 +30,10 @@ const model = (sequelize, DataTypes) => {
     }
   );
 
+  Model.associate = models => {
+    models.userTask.hasMany(models.userTaskHistory);
+  };
+
   return Model;
 };
 export default model;
