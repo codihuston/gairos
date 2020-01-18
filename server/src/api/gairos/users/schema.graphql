@@ -4,6 +4,7 @@ type Query {
   hello: String
   me: User
   getUserTasks(userId: ID!): [UserTask]
+  getUserTaskHistory(userId: ID!): [UserTaskHistory]
 }
 
 type Mutation {
@@ -25,4 +26,13 @@ type UserTask{
   name: String!
   description: String
   isPublic: Boolean
+}
+
+type UserTaskHistory{
+  id: ID!
+  name: String!
+  startTime: String
+  endTime: String
+  createdAt: String
+  updatedAt: String
 }

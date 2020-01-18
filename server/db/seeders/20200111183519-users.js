@@ -40,6 +40,8 @@ export default {
     for (const user of users) {
       let tempUser = await models.user.create(user);
 
+      // NOTE:  you must pass a sequelize instance into the magic methods
+      // described here: https://sequelize.org/master/manual/assocs.html
       await tempUser.addTag(tag, {
         through: {
           description: "my example activities",
@@ -47,8 +49,6 @@ export default {
         }
       });
 
-      // NOTE:  you must pass a sequelize instance into the magic methods
-      // described here: https://sequelize.org/master/manual/assocs.html
       const userTask = await tempUser.addTask(task, {
         through: {
           description: "some description",
@@ -56,13 +56,17 @@ export default {
         }
       });
 
-      // create sequelize instance of this model (userTaskHistory); don't need
-      // to use .add*() b/c this is a one-to-one relationship, and by specifying
-      // the userTask id here, we've already associated these two entities
-      const userTaskHistory = await models.userTaskHistory.create({
-        userTaskId: userTask[0].id,
-        startTime: new Date(),
-        endTime: new Date()
+      const userTaskHistory = await tempUser.addTaskHistory(task, {
+        through: {
+          startTime: new Date(),
+          endTime: new Date()
+        }
+      });
+      await tempUser.addTaskHistory(task, {
+        through: {
+          startTime: new Date(),
+          endTime: new Date()
+        }
       });
     }
     return;

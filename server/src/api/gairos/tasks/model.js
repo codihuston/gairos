@@ -16,6 +16,12 @@ const model = (sequelize, DataTypes) => {
       foreignKey: "taskId",
       unique: false
     });
+    models.task.belongsToMany(models.user, {
+      through: models.userTaskHistory,
+      foreignKey: "taskId",
+      as: "userHistory",
+      unique: false
+    });
   };
 
   return Model;

@@ -34,6 +34,13 @@ const model = (sequelize, DataTypes) => {
       through: models.userTag,
       foreignKey: "userId"
     });
+    models.user.belongsToMany(models.task, {
+      through: models.userTaskHistory,
+      foreignKey: "userId",
+      // Note: alias affects the name of the magic methods via Sequelize
+      as: "taskHistory",
+      unique: false
+    });
   };
 
   User.findByLogin = async login => {

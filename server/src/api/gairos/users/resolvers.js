@@ -28,6 +28,9 @@ export default {
     getUserTasks: async (parent, { userId }, { dataSources }) => {
       const res = await dataSources.UserAPI.getTasks(userId);
       return res;
+    },
+    getUserTaskHistory: async (parent, { userId }, { dataSources }) => {
+      return await dataSources.UserAPI.getTaskHistory(userId);
     }
   },
   Mutation: {

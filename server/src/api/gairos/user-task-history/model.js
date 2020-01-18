@@ -1,22 +1,33 @@
 const model = (sequelize, DataTypes) => {
-  const Model = sequelize.define("userTaskHistory", {
-    userTaskId: {
-      type: DataTypes.UUID,
-      primaryKey: true
+  const Model = sequelize.define(
+    "userTaskHistory",
+    {
+      userId: {
+        type: DataTypes.UUID
+      },
+      taskId: {
+        type: DataTypes.UUID
+      },
+      startTime: {
+        type: DataTypes.DATE,
+        nullable: false
+      },
+      endTime: {
+        type: DataTypes.DATE,
+        nullable: true
+      }
     },
-    startTime: {
-      type: DataTypes.DATE,
-      nullable: false
-    },
-    endTime: {
-      type: DataTypes.DATE,
-      nullable: true
+    {
+      indexes: [
+        {
+          unique: false,
+          fields: ["userId", "taskId"]
+        }
+      ]
     }
-  });
+  );
 
-  Model.associate = models => {
-    models.userTaskHistory.belongsTo(models.userTask);
-  };
+  Model.associate = models => {};
 
   return Model;
 };

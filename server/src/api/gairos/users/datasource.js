@@ -44,6 +44,29 @@ export default {
       return this.reduceTasks(res.tasks);
     }
 
+    async getTaskHistory(userId) {
+      const res = await this.models.user.findOne({
+        where: {
+          id: userId
+        },
+        include: [
+          {
+            model: this.models.task,
+            // use N:M relationship via taskHistory alias defined in user model
+            as: "taskHistory",
+            through: {
+              // attributes: ["startTime", "endTime"],
+              where: {
+                userId
+              }
+            }
+          }
+        ]
+      });
+
+      return this.reduceTaskHistory(res.taskHistory);
+    }
+
     reduceTasks(tasks) {
       return tasks.map(({ id, name, userTask: { isPublic, description } }) => ({
         id,
@@ -51,6 +74,23 @@ export default {
         isPublic,
         description
       }));
+    }
+
+    reduceTaskHistory(tasks) {
+      return tasks.map(
+        ({
+          id,
+          name,
+          userTaskHistory: { startTime, endTime, createdAt, updatedAt }
+        }) => ({
+          id,
+          name,
+          startTime,
+          endTime,
+          createdAt,
+          updatedAt
+        })
+      );
     }
   }
 };

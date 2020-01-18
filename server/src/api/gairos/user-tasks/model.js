@@ -2,11 +2,6 @@ const model = (sequelize, DataTypes) => {
   const Model = sequelize.define(
     "userTask",
     {
-      id: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
-        primaryKey: true
-      },
       userId: {
         type: DataTypes.UUID
       },
@@ -30,9 +25,7 @@ const model = (sequelize, DataTypes) => {
     }
   );
 
-  Model.associate = models => {
-    models.userTask.hasMany(models.userTaskHistory);
-  };
+  Model.associate = models => {};
 
   return Model;
 };
