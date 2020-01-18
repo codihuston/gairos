@@ -13,7 +13,8 @@ const model = (sequelize, DataTypes) => {
   Model.associate = models => {
     models.task.belongsToMany(models.user, {
       through: models.userTask,
-      foreignKey: "taskId"
+      foreignKey: "taskId",
+      unique: false
     });
   };
 

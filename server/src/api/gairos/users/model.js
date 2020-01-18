@@ -27,7 +27,8 @@ const model = (sequelize, DataTypes) => {
 
     models.user.belongsToMany(models.task, {
       through: models.userTask,
-      foreignKey: "userId"
+      foreignKey: "userId",
+      unique: false
     });
 
     models.user.belongsToMany(models.tag, {
