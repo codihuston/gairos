@@ -108,9 +108,9 @@ export default async () => {
       console.log("Please wait while executing database seeders *ASYNC*...");
 
       const res = execSync(`yarn run db:seed:${process.env.NODE_ENV}`, {
-        cwd: resolve(__dirname, "..", "..") // server root
+        cwd: resolve(__dirname, "..", ".."), // server root
+        stdio: "inherit"
       });
-      console.log("Seeder result:", res.toString());
     }
   } catch (e) {
     throw e;
