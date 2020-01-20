@@ -29,8 +29,10 @@ type UserTask{
 }
 
 type UserTaskHistory{
-  id: ID!
+  userId: ID!
+  taskId: ID!
   name: String!
+  description: String!
   startTime: String
   endTime: String
   createdAt: String

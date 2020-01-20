@@ -40,31 +40,55 @@ export default {
         include: [this.models.task]
       });
 
+      console.log("QQQ getTasks", res);
+
       // return data shaped to what the graphql schema expects
       return this.reduceTasks(res.tasks);
     }
 
     async getTaskHistory(userId) {
-      const res = await this.models.user.findOne({
+      // const res = await this.models.user.findOne({
+      //   where: {
+      //     id: userId
+      //   },
+      //   include: [
+      //     {
+      //       model: this.models.task,
+      //       // use N:M relationship via taskHistory alias defined in user model
+      //       as: "taskHistory",
+      //       through: {
+      //         // attributes: ["startTime", "endTime"],
+      //         where: {
+      //           userId
+      //         }
+      //       }
+      //     }
+      //   ]
+      // });
+
+      const res = await this.models.userTaskHistory.findAll({
         where: {
-          id: userId
+          userId
         },
         include: [
           {
             model: this.models.task,
-            // use N:M relationship via taskHistory alias defined in user model
-            as: "taskHistory",
-            through: {
-              // attributes: ["startTime", "endTime"],
-              where: {
-                userId
+            include: [
+              {
+                // this works, returns 1 userTask per 1 history
+                model: this.models.userTask,
+                as: "taskUser"
               }
-            }
+            ]
           }
         ]
       });
-
-      return this.reduceTaskHistory(res.taskHistory);
+      console.log("QQQ res userTaskHistory", res[0]);
+      console.log("QQQ res task", res[0].task);
+      console.log("QQQ res userTasks", res[0].task.userTask);
+      console.log("QQQ res userTasks", res[0].task.userTasks);
+      // TODO: reduce user task history
+      return this.reduceTaskHistory(res);
     }
 
     reduceTasks(tasks) {
@@ -79,12 +103,21 @@ export default {
     reduceTaskHistory(tasks) {
       return tasks.map(
         ({
-          id,
-          name,
-          userTaskHistory: { startTime, endTime, createdAt, updatedAt }
+          userId,
+          taskId,
+          startTime,
+          endTime,
+          createdAt,
+          updatedAt,
+          task: {
+            name,
+            taskUser: { description }
+          }
         }) => ({
-          id,
+          userId,
+          taskId,
           name,
+          description,
           startTime,
           endTime,
           createdAt,

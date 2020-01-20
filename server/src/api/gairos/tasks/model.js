@@ -22,6 +22,14 @@ const model = (sequelize, DataTypes) => {
       as: "userHistory",
       unique: false
     });
+    models.task.hasMany(models.userTaskHistory, {
+      foreignKey: "taskId"
+    });
+    models.task.hasOne(models.userTask, {
+      foreignKey: "taskId",
+      // TODO: change this to singular, and the other to plural
+      as: "taskUser"
+    });
   };
 
   return Model;

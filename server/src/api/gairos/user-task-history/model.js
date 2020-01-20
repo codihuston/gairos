@@ -27,7 +27,11 @@ const model = (sequelize, DataTypes) => {
     }
   );
 
-  Model.associate = models => {};
+  Model.associate = models => {
+    models.userTaskHistory.belongsTo(models.task, {
+      foreignKey: "taskId"
+    });
+  };
 
   return Model;
 };
