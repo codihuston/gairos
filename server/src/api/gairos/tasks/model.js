@@ -16,18 +16,12 @@ const model = (sequelize, DataTypes) => {
       foreignKey: "taskId",
       unique: false
     });
-    models.task.belongsToMany(models.user, {
-      through: models.userTaskHistory,
-      foreignKey: "taskId",
-      as: "userHistory",
-      unique: false
-    });
     models.task.hasMany(models.userTaskHistory, {
-      foreignKey: "taskId"
+      foreignKey: "taskId",
+      as: "taskHistory"
     });
     models.task.hasOne(models.userTask, {
       foreignKey: "taskId",
-      // TODO: change this to singular, and the other to plural
       as: "taskUser"
     });
   };

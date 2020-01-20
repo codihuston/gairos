@@ -56,17 +56,11 @@ export default {
         }
       });
 
-      const userTaskHistory = await tempUser.addTaskHistory(task, {
-        through: {
-          startTime: new Date(),
-          endTime: new Date()
-        }
-      });
-      await tempUser.addTaskHistory(task, {
-        through: {
-          startTime: new Date(),
-          endTime: new Date()
-        }
+      const userTaskHistory = await models.userTaskHistory.create({
+        userId: tempUser.id,
+        taskId: task.id,
+        startTime: new Date(),
+        endTime: new Date()
       });
     }
     return;
