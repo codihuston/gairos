@@ -59,6 +59,7 @@ export default {
       const userTaskHistory = await models.userTaskHistory.create({
         userId: tempUser.id,
         taskId: task.id,
+        googleEventId: "SOME_ID",
         startTime: new Date(),
         endTime: new Date()
       });

@@ -82,6 +82,7 @@ export default {
         ({
           userId,
           taskId,
+          googleEventId,
           startTime,
           endTime,
           createdAt,
@@ -93,6 +94,7 @@ export default {
         }) => ({
           userId,
           taskId,
+          googleEventId,
           name,
           description,
           startTime,

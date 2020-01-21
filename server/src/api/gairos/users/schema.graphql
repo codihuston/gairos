@@ -33,6 +33,7 @@ type UserTaskHistory{
   taskId: ID!
   name: String!
   description: String!
+  googleEventId: String
   startTime: String
   endTime: String
   createdAt: String

@@ -2,11 +2,20 @@ const model = (sequelize, DataTypes) => {
   const Model = sequelize.define(
     "userTaskHistory",
     {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true
+      },
       userId: {
         type: DataTypes.UUID
       },
       taskId: {
         type: DataTypes.UUID
+      },
+      googleEventId: {
+        type: DataTypes.STRING,
+        nullable: true
       },
       startTime: {
         type: DataTypes.DATE,
