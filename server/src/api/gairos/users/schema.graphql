@@ -3,6 +3,7 @@
 type Query {
   hello: String
   me: User
+  getUserTags(userId: ID!): [Tag]
   getUserTasks(userId: ID!): [UserTask]
   getUserTaskHistory(userId: ID!): [UserTaskHistory]
 }
@@ -19,6 +20,7 @@ type User {
   isFirstSetupCompleted: Boolean,
   calendarId: ID
   tasks: [Task]
+  tags: [Tag]
 }
 
 type UserTask{

@@ -31,6 +31,24 @@ export default {
       return await this.models.user.create(opts);
     }
 
+    async getTags(userId) {
+      const res = await this.models.user.findOne({
+        include: [
+          {
+            model: this.models.tag,
+            through: {
+              attributes: ["description", "createdAt", "updatedAt"]
+            }
+          }
+        ],
+        where: {
+          id: userId
+        }
+      });
+
+      return res.tags;
+    }
+
     async getTasks(userId) {
       // fetch data
       const res = await this.models.user.findOne({
@@ -64,7 +82,6 @@ export default {
           }
         ]
       });
-      // TODO: reduce user task history
       return res ? this.reduceTaskHistory(res) : [];
     }
 
@@ -102,6 +119,17 @@ export default {
           createdAt,
           updatedAt
         })
+      );
+    }
+
+    reduceTags(tags) {
+      return tags.map(
+        ({
+          name,
+          userTags: { userTagId, tagId, description, createdAt, updatedAt }
+        }) => {
+          tagId, userTagId, name, description, createdAt, updatedAt;
+        }
       );
     }
   }

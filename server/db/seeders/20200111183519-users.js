@@ -42,13 +42,16 @@ export default {
 
       // NOTE:  you must pass a sequelize instance into the magic methods
       // described here: https://sequelize.org/master/manual/assocs.html
-      await tempUser.addTag(tag, {
+
+      // create a user tag using magic sequelize method
+      const userTag = await tempUser.addTag(tag, {
         through: {
           description: "my example activities",
           isPublic: true
         }
       });
 
+      // create user task using magic sequelize method
       const userTask = await tempUser.addTask(task, {
         through: {
           description: "some description",
@@ -56,6 +59,15 @@ export default {
         }
       });
 
+      // add this task to this user's tag
+      const userTaskTag = await models.userTaskTag.create({
+        userTagId: userTag.id,
+        taskId: task.id
+      });
+
+      // create user task history WITHOUT magic sequelize method
+      // sequelize (M:N enforces UNIQUE, we don't want that!) This is the
+      // workaround!
       const userTaskHistory = await models.userTaskHistory.create({
         userId: tempUser.id,
         taskId: task.id,

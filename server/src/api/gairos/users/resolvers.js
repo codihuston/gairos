@@ -25,6 +25,10 @@ export default {
       // TODO: handle bad response?
       return dataSources.UserAPI.findByPk(1);
     },
+    getUserTags: async (parent, { userId }, { dataSources }) => {
+      const res = await dataSources.UserAPI.getTags(userId);
+      return res;
+    },
     getUserTasks: async (parent, { userId }, { dataSources }) => {
       const res = await dataSources.UserAPI.getTasks(userId);
       return res;

@@ -8,4 +8,16 @@ type Tag {
   id: ID!
   name: ID!
   users: [User]
+  userTag: UserTag
+  createdAt: String
+  updatedAt: String
+}
+
+type UserTag{
+  userTagId: ID!
+  userId: ID!
+  TagId: ID!
+  description: String
+  createdAt: String
+  updatedAt: String
 }
