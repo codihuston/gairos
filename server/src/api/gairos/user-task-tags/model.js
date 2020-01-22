@@ -2,10 +2,14 @@ const model = (sequelize, DataTypes) => {
   const Model = sequelize.define(
     "userTaskTag",
     {
-      userTagId: {
+      id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true
+      },
+      userTagId: {
+        type: DataTypes.UUID,
+        nullable: false
       },
       taskId: {
         type: DataTypes.UUID,
@@ -22,7 +26,11 @@ const model = (sequelize, DataTypes) => {
     }
   );
 
-  Model.associate = models => {};
+  Model.associate = models => {
+    models.userTaskTag.belongsTo(models.task, {
+      foreginKey: "taskId"
+    });
+  };
 
   return Model;
 };

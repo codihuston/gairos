@@ -7,6 +7,9 @@ type Task {
   id: ID!
   name: ID!
   users: [User]
+  userTaskInfo: UserTaskInfo
+  createdAt: String
+  updatedAt: String
 }
 
 type TaskUser{

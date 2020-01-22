@@ -41,7 +41,7 @@ export const mockResponses = {
           name: "Sample Task",
           createdAt: "2020-01-20T21:52:44.760Z",
           updatedAt: "2020-01-20T21:52:44.760Z",
-          taskUser: {
+          userTaskInfo: {
             userId: "0bdc487a-8ad7-4264-b28d-d02dbbef787b",
             taskId: "1bdc487a-8ad7-4264-b28d-d02dbbef786a",
             description: "some description",

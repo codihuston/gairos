@@ -12,12 +12,3 @@ type Tag {
   createdAt: String
   updatedAt: String
 }
-
-type UserTag{
-  userTagId: ID!
-  userId: ID!
-  TagId: ID!
-  description: String
-  createdAt: String
-  updatedAt: String
-}

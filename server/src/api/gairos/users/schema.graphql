@@ -3,8 +3,8 @@
 type Query {
   hello: String
   me: User
-  getUserTags(userId: ID!): [Tag]
-  getUserTasks(userId: ID!): [UserTask]
+  getUserTags(userId: ID!): [UserTag]
+  getUserTasks(userId: ID!): [UserTaskInfo]
   getUserTaskHistory(userId: ID!): [UserTaskHistory]
 }
 
@@ -23,11 +23,13 @@ type User {
   tags: [Tag]
 }
 
-type UserTask{
+type UserTaskInfo{
   id: ID!
   name: String!
   description: String
   isPublic: Boolean
+  createdAt: String
+  updatedAt: String
 }
 
 type UserTaskHistory{
@@ -40,4 +42,24 @@ type UserTaskHistory{
   endTime: String
   createdAt: String
   updatedAt: String
+}
+
+type UserTag{
+  userTagId: ID!
+  userId: ID!
+  tagId: ID!
+  description: String
+  isPublic: Boolean
+  tag: Tag
+  userTaskTags: [UserTaskTags]
+  createdAt: String
+  updatedAt: String
+}
+
+type UserTaskTags{
+  id: ID!
+  userTagId: ID!
+  createdAt: String
+  updatedAt: String
+  task: Task
 }

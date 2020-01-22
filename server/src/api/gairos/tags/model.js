@@ -15,6 +15,7 @@ const model = (sequelize, DataTypes) => {
       through: models.userTag,
       foreignKey: "tagId"
     });
+    models.tag.hasMany(models.userTag);
   };
 
   return Model;

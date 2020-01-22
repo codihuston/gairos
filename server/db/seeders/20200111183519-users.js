@@ -44,6 +44,7 @@ export default {
       // described here: https://sequelize.org/master/manual/assocs.html
 
       // create a user tag using magic sequelize method
+      // NOTE: addTag returns an array
       const userTag = await tempUser.addTag(tag, {
         through: {
           description: "my example activities",
@@ -61,7 +62,7 @@ export default {
 
       // add this task to this user's tag
       const userTaskTag = await models.userTaskTag.create({
-        userTagId: userTag.id,
+        userTagId: userTag[0].userTagId,
         taskId: task.id
       });
 

@@ -22,7 +22,7 @@ const model = (sequelize, DataTypes) => {
     });
     models.task.hasOne(models.userTask, {
       foreignKey: "taskId",
-      as: "taskUser"
+      as: "userTaskInfo"
     });
   };
 

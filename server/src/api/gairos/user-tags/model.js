@@ -31,7 +31,14 @@ const model = (sequelize, DataTypes) => {
   );
 
   Model.associate = models => {
-    // models.userTag.hasOne(models.tag);
+    models.userTag.belongsTo(models.tag);
+    // models.userTag.hasOne(models.userTaskTag, {
+    models.userTag.hasMany(models.userTaskTag, {
+      foreignKey: {
+        name: "userTagId",
+        allowNull: true
+      }
+    });
   };
 
   return Model;

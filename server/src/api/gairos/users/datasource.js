@@ -32,21 +32,34 @@ export default {
     }
 
     async getTags(userId) {
-      const res = await this.models.user.findOne({
+      const res = await this.models.userTag.findAll({
         include: [
           {
-            model: this.models.tag,
-            through: {
-              attributes: ["description", "createdAt", "updatedAt"]
-            }
+            model: this.models.tag
+          },
+          {
+            model: this.models.userTaskTag,
+            include: [
+              {
+                model: this.models.task,
+                include: [
+                  {
+                    model: this.models.userTask,
+                    as: "userTaskInfo",
+                    where: {
+                      userId
+                    }
+                  }
+                ]
+              }
+            ]
           }
         ],
         where: {
-          id: userId
+          userId
         }
       });
-
-      return res.tags;
+      return res;
     }
 
     async getTasks(userId) {
@@ -73,7 +86,7 @@ export default {
             include: [
               {
                 model: this.models.userTask,
-                as: "taskUser",
+                as: "userTaskInfo",
                 where: {
                   userId
                 }
@@ -106,7 +119,7 @@ export default {
           updatedAt,
           task: {
             name,
-            taskUser: { description }
+            userTaskInfo: { description }
           }
         }) => ({
           userId,
@@ -119,17 +132,6 @@ export default {
           createdAt,
           updatedAt
         })
-      );
-    }
-
-    reduceTags(tags) {
-      return tags.map(
-        ({
-          name,
-          userTags: { userTagId, tagId, description, createdAt, updatedAt }
-        }) => {
-          tagId, userTagId, name, description, createdAt, updatedAt;
-        }
       );
     }
   }
