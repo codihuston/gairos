@@ -76,10 +76,12 @@ export default resolveGraphqlDefinitions()
       resolvers,
       dataSources,
       context: async ({ req, res }) => {
+        console.log("SESSION: ", req.session);
+
         // pass context into our resolvers
         return {
           session: req.session,
-          me: models.user.findByLogin("rwieruch")
+          me: req.session.user
         };
       }
     });
@@ -98,7 +100,14 @@ export default resolveGraphqlDefinitions()
 
       // render the error page
       res.status(err.status || 500);
-      res.json(err);
+      console.error(err);
+      res.json({
+        errors: [
+          {
+            message: err.message
+          }
+        ]
+      });
     });
 
     return app;

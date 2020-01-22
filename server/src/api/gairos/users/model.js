@@ -6,19 +6,29 @@ const model = (sequelize, DataTypes) => {
       primaryKey: true
     },
     googleId: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      nullable: false
     },
     username: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      nullable: false
+    },
+    displayNameLastFirst: {
+      type: DataTypes.STRING,
+      nullable: true
     },
     email: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      nullable: false
     },
     isFirstSetupCompleted: {
-      type: DataTypes.STRING
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
     },
     calendarId: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      defaultValue: null,
+      nullable: true
     }
   });
 
@@ -40,6 +50,10 @@ const model = (sequelize, DataTypes) => {
     });
   };
 
+  /**
+   * Class Methods
+   */
+
   User.findByLogin = async login => {
     let user = await User.findOne({
       where: { username: login }
@@ -52,6 +66,74 @@ const model = (sequelize, DataTypes) => {
     return user;
   };
 
+  User.validateGoogleProfile = profile => {
+    if (
+      !profile ||
+      !profile.resourceName ||
+      !profile.names ||
+      !profile.emailAddresses
+    ) {
+      throw new Error(
+        "Invalid Google Profile Data, please contact a developer with this code: uvacux"
+      );
+    }
+
+    return true;
+  };
+
+  User.createFromGoogleProfile = async profile => {
+    if (User.validateGoogleProfile(profile)) {
+      const resourceName = profile.resourceName || null;
+      const { names } = profile;
+      const { emailAddresses } = profile;
+      let displayName,
+        displayNameLastFirst,
+        emailAddress = null;
+
+      // extract usernames from google profile
+      if (names && names[0]) {
+        let name = names[0] || {};
+        displayName = name.displayName || null;
+        displayNameLastFirst = name.displayNameLastFirst;
+      }
+
+      // extract first email from google profile
+      if (emailAddresses && emailAddresses[0]) {
+        let email = emailAddresses[0] || {};
+        emailAddress = email.value;
+      }
+
+      // the values to save
+      const defaults = {
+        googleId: resourceName,
+        email: emailAddress,
+        username: displayName,
+        displayNameLastFirst
+      };
+
+      // find or create the user
+      const [user, wasCreated] = await User.findOrCreate({
+        where: {
+          googleId: resourceName
+        },
+        defaults
+      });
+
+      // update fields from google (if any have changed)
+      await user.set(defaults).save();
+
+      return user;
+    }
+  };
+
+  User.findByGoogleId = async googleId => {
+    let user = await User.findOne({
+      where: {
+        googleId
+      }
+    });
+    return user;
+  };
   return User;
 };
 export default model;
