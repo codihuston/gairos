@@ -46,6 +46,7 @@
     "express-session": "^1.17.0",
     "glob": "^7.1.6",
     "googleapis": "39",
+    "graphql-resolvers": "^0.3.3",
     "graphql-tag": "^2.10.1",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
