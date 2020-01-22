@@ -105,35 +105,7 @@ export default {
           }
         ]
       });
-      return res ? this.reduceTaskHistory(res) : [];
-    }
-
-    reduceTaskHistory(tasks) {
-      return tasks.map(
-        ({
-          userId,
-          taskId,
-          googleEventId,
-          startTime,
-          endTime,
-          createdAt,
-          updatedAt,
-          task: {
-            name,
-            userTaskInfo: { description }
-          }
-        }) => ({
-          userId,
-          taskId,
-          googleEventId,
-          name,
-          description,
-          startTime,
-          endTime,
-          createdAt,
-          updatedAt
-        })
-      );
+      return res;
     }
   }
 };

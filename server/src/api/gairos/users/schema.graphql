@@ -35,13 +35,11 @@ type UserTaskInfo{
 type UserTaskHistory{
   userId: ID!
   taskId: ID!
-  name: String!
-  description: String!
-  googleEventId: String
   startTime: String
   endTime: String
   createdAt: String
   updatedAt: String
+  task: Task
 }
 
 type UserTag{
