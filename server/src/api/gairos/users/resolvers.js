@@ -1,26 +1,13 @@
-import { UnauthenticatedError } from "../../../errors/graphql";
 import SequelizeErrorHandler from "../../../errors/sequelize";
+import { combineResolvers } from "graphql-resolvers";
+import { isAuthenticated } from "../../../middleware/graphql";
 
 export default {
   Query: {
-    // get access to context
-    hello: (parent, args, context) => {
-      const { session } = context;
-
-      console.log("Session in resolvers:", context.session);
-
-      // Handle unauthorized requests
-      // TODO: move into its own /errors file?
-      const isAuthenticated = session.isAuthenticated || false;
-      const hasAccessToken =
-        (session.tokens && session.tokens.access_token) || false;
-
-      if (!isAuthenticated || !hasAccessToken) {
-        throw new UnauthenticatedError();
-      }
-
+    // implements middleware for graphql a la combineResolvers()
+    hello: combineResolvers(isAuthenticated, (parent, args, context) => {
       return "Hello world!";
-    },
+    }),
     me: async (parent, args, { dataSources }) => {
       // TODO: handle bad response?
       return dataSources.UserAPI.findByPk(1);
