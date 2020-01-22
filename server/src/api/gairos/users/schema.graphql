@@ -4,7 +4,7 @@ type Query {
   hello: String
   me: User
   getUserTags(userId: ID!): [UserTag]
-  getUserTasks(userId: ID!): [UserTaskInfo]
+  getUserTasks(userId: ID!): [Task]
   getUserTaskHistory(userId: ID!): [UserTaskHistory]
 }
 

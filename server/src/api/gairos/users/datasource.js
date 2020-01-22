@@ -68,11 +68,21 @@ export default {
         where: {
           id: userId
         },
-        include: [this.models.task]
+        include: [
+          {
+            model: this.models.task,
+            include: [
+              {
+                model: this.models.userTask,
+                as: "userTaskInfo"
+              }
+            ]
+          }
+        ]
       });
 
       // return data shaped to what the graphql schema expects
-      return this.reduceTasks(res.tasks);
+      return res.tasks;
     }
 
     async getTaskHistory(userId) {
@@ -96,15 +106,6 @@ export default {
         ]
       });
       return res ? this.reduceTaskHistory(res) : [];
-    }
-
-    reduceTasks(tasks) {
-      return tasks.map(({ id, name, userTask: { isPublic, description } }) => ({
-        id,
-        name,
-        isPublic,
-        description
-      }));
     }
 
     reduceTaskHistory(tasks) {
