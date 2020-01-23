@@ -25,13 +25,16 @@ export default {
     }
   },
   Mutation: {
-    createUser: async (parent, args, { dataSources }) => {
-      try {
-        const user = await dataSources.UserAPI.create(args);
-        return user;
-      } catch (e) {
-        throw SequelizeErrorHandler(e);
+    setMyCalendar: combineResolvers(
+      isAuthenticated,
+      async (parent, { calendarId }, { me, dataSources }) => {
+        try {
+          const user = await dataSources.UserAPI.setCalendar(me.id, calendarId);
+          return user;
+        } catch (e) {
+          throw SequelizeErrorHandler(e);
+        }
       }
-    }
+    )
   }
 };

@@ -9,7 +9,7 @@ type Query {
 }
 
 type Mutation {
-  createUser(id: ID!, username: String):User
+  setMyCalendar(calendarId: ID!): User
 }
 
 type User {

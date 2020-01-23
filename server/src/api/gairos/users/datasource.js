@@ -27,10 +27,6 @@ export default {
       return await this.models.user.findByPk(id);
     }
 
-    async create(opts) {
-      return await this.models.user.create(opts);
-    }
-
     async getTags(userId) {
       const res = await this.models.userTag.findAll({
         include: [
@@ -106,6 +102,26 @@ export default {
         ]
       });
       return res;
+    }
+
+    /**
+     * Sets the calendarId field in the database
+     *
+     * @param {*} userId
+     * @param {*} calendarId
+     */
+    async setCalendar(userId, calendarId) {
+      const user = await this.models.user.findOne({
+        where: {
+          id: userId
+        }
+      });
+
+      user.calendarId = calendarId;
+
+      user.save();
+
+      return user;
     }
   }
 };
