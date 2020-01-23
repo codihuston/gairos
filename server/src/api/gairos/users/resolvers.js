@@ -25,11 +25,11 @@ export default {
     }
   },
   Mutation: {
-    setMyCalendar: combineResolvers(
+    updateMyProfile: combineResolvers(
       isAuthenticated,
-      async (parent, { calendarId }, { me, dataSources }) => {
+      async (parent, { input }, { me, dataSources }) => {
         try {
-          const user = await dataSources.UserAPI.setCalendar(me.id, calendarId);
+          const user = await dataSources.UserAPI.update(me.id, input);
           return user;
         } catch (e) {
           throw SequelizeErrorHandler(e);

@@ -9,7 +9,7 @@ type Query {
 }
 
 type Mutation {
-  setMyCalendar(calendarId: ID!): User
+  updateMyProfile(input: UserInput): User
 }
 
 type User {
@@ -21,6 +21,13 @@ type User {
   calendarId: ID
   tasks: [Task]
   tags: [Tag]
+}
+
+input UserInput{
+  username: String
+  email: String,
+  isFirstSetupCompleted: Boolean,
+  calendarId: ID
 }
 
 type UserTaskInfo{

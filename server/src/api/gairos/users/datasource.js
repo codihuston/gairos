@@ -105,19 +105,19 @@ export default {
     }
 
     /**
-     * Sets the calendarId field in the database
+     * Updates a user with the given graphql input object
      *
      * @param {*} userId
-     * @param {*} calendarId
+     * @param {*} opts
      */
-    async setCalendar(userId, calendarId) {
+    async update(userId, input) {
       const user = await this.models.user.findOne({
         where: {
           id: userId
         }
       });
 
-      user.calendarId = calendarId;
+      user.set(input);
 
       user.save();
 
