@@ -40,8 +40,38 @@ export default {
       return res.users;
     }
 
-    async create(opts) {
-      return await this.models.task.create(opts);
+    async create(userId, input) {
+      let userTask = null;
+
+      // create the task
+      console.log("QQQ", this.models.task);
+
+      const [task, created] = await this.models.task.findOrCreate({
+        where: {
+          name: input.name
+        },
+        defaults: {
+          name: input.name
+        }
+      });
+
+      // create the user task
+      userTask = await this.models.userTask.create({
+        userId,
+        taskId: task.id,
+        description: input.description,
+        isPublic: input.isPublic
+      });
+
+      // associate this user task to this task
+      // EXPECTED: throws unique violation on userId if trying to
+      // recreate the same task
+      await task.setUserTaskInfo(userTask);
+
+      // join the json together (for gql response)
+      task.userTaskInfo = await task.getUserTaskInfo();
+
+      return task;
     }
   }
 };

@@ -1,11 +1,11 @@
-import GraphqlErrors from "../graphql";
+import { GenericSequelizeError } from "../graphql";
 
 export default function(error) {
   // TODO: conditionally return a graphql custom error related to the issue?
   console.error(error);
   if (error.errors) {
     for (const e of error.errors) {
-      throw new GraphqlErrors.GenericSequelizeError({
+      throw new GenericSequelizeError({
         message: `${e.type}: ${e.message}`
       });
     }

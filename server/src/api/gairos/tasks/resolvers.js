@@ -1,3 +1,7 @@
+import SequelizeErrorHandler from "../../../errors/sequelize";
+import { combineResolvers } from "graphql-resolvers";
+import { isAuthenticated } from "../../../middleware/graphql";
+
 export default {
   Query: {
     getTasks: async (parent, args, { dataSources }) => {
@@ -8,5 +12,17 @@ export default {
       return dataSources.TaskAPI.getUsers(taskId);
     }
   },
-  Mutation: {}
+  Mutation: {
+    createTask: combineResolvers(
+      isAuthenticated,
+      async (async, { input }, { me, dataSources }) => {
+        try {
+          const task = await dataSources.TaskAPI.create(me.id, input);
+          return task;
+        } catch (e) {
+          throw SequelizeErrorHandler(e);
+        }
+      }
+    )
+  }
 };

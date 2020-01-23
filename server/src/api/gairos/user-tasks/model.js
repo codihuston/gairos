@@ -12,7 +12,8 @@ const model = (sequelize, DataTypes) => {
         type: DataTypes.STRING
       },
       isPublic: {
-        type: DataTypes.BOOLEAN
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
       }
     },
     {
