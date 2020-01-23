@@ -3,9 +3,9 @@
 type Query {
   hello: String
   me: User
-  getUserTags(userId: ID!): [UserTag]
-  getUserTasks(userId: ID!): [Task]
-  getUserTaskHistory(userId: ID!): [UserTaskHistory]
+  getMyTags: [UserTag]
+  getMyTasks: [Task]
+  getMyTaskHistory: [UserTaskHistory]
 }
 
 type Mutation {

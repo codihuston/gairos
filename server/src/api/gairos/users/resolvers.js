@@ -12,16 +12,16 @@ export default {
       // TODO: handle bad response?
       return dataSources.UserAPI.findByPk(1);
     },
-    getUserTags: async (parent, { userId }, { dataSources }) => {
-      const res = await dataSources.UserAPI.getTags(userId);
+    getMyTags: async (parent, args, { me, dataSources }) => {
+      const res = await dataSources.UserAPI.getTags(me.id);
       return res;
     },
-    getUserTasks: async (parent, { userId }, { dataSources }) => {
-      const res = await dataSources.UserAPI.getTasks(userId);
+    getMyTasks: async (parent, args, { me, dataSources }) => {
+      const res = await dataSources.UserAPI.getTasks(me.id);
       return res;
     },
-    getUserTaskHistory: async (parent, { userId }, { dataSources }) => {
-      return await dataSources.UserAPI.getTaskHistory(userId);
+    getMyTaskHistory: async (parent, args, { me, dataSources }) => {
+      return await dataSources.UserAPI.getTaskHistory(me.id);
     }
   },
   Mutation: {
