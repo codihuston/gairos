@@ -30,9 +30,9 @@ describe("GraphQL Queries", function() {
 
     // init the test server
     const { query } = createTestClient(server);
-    const res = await query({ query: mockQueries.getCalendars });
+    const res = await query({ query: mockQueries.getMyCalendars });
 
     expect(res.errors).not.toBeDefined();
-    expect(res.data.getCalendars).toEqual(mockResponses.list.reduced);
+    expect(res.data.getMyCalendars).toEqual(mockResponses.list.reduced);
   });
 });

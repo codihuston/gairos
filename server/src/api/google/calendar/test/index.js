@@ -20,9 +20,9 @@
 import gql from "graphql-tag";
 
 export const mockQueries = {
-  getCalendars: gql`
+  getMyCalendars: gql`
     query {
-      getCalendars {
+      getMyCalendars {
         kind
         etag
         id
@@ -72,7 +72,7 @@ export const mockResponses = {
       }
     ]
   },
-  createCalendar: {
+  createMyCalendar: {
     raw: {
       kind: "calendar#calendar",
       etag: '"lO1DEZXES82bm5FrxtzDShzbXNs"',

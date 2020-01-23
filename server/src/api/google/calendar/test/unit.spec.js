@@ -6,9 +6,9 @@ const api = new DataSource.Class();
 describe("google calendar unit tests", function() {
   beforeAll(function() {
     api.list = jest.fn().mockReturnValue(mockResponses.list.reduced);
-    api.createCalendar = jest
+    api.createMyCalendar = jest
       .fn()
-      .mockReturnValue(mockResponses.createCalendar.reduced);
+      .mockReturnValue(mockResponses.createMyCalendar.reduced);
   });
 
   it("reducer_validInput_returnsObject", async function() {
@@ -24,13 +24,13 @@ describe("google calendar unit tests", function() {
     expect(api.list).toHaveBeenCalled();
   });
 
-  it("createCalendar_requiredInput_returnsArray", async function() {
+  it("createMyCalendar_requiredInput_returnsArray", async function() {
     expect(
-      api.createCalendar({
+      api.createMyCalendar({
         summary: "test calendar",
         description: "some description"
       })
-    ).toEqual(mockResponses.createCalendar.reduced);
-    expect(api.createCalendar).toHaveBeenCalled();
+    ).toEqual(mockResponses.createMyCalendar.reduced);
+    expect(api.createMyCalendar).toHaveBeenCalled();
   });
 });

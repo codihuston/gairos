@@ -1,7 +1,6 @@
 import { DataSource } from "apollo-datasource";
 import debugLib from "debug";
 import { GoogleCalendar } from "../../";
-import resolvers from "./resolvers";
 
 const debug = debugLib("server:calendar api");
 

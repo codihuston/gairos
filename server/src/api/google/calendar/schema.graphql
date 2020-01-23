@@ -1,9 +1,9 @@
 extend type Query {
-  getCalendars: [Calendar]
+  getMyCalendars: [Calendar]
 }
 
 extend type Mutation{
-  createCalendar(summary: String!, description: String): Calendar
+  createMyCalendar(summary: String!, description: String): Calendar
 }
 
 type Calendar {
