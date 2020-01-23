@@ -10,6 +10,7 @@ import ConnectSessionStore from "connect-session-sequelize";
 import { ApolloServer } from "apollo-server-express";
 import cors from "cors";
 
+import { defaultUsers as users } from "./test/utils";
 import { router as indexRouter } from "./routes/index";
 import { router as authRouter } from "./routes/auth";
 import { resolveGraphqlDefinitions } from "./api";
@@ -76,6 +77,29 @@ export default resolveGraphqlDefinitions()
       resolvers,
       dataSources,
       context: async ({ req, res }) => {
+        /**
+         * If in development mode, and the user has not logged in
+         * (hit /auth/google), auto-populate a seeded user into this
+         * session.
+         *
+         * Note:
+         *  - the defined user session below is overridden if you hit
+         *  the /auth/google endpoint
+         *  - that seeders are only ran if process.env.DB_SYNC_WITH_SEQUELIZE
+         *  is set to true (default). It is recommended to set that environment
+         *  variable to true at least once when setting up your dev environment
+         */
+        if (!isProductionEnvironment && !req.session.user) {
+          const user = await models.user.findOne({
+            where: {
+              id: users[0].id
+            }
+          });
+
+          req.session.isAuthenticated = true;
+          req.session.user = user;
+        }
+
         console.log("SESSION: ", req.session);
 
         // pass context into our resolvers
