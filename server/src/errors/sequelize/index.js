@@ -29,7 +29,8 @@ export default function(error, potentialErrors) {
       for (const potentialError of potentialErrors) {
         const { matches, message, errorToThrow } = potentialError;
         const isErrorToThrowAFunction = typeof errorToThrow === "function";
-        const isErrorToThrowAnApolloError = errorToThrow instanceof ApolloError;
+        const isErrorToThrowAnApolloError =
+          potentialError instanceof ApolloError;
 
         // if given a error condition to match and a message
         if (
@@ -39,10 +40,11 @@ export default function(error, potentialErrors) {
           if (isErrorToThrowAFunction) {
             // throw the given errorToThrow
             throw errorToThrow(message, error);
-          } else if (isErrorToThrowAnApolloError) {
-            // if it is a plain ApolloError, just throw it
-            throw errorToThrow;
           }
+        }
+        // if it is a plain ApolloError, just throw it
+        else if (isErrorToThrowAnApolloError) {
+          throw potentialError;
         }
       }
     }
@@ -50,3 +52,14 @@ export default function(error, potentialErrors) {
   // otherwise throw the error as provided by sequelize
   throw CustomApolloError(`Sequelize Error: ${error.message}`, 422, error);
 }
+
+const errorToThrow = (message, additionalProperties) =>
+  new ApolloError(message, 422, additionalProperties);
+
+export const UniqueViolationError = (message = "Resource already exists!") => {
+  return {
+    matches: "unique violation",
+    message,
+    errorToThrow
+  };
+};

@@ -1,7 +1,9 @@
 import { combineResolvers } from "graphql-resolvers";
 
-import SequelizeErrorHandler from "../../../errors/sequelize";
-import { UniqueViolationError } from "../../../errors/graphql";
+import SequelizeErrorHandler, {
+  UniqueViolationError
+} from "../../../errors/sequelize";
+
 import { isAuthenticated } from "../../../middleware/graphql";
 
 export default {
@@ -23,11 +25,7 @@ export default {
           return task;
         } catch (e) {
           throw SequelizeErrorHandler(e, [
-            {
-              matches: "unique violation",
-              message: "You have already created this task!",
-              errorToThrow: UniqueViolationError
-            }
+            UniqueViolationError("You have already created this task!")
           ]);
         }
       }
