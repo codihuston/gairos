@@ -17,7 +17,8 @@ const model = (sequelize, DataTypes) => {
         type: DataTypes.STRING
       },
       isPublic: {
-        type: DataTypes.BOOLEAN
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
       }
     },
     {
@@ -31,13 +32,14 @@ const model = (sequelize, DataTypes) => {
   );
 
   Model.associate = models => {
-    models.userTag.belongsTo(models.tag);
-    // models.userTag.hasOne(models.userTaskTag, {
     models.userTag.hasMany(models.userTaskTag, {
       foreignKey: {
         name: "userTagId",
         allowNull: true
       }
+    });
+    models.userTag.belongsTo(models.tag, {
+      foreignKey: "taskId"
     });
   };
 

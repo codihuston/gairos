@@ -43,8 +43,28 @@ export default {
       return res;
     }
 
-    async create(opts) {
-      return await this.models.tag.create(opts);
+    async create(userId, input) {
+      let userTag = null;
+
+      const [tag, created] = await this.models.tag.findOrCreate({
+        where: {
+          name: input.name
+        },
+        defaults: {
+          name: input.name
+        }
+      });
+
+      userTag = await this.models.userTag.create({
+        userId,
+        tagId: tag.id,
+        description: input.description,
+        isPublic: input.isPublic
+      });
+
+      await tag.setUserTagInfo(userTag);
+
+      return tag;
     }
   }
 };

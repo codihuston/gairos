@@ -9,6 +9,14 @@ type Tag {
   name: ID!
   users: [User]
   userTag: UserTag
+  userTagInfo: UserTagInfo
   createdAt: String
   updatedAt: String
+}
+
+input TagInput{
+  userId: ID
+  name: String!
+  description: String
+  isPublic: Boolean
 }

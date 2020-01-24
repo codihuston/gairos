@@ -54,6 +54,21 @@ export default {
           ]);
         }
       }
+    ),
+    createMyTag: combineResolvers(
+      isAuthenticated,
+      isGivenUser,
+      async (async, { input }, { me, dataSources }) => {
+        try {
+          const userId = input.userId ? input.userId : me.id;
+          const task = await dataSources.TagAPI.create(userId, input);
+          return task;
+        } catch (e) {
+          throw SequelizeErrorHandler(e, [
+            UniqueViolationError("You have already created this tag!")
+          ]);
+        }
+      }
     )
   }
 };

@@ -11,6 +11,7 @@ type Query {
 type Mutation {
   updateMyProfile(input: UserInput): User
   createMyTask(input: TaskInput): Task
+  createMyTag(input: TagInput): Tag
 }
 
 type User {
@@ -48,6 +49,15 @@ type UserTaskHistory{
   createdAt: String
   updatedAt: String
   task: Task
+}
+
+type UserTagInfo{
+  id: ID!
+  name: String!
+  description: String
+  isPublic: Boolean
+  createdAt: String
+  updatedAt: String
 }
 
 type UserTag{
