@@ -1,6 +1,9 @@
-import SequelizeErrorHandler from "../../../errors/sequelize";
 import { combineResolvers } from "graphql-resolvers";
-import { isAuthenticated } from "../../../middleware/graphql";
+
+import SequelizeErrorHandler, {
+  UniqueViolationError
+} from "../../../errors/sequelize";
+import { isAuthenticated, isGivenUser } from "../../../middleware/graphql";
 
 export default {
   Query: {
@@ -33,6 +36,21 @@ export default {
           return user;
         } catch (e) {
           throw SequelizeErrorHandler(e);
+        }
+      }
+    ),
+    createMyTask: combineResolvers(
+      isAuthenticated,
+      isGivenUser,
+      async (async, { input }, { me, dataSources }) => {
+        try {
+          const userId = input.userId ? input.userId : me.id;
+          const task = await dataSources.TaskAPI.create(userId, input);
+          return task;
+        } catch (e) {
+          throw SequelizeErrorHandler(e, [
+            UniqueViolationError("You have already created this task!")
+          ]);
         }
       }
     )

@@ -3,10 +3,6 @@ extend type Query {
   getTaskUsers(taskId: ID!): [TaskUser]
 }
 
-extend type Mutation {
-  createTask(input: TaskInput): Task
-}
-
 type Task {
   id: ID!
   name: ID!
@@ -23,6 +19,7 @@ type TaskUser{
 }
 
 input TaskInput{
+  userId: ID
   name: String!
   description: String
 }
