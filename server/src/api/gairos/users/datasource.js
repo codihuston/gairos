@@ -37,14 +37,14 @@ export default {
             model: this.models.userTaskTag,
             include: [
               {
-                model: this.models.task,
+                model: this.models.userTask,
+                as: "userTaskInfo",
+                where: {
+                  userId
+                },
                 include: [
                   {
-                    model: this.models.userTask,
-                    as: "userTaskInfo",
-                    where: {
-                      userId
-                    }
+                    model: this.models.task
                   }
                 ]
               }
@@ -55,6 +55,7 @@ export default {
           userId
         }
       });
+
       return res;
     }
 

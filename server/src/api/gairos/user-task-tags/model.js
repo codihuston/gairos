@@ -11,7 +11,7 @@ const model = (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         nullable: false
       },
-      taskId: {
+      userTaskId: {
         type: DataTypes.UUID,
         nullable: false
       }
@@ -20,15 +20,16 @@ const model = (sequelize, DataTypes) => {
       indexes: [
         {
           unique: true,
-          fields: ["userTagId", "taskId"]
+          fields: ["userTagId", "userTaskId"]
         }
       ]
     }
   );
 
   Model.associate = models => {
-    models.userTaskTag.belongsTo(models.task, {
-      foreginKey: "taskId"
+    models.userTaskTag.belongsTo(models.userTask, {
+      foreignKey: "userTaskId",
+      as: "userTaskInfo"
     });
   };
 

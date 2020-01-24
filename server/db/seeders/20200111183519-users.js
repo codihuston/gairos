@@ -44,6 +44,7 @@ export default {
       });
 
       // create user task using magic sequelize method
+      // NOTE: addTask returns an array
       const userTask = await tempUser.addTask(task, {
         through: {
           description: "some description",
@@ -54,7 +55,7 @@ export default {
       // add this task to this user's tag
       const userTaskTag = await models.userTaskTag.create({
         userTagId: userTag[0].userTagId,
-        taskId: task.id
+        userTaskId: userTask[0].userTaskId
       });
 
       // create user task history WITHOUT magic sequelize method

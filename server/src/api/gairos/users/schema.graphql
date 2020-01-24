@@ -40,6 +40,7 @@ type UserTaskInfo{
   isPublic: Boolean
   createdAt: String
   updatedAt: String
+  task: Task
 }
 
 type UserTaskHistory{
@@ -78,5 +79,5 @@ type UserTaskTag{
   userTagId: ID!
   createdAt: String
   updatedAt: String
-  task: Task
+  userTaskInfo: UserTaskInfo
 }
