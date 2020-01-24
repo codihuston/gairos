@@ -20,7 +20,11 @@ export default {
           const task = await dataSources.TaskAPI.create(me.id, input);
           return task;
         } catch (e) {
-          throw SequelizeErrorHandler(e);
+          throw SequelizeErrorHandler({
+            error: e,
+            matches: "unique violation",
+            message: "You have already created this task!"
+          });
         }
       }
     )

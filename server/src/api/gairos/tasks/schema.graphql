@@ -18,7 +18,8 @@ type Task {
 
 type TaskUser{
   id: ID!
-  username: String
+  username: String,
+  isPublic: Boolean
 }
 
 input TaskInput{

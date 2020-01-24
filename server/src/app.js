@@ -15,7 +15,7 @@ import { router as indexRouter } from "./routes/index";
 import { router as authRouter } from "./routes/auth";
 import { resolveGraphqlDefinitions } from "./api";
 import { sequelize, models } from "./db";
-import { isProductionEnvironment } from "./utils";
+import { isProductionEnvironment, isDevelopmentEnvironment } from "./utils";
 
 const debug = debugLib("server:app");
 const SequelizeStore = ConnectSessionStore(session.Store);
@@ -73,6 +73,8 @@ export default resolveGraphqlDefinitions()
     debug("GraphQL resolvers:", resolvers);
     debug("GraphQL dataSources:", dataSources);
     const server = new ApolloServer({
+      // enable debug for development environment only
+      debug: isDevelopmentEnvironment,
       typeDefs,
       resolvers,
       dataSources,
