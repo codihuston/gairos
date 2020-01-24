@@ -55,17 +55,19 @@ export default {
         }
       }
     ),
-    createMyTag: combineResolvers(
+    tagMyTask: combineResolvers(
       isAuthenticated,
       isGivenUser,
       async (async, { input }, { me, dataSources }) => {
         try {
           const userId = input.userId ? input.userId : me.id;
-          const task = await dataSources.TagAPI.create(userId, input);
+          const task = await dataSources.TagAPI.tagTask(userId, input);
           return task;
         } catch (e) {
           throw SequelizeErrorHandler(e, [
-            UniqueViolationError("You have already created this tag!")
+            UniqueViolationError(
+              "You have already linked this task to this tag!"
+            )
           ]);
         }
       }

@@ -12,6 +12,7 @@ type Mutation {
   updateMyProfile(input: UserInput): User
   createMyTask(input: TaskInput): Task
   createMyTag(input: TagInput): Tag
+  tagMyTask(input: TagTaskInput): UserTaskTag
 }
 
 type User {
@@ -67,12 +68,12 @@ type UserTag{
   description: String
   isPublic: Boolean
   tag: Tag
-  userTaskTags: [UserTaskTags]
+  userTaskTags: [UserTaskTag]
   createdAt: String
   updatedAt: String
 }
 
-type UserTaskTags{
+type UserTaskTag{
   id: ID!
   userTagId: ID!
   createdAt: String

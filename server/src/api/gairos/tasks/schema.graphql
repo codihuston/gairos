@@ -23,3 +23,8 @@ input TaskInput{
   name: String!
   description: String
 }
+
+input TagTaskInput{
+  userTagId: ID!
+  taskId: ID!
+}

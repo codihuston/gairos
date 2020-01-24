@@ -66,5 +66,33 @@ export default {
 
       return tag;
     }
+
+    async tagTask(userId, input) {
+      // get this user's tag (to ensure that it is theirs)
+      const userTag = await this.models.userTag.findOne({
+        where: {
+          userTagId: input.userTagId
+        }
+      });
+
+      // if the tag was found
+      if (userTag && userTag.userTagId) {
+        // tag the task
+        const userTaskTag = await this.models.userTaskTag.create(
+          {
+            userTagId: userTag.userTagId,
+            taskId: input.taskId
+          }
+          // Note: cannot eagerload task during creation
+        );
+        return userTaskTag;
+      }
+      // otherwise, throw an exception
+      else {
+        throw new Error(
+          "The given tag does not exist, unable to link this task!"
+        );
+      }
+    }
   }
 };
