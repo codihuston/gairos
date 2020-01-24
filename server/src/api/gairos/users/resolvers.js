@@ -30,6 +30,7 @@ export default {
   Mutation: {
     updateMyProfile: combineResolvers(
       isAuthenticated,
+      isGivenUser,
       async (parent, { input }, { me, dataSources }) => {
         try {
           const user = await dataSources.UserAPI.update(me.id, input);
