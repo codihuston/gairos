@@ -22,11 +22,13 @@ export default {
           const task = await dataSources.TaskAPI.create(me.id, input);
           return task;
         } catch (e) {
-          throw SequelizeErrorHandler(e, {
-            matches: "unique violation",
-            message: "You have already created this task!",
-            errorToThrow: UniqueViolationError
-          });
+          throw SequelizeErrorHandler(e, [
+            {
+              matches: "unique violation",
+              message: "You have already created this task!",
+              errorToThrow: UniqueViolationError
+            }
+          ]);
         }
       }
     )
