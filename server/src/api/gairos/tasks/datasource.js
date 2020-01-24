@@ -43,9 +43,6 @@ export default {
     async create(userId, input) {
       let userTask = null;
 
-      // create the task
-      console.log("QQQ", this.models.task);
-
       const [task, created] = await this.models.task.findOrCreate({
         where: {
           name: input.name

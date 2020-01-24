@@ -107,7 +107,7 @@ export default resolveGraphqlDefinitions()
         // pass context into our resolvers
         return {
           session: req.session,
-          me: req.session.user
+          me: req.session.user ? req.session.user : null
         };
       }
     });
