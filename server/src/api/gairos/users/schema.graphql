@@ -16,6 +16,7 @@ type Mutation {
   deleteMyTask(input: DeleteUserTaskInput): Boolean
   createMyTag(input: TagInput): Tag
   renameMyTag(input: RenameUserTagInput): Tag
+  updateMyTag(input: UpdateUserTagInput): UserTagInfo
   tagMyTask(input: TagTaskInput): UserTaskTag
 }
 
@@ -62,6 +63,7 @@ type UserTagInfo{
   name: String!
   description: String
   isPublic: Boolean
+  isArchived: Boolean
   createdAt: String
   updatedAt: String
 }

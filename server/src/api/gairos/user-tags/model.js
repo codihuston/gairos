@@ -19,6 +19,10 @@ const model = (sequelize, DataTypes) => {
       isPublic: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
+      },
+      isArchived: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
       }
     },
     {

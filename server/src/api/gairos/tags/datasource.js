@@ -137,5 +137,33 @@ export default {
 
       return tag;
     }
+
+    async update(userId, input) {
+      // find the existing tag
+      const userTag = await this.models.userTag.findOne({
+        where: {
+          userId,
+          id: input.userTagId
+        }
+      });
+
+      if (!userTag) {
+        throw new Error("The given user tag does not exist!");
+      }
+
+      // throw if found, but not owned by the given userId
+      const doesThisUserOwnThisTag = userTag.userId === userId;
+      if (!doesThisUserOwnThisTag) {
+        throw new Error("The given user does not own this tag!");
+      }
+
+      // update the tag
+      await userTag.set(input);
+
+      // save the tag
+      await userTag.save();
+
+      return userTag;
+    }
   }
 };

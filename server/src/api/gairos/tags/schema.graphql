@@ -25,3 +25,10 @@ input RenameUserTagInput{
   userTagId: ID!
   name: String!
 }
+
+input UpdateUserTagInput{
+  userTagId: ID!
+  description: String
+  isPublic: Boolean
+  isArchived: Boolean
+}
