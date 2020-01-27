@@ -64,7 +64,7 @@ type UserTagInfo{
 }
 
 type UserTag{
-  userTagId: ID!
+  id: ID!
   userId: ID!
   tagId: ID!
   description: String

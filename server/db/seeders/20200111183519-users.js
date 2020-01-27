@@ -54,7 +54,7 @@ export default {
 
       // add this task to this user's tag
       const userTaskTag = await models.userTaskTag.create({
-        userTagId: userTag[0].userTagId,
+        userTagId: userTag[0].id,
         userTaskId: userTask[0].id
       });
 

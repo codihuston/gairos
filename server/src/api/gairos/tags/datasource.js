@@ -71,16 +71,16 @@ export default {
       // get this user's tag (to ensure that it is theirs)
       const userTag = await this.models.userTag.findOne({
         where: {
-          userTagId: input.userTagId
+          id: input.userTagId
         }
       });
 
       // if the tag was found
-      if (userTag && userTag.userTagId) {
+      if (userTag && userTag.id) {
         // tag the task
         const userTaskTag = await this.models.userTaskTag.create(
           {
-            userTagId: userTag.userTagId,
+            userTagId: userTag.id,
             taskId: input.taskId
           }
           // Note: cannot eagerload task during creation
