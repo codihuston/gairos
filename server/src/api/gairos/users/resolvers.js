@@ -101,6 +101,19 @@ export default {
           ]);
         }
       }
+    ),
+    deleteMyTask: combineResolvers(
+      isAuthenticated,
+      isGivenUser,
+      async (parent, { input }, { me, dataSources }) => {
+        try {
+          const userId = input.userId ? input.userId : me.id;
+          const task = await dataSources.TaskAPI.deleteUserTask(userId, input);
+          return task;
+        } catch (e) {
+          throw SequelizeErrorHandler(e);
+        }
+      }
     )
   }
 };

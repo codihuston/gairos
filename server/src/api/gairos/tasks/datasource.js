@@ -128,5 +128,40 @@ export default {
 
       return userTask;
     }
+
+    async deleteUserTask(userId, input) {
+      // find the existing userTask
+      const userTask = await this.models.userTask.findOne({
+        where: {
+          id: input.userTaskId
+        }
+      });
+
+      // throw if it doesn't exist
+      if (!userTask) {
+        throw new Error("The given task does not exist!");
+      }
+
+      // throw if found, but not owned by the given user || the given userId
+      // does not match on the found userTask instance, depending on how this
+      // method is being used (gql mutation: deleteMyTask)
+      const doesThisUserOwnThisTask = userTask.userId === userId;
+      if (!doesThisUserOwnThisTask) {
+        throw new Error("The given user does not own this task!");
+      }
+
+      // delete it
+      // NOTE: using static method (public method is broken for postgres, which
+      // returns empty array [] as of 2020/01/27)
+      // SEE: https://github.com/sequelize/sequelize/issues/10508
+      const res = await this.models.userTask.destroy({
+        where: {
+          userId,
+          id: input.userTaskId
+        }
+      });
+
+      return res;
+    }
   }
 };

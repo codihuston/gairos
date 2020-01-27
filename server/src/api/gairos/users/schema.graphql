@@ -11,10 +11,11 @@ type Query {
 type Mutation {
   updateMyProfile(input: UserInput): User
   createMyTask(input: TaskInput): Task
-  createMyTag(input: TagInput): Tag
-  tagMyTask(input: TagTaskInput): UserTaskTag
   renameMyTask(input: RenameUserTaskInput): Task
   updateMyTask(input: UpdateUserTaskInput): UserTaskInfo
+  deleteMyTask(input: DeleteUserTaskInput): Boolean
+  createMyTag(input: TagInput): Tag
+  tagMyTask(input: TagTaskInput): UserTaskTag
 }
 
 type User {

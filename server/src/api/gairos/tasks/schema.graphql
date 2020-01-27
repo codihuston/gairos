@@ -41,3 +41,8 @@ input UpdateUserTaskInput{
   createdAt: String
   updatedat: String
 }
+
+input DeleteUserTaskInput{
+  userId: ID
+  userTaskId: ID!
+}
