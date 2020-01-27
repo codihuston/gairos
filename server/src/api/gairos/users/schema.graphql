@@ -10,6 +10,7 @@ type Query {
 
 type Mutation {
   updateMyProfile(input: UserInput): User
+  createMyTaskHistory(input: CreateTaskHistoryInput): UserTaskHistory
   createMyTask(input: TaskInput): Task
   renameMyTask(input: RenameUserTaskInput): Task
   updateMyTask(input: UpdateUserTaskInput): UserTaskInfo

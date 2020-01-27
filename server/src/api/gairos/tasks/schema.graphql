@@ -47,3 +47,10 @@ input DeleteUserTaskInput{
   userId: ID
   userTaskId: ID!
 }
+
+input CreateTaskHistoryInput{
+  userTaskId: ID!
+  googleEventId: String
+  startTime: String!
+  endTime: String
+}

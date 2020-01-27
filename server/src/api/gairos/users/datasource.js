@@ -122,5 +122,50 @@ export default {
 
       return user;
     }
+
+    async createTaskHistory(
+      userId,
+      { userTaskId, googleEventId, startTime, endTime }
+    ) {
+      // find the given userTaskId
+      const userTask = await this.models.userTask.findOne({
+        where: {
+          userId,
+          id: userTaskId
+        },
+        include: [
+          {
+            model: this.models.task
+          }
+        ]
+      });
+
+      if (!userTask) {
+        throw new Error("The given user task does not exist!");
+      }
+
+      // confirm that this user owns this task
+      const doesThisUserOwnThisUserTask = userTask.userId === userId;
+      if (!doesThisUserOwnThisUserTask) {
+        console.log("QQQ created", userTask);
+        throw new Error("This user does not own the given task!");
+      }
+
+      // create history
+      const userTaskHistory = await this.models.userTaskHistory.create({
+        userTaskId,
+        googleEventId,
+        startTime,
+        endTime
+      });
+
+      // associate
+      userTaskHistory.setUserTaskInfo(userTask);
+
+      // combine json for response
+      userTaskHistory.userTaskInfo = userTask;
+
+      return userTaskHistory;
+    }
   }
 };
