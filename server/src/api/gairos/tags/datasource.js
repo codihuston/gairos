@@ -101,7 +101,7 @@ export default {
       }
     }
 
-    async rename(userId, input) {
+    async renameUserTag(userId, input) {
       // find the existing tag
       const userTag = await this.models.userTag.findOne({
         where: {
@@ -144,7 +144,7 @@ export default {
       return tag;
     }
 
-    async update(userId, input) {
+    async updateUserTag(userId, input) {
       // find the existing tag
       const userTag = await this.models.userTag.findOne({
         where: {
