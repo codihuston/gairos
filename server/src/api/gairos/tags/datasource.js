@@ -135,8 +135,6 @@ export default {
       // join the json together (for gql response)
       tag.userTagInfo = await tag.getUserTagInfo();
 
-      // console.log("QQQ TEMP", temp);
-
       return tag;
     }
   }
