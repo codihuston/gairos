@@ -171,5 +171,35 @@ export default {
 
       return userTag;
     }
+
+    async deleteUserTag(userId, input) {
+      // find the existing userTag
+      const userTag = await this.models.userTag.findOne({
+        where: {
+          id: input.userTagId
+        }
+      });
+
+      // throw if it doesn't exist
+      if (!userTag) {
+        throw new Error("The given task does not exist!");
+      }
+
+      // throw if found, but not owned by the given userId
+      const doesThisUserOwnThisTag = userTag.userId === userId;
+      if (!doesThisUserOwnThisTag) {
+        throw new Error("The given user does not own this task!");
+      }
+
+      // delete it
+      const res = await this.models.userTag.destroy({
+        where: {
+          userId,
+          id: input.userTagId
+        }
+      });
+
+      return res;
+    }
   }
 };

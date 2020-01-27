@@ -32,3 +32,8 @@ input UpdateUserTagInput{
   isPublic: Boolean
   isArchived: Boolean
 }
+
+input DeleteUserTagInput{
+  userId: ID
+  userTagId: ID!
+}

@@ -17,6 +17,7 @@ type Mutation {
   createMyTag(input: TagInput): Tag
   renameMyTag(input: RenameUserTagInput): Tag
   updateMyTag(input: UpdateUserTagInput): UserTagInfo
+  deleteMyTag(input: DeleteUserTagInput): Boolean
   tagMyTask(input: TagTaskInput): UserTaskTag
 }
 
