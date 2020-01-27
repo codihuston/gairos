@@ -109,5 +109,24 @@ export default {
 
       return task;
     }
+
+    async updateUserTask(userId, input) {
+      // find the existing task
+      const userTask = await this.models.userTask.findOne({
+        where: {
+          id: input.userTaskId
+        }
+      });
+
+      if (!userTask) {
+        throw new Error("The given user task does not exist!");
+      }
+
+      // update the userTask
+      await userTask.set(input);
+      userTask.save();
+
+      return userTask;
+    }
   }
 };

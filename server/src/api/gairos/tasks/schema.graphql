@@ -33,3 +33,11 @@ input RenameUserTaskInput{
   userTaskId: ID!
   name: String!
 }
+
+input UpdateUserTaskInput{
+  userTaskId: ID!
+  description: String
+  isPublic: Boolean
+  createdAt: String
+  updatedat: String
+}
