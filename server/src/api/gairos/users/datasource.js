@@ -147,7 +147,6 @@ export default {
       // confirm that this user owns this task
       const doesThisUserOwnThisUserTask = userTask.userId === userId;
       if (!doesThisUserOwnThisUserTask) {
-        console.log("QQQ created", userTask);
         throw new Error("This user does not own the given task!");
       }
 
@@ -214,6 +213,54 @@ export default {
       await userTaskHistory.save();
 
       return userTaskHistory;
+    }
+
+    async deleteTaskHistory(userId, input) {
+      // find the existing userTask
+      const userTaskHistory = await this.models.userTaskHistory.findOne({
+        where: {
+          id: input.id
+        },
+        include: [
+          {
+            model: this.models.userTask,
+            as: "userTaskInfo"
+          }
+        ]
+      });
+
+      // throw if it doesn't exist
+      if (!userTaskHistory) {
+        throw new Error("The given user task history does not exist!");
+      }
+
+      // confirm that the user task exists (should be eager loaded by now)
+      if (
+        !userTaskHistory.userTaskInfo &&
+        userTaskHistory.userTaskInfo.userId
+      ) {
+        throw new Error(
+          "The task associated with this history record could not be found!"
+        );
+      }
+
+      // confirm that the user owns it
+      const doesThisUserOwnUserTask =
+        userTaskHistory.userTaskInfo.userId === userId;
+      if (!doesThisUserOwnUserTask) {
+        throw new Error(
+          "This user does not own the given task history record!"
+        );
+      }
+
+      // delete it
+      const res = await this.models.userTaskHistory.destroy({
+        where: {
+          id: input.id
+        }
+      });
+
+      return res;
     }
   }
 };

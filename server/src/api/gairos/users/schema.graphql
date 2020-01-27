@@ -12,6 +12,7 @@ type Mutation {
   updateMyProfile(input: UserInput): User
   createMyTaskHistory(input: CreateTaskHistoryInput): UserTaskHistory
   updateMyTaskHistory(input: UpdateTaskHistoryInput): UserTaskHistory
+  deleteMyTaskHistory(input: DeleteTaskHistoryInput): Boolean
   createMyTask(input: TaskInput): Task
   renameMyTask(input: RenameUserTaskInput): Task
   updateMyTask(input: UpdateUserTaskInput): UserTaskInfo

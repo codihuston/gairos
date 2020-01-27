@@ -43,36 +43,6 @@ export default {
         }
       }
     ),
-    createMyTaskHistory: combineResolvers(
-      isAuthenticated,
-      isGivenUser,
-      async (parent, { input }, { me, dataSources }) => {
-        try {
-          const user = await dataSources.UserAPI.createTaskHistory(
-            me.id,
-            input
-          );
-          return user;
-        } catch (e) {
-          throw SequelizeErrorHandler(e);
-        }
-      }
-    ),
-    updateMyTaskHistory: combineResolvers(
-      isAuthenticated,
-      isGivenUser,
-      async (parent, { input }, { me, dataSources }) => {
-        try {
-          const user = await dataSources.UserAPI.updateTaskHistory(
-            me.id,
-            input
-          );
-          return user;
-        } catch (e) {
-          throw SequelizeErrorHandler(e);
-        }
-      }
-    ),
     /**
      * Tasks
      */
@@ -188,6 +158,54 @@ export default {
           const userId = input.userId ? input.userId : me.id;
           const task = await dataSources.TagAPI.deleteUserTag(userId, input);
           return task;
+        } catch (e) {
+          throw SequelizeErrorHandler(e);
+        }
+      }
+    ),
+    /**
+     * Task History
+     */
+    createMyTaskHistory: combineResolvers(
+      isAuthenticated,
+      isGivenUser,
+      async (parent, { input }, { me, dataSources }) => {
+        try {
+          const user = await dataSources.UserAPI.createTaskHistory(
+            me.id,
+            input
+          );
+          return user;
+        } catch (e) {
+          throw SequelizeErrorHandler(e);
+        }
+      }
+    ),
+    updateMyTaskHistory: combineResolvers(
+      isAuthenticated,
+      isGivenUser,
+      async (parent, { input }, { me, dataSources }) => {
+        try {
+          const user = await dataSources.UserAPI.updateTaskHistory(
+            me.id,
+            input
+          );
+          return user;
+        } catch (e) {
+          throw SequelizeErrorHandler(e);
+        }
+      }
+    ),
+    deleteMyTaskHistory: combineResolvers(
+      isAuthenticated,
+      isGivenUser,
+      async (parent, { input }, { me, dataSources }) => {
+        try {
+          const user = await dataSources.UserAPI.deleteTaskHistory(
+            me.id,
+            input
+          );
+          return user;
         } catch (e) {
           throw SequelizeErrorHandler(e);
         }

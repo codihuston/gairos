@@ -111,8 +111,6 @@ export default {
       // join the json together (for gql response)
       task.userTaskInfo = await task.getUserTaskInfo();
 
-      // console.log("QQQ TEMP", temp);
-
       return task;
     }
 
