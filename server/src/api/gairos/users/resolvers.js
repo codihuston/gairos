@@ -58,6 +58,21 @@ export default {
         }
       }
     ),
+    updateMyTaskHistory: combineResolvers(
+      isAuthenticated,
+      isGivenUser,
+      async (parent, { input }, { me, dataSources }) => {
+        try {
+          const user = await dataSources.UserAPI.updateTaskHistory(
+            me.id,
+            input
+          );
+          return user;
+        } catch (e) {
+          throw SequelizeErrorHandler(e);
+        }
+      }
+    ),
     /**
      * Tasks
      */

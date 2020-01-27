@@ -11,6 +11,7 @@ type Query {
 type Mutation {
   updateMyProfile(input: UserInput): User
   createMyTaskHistory(input: CreateTaskHistoryInput): UserTaskHistory
+  updateMyTaskHistory(input: UpdateTaskHistoryInput): UserTaskHistory
   createMyTask(input: TaskInput): Task
   renameMyTask(input: RenameUserTaskInput): Task
   updateMyTask(input: UpdateUserTaskInput): UserTaskInfo
@@ -55,6 +56,7 @@ type UserTaskHistory{
   id: ID
   startTime: String
   endTime: String
+  googleEventId: String
   createdAt: String
   updatedAt: String
   userTaskInfo: UserTaskInfo

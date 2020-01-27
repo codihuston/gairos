@@ -167,5 +167,53 @@ export default {
 
       return userTaskHistory;
     }
+
+    async updateTaskHistory(userId, input) {
+      // find the existing history object
+      const userTaskHistory = await this.models.userTaskHistory.findOne({
+        where: {
+          id: input.id
+        },
+        include: [
+          {
+            model: this.models.userTask,
+            as: "userTaskInfo",
+            include: [
+              {
+                model: this.models.task
+              }
+            ]
+          }
+        ]
+      });
+
+      if (!userTaskHistory) {
+        throw new Error("The given user task history does not exist!");
+      }
+
+      // if changing the userTaskId
+      if (input.userTaskId) {
+        // confirm that the user task exists (should be eager loaded by now)
+        if (
+          !userTaskHistory.userTaskInfo &&
+          userTaskHistory.userTaskInfo.userId
+        ) {
+          throw new Error("The given user task does not exist!");
+        }
+
+        // confirm that the user owns it
+        const doesThisUserOwnUserTask =
+          userTaskHistory.userTaskInfo.userId === userId;
+        if (!doesThisUserOwnUserTask) {
+          throw new Error("This user does not own the given task!");
+        }
+      }
+
+      // update history
+      userTaskHistory.set(input);
+      await userTaskHistory.save();
+
+      return userTaskHistory;
+    }
   }
 };

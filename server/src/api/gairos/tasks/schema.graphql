@@ -54,3 +54,11 @@ input CreateTaskHistoryInput{
   startTime: String!
   endTime: String
 }
+
+input UpdateTaskHistoryInput{
+  id: ID!
+  userTaskId: ID
+  googleEventId: String
+  startTime: String
+  endTime: String
+}
