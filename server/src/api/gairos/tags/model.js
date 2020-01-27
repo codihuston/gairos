@@ -13,11 +13,13 @@ const model = (sequelize, DataTypes) => {
   Model.associate = models => {
     models.tag.belongsToMany(models.user, {
       through: models.userTag,
-      foreignKey: "tagId"
+      foreignKey: "tagId",
+      onDelete: "NO ACTION"
     });
     models.tag.hasOne(models.userTag, {
       foreignKey: "tagId",
-      as: "userTagInfo"
+      as: "userTagInfo",
+      onDelete: "NO ACTION"
     });
   };
 
