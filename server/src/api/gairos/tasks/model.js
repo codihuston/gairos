@@ -14,15 +14,18 @@ const model = (sequelize, DataTypes) => {
     models.task.belongsToMany(models.user, {
       through: models.userTask,
       foreignKey: "taskId",
-      unique: false
+      unique: false,
+      onDelete: "NO ACTION"
     });
     models.task.hasMany(models.userTaskHistory, {
       foreignKey: "taskId",
-      as: "taskHistory"
+      as: "taskHistory",
+      onDelete: "NO ACTION"
     });
     models.task.hasOne(models.userTask, {
       foreignKey: "taskId",
-      as: "userTaskInfo"
+      as: "userTaskInfo",
+      onDelete: "NO ACTION"
     });
   };
 

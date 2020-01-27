@@ -33,8 +33,7 @@ const model = (sequelize, DataTypes) => {
 
   Model.associate = models => {
     models.userTask.hasOne(models.userTaskTag, {
-      foreignKey: "userTaskId",
-      onDelete: "cascade"
+      foreignKey: "userTaskId"
     });
     models.userTask.belongsTo(models.task, {
       foreignKey: "taskId"
