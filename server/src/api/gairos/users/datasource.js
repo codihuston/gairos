@@ -181,7 +181,10 @@ export default {
               {
                 model: this.models.task
               }
-            ]
+            ],
+            where: {
+              userId
+            }
           }
         ]
       });
@@ -192,6 +195,9 @@ export default {
 
       // if changing the userTaskId
       if (input.userTaskId) {
+        // TODO: an exception is thrown if a given userTaskId does not exist
+        // in userTask table
+
         // confirm that the user task exists (should be eager loaded by now)
         if (
           !userTaskHistory.userTaskInfo &&

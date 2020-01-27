@@ -65,4 +65,5 @@ input UpdateTaskHistoryInput{
 
 input DeleteTaskHistoryInput{
   id: ID!
+  userId: ID
 }

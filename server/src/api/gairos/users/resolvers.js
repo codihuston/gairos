@@ -171,8 +171,9 @@ export default {
       isGivenUser,
       async (parent, { input }, { me, dataSources }) => {
         try {
+          const userId = input.userId ? input.userId : me.id;
           const user = await dataSources.UserAPI.createTaskHistory(
-            me.id,
+            userId,
             input
           );
           return user;
@@ -186,8 +187,9 @@ export default {
       isGivenUser,
       async (parent, { input }, { me, dataSources }) => {
         try {
+          const userId = input.userId ? input.userId : me.id;
           const user = await dataSources.UserAPI.updateTaskHistory(
-            me.id,
+            userId,
             input
           );
           return user;
@@ -201,8 +203,9 @@ export default {
       isGivenUser,
       async (parent, { input }, { me, dataSources }) => {
         try {
+          const userId = input.userId ? input.userId : me.id;
           const user = await dataSources.UserAPI.deleteTaskHistory(
-            me.id,
+            userId,
             input
           );
           return user;
