@@ -38,6 +38,7 @@ input UpdateUserTaskInput{
   userTaskId: ID!
   description: String
   isPublic: Boolean
+  isArchived: Boolean
   createdAt: String
   updatedat: String
 }

@@ -44,6 +44,7 @@ type UserTaskInfo{
   name: String!
   description: String
   isPublic: Boolean
+  isArchived: Boolean
   createdAt: String
   updatedAt: String
   task: Task
