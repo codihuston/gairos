@@ -67,7 +67,7 @@ export default {
       return tag;
     }
 
-    async tagTask(userId, input) {
+    async tagUserTask(userId, input) {
       // get this user's tag (to ensure that it is theirs)
       const userTag = await this.models.userTag.findOne({
         where: {
@@ -77,6 +77,12 @@ export default {
 
       // if the tag was found
       if (userTag && userTag.id) {
+        // throw if found, but not owned by the given userId
+        const doesThisUserOwnThisTag = userTag.userId === userId;
+        if (!doesThisUserOwnThisTag) {
+          throw new Error("The given user does not own this tag!");
+        }
+
         // tag the task
         const userTaskTag = await this.models.userTaskTag.create(
           {

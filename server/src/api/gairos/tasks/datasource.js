@@ -40,7 +40,7 @@ export default {
       return res.users;
     }
 
-    async create(userId, input) {
+    async createUserTask(userId, input) {
       let userTask = null;
 
       const [task, created] = await this.models.task.findOrCreate({
@@ -71,7 +71,7 @@ export default {
       return task;
     }
 
-    async rename(userId, input) {
+    async renameUserTask(userId, input) {
       // find the existing task
       const userTask = await this.models.userTask.findOne({
         where: {

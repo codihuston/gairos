@@ -49,7 +49,7 @@ export default {
       async (parent, { input }, { me, dataSources }) => {
         try {
           const userId = input.userId ? input.userId : me.id;
-          const task = await dataSources.TaskAPI.create(userId, input);
+          const task = await dataSources.TaskAPI.createUserTask(userId, input);
           return task;
         } catch (e) {
           throw SequelizeErrorHandler(e, [
@@ -64,7 +64,7 @@ export default {
       async (parent, { input }, { me, dataSources }) => {
         try {
           const userId = input.userId ? input.userId : me.id;
-          const task = await dataSources.TagAPI.tagTask(userId, input);
+          const task = await dataSources.TagAPI.tagUserTask(userId, input);
           return task;
         } catch (e) {
           throw SequelizeErrorHandler(e, [
@@ -81,7 +81,7 @@ export default {
       async (parent, { input }, { me, dataSources }) => {
         try {
           const userId = input.userId ? input.userId : me.id;
-          const task = await dataSources.TaskAPI.rename(userId, input);
+          const task = await dataSources.TaskAPI.renameUserTask(userId, input);
           return task;
         } catch (e) {
           throw SequelizeErrorHandler(e, [
