@@ -55,7 +55,7 @@ export default {
       // add this task to this user's tag
       const userTaskTag = await models.userTaskTag.create({
         userTagId: userTag[0].userTagId,
-        userTaskId: userTask[0].userTaskId
+        userTaskId: userTask[0].id
       });
 
       // create user task history WITHOUT magic sequelize method

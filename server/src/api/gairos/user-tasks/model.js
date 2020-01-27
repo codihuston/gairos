@@ -2,7 +2,7 @@ const model = (sequelize, DataTypes) => {
   const Model = sequelize.define(
     "userTask",
     {
-      userTaskId: {
+      id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true
@@ -33,7 +33,8 @@ const model = (sequelize, DataTypes) => {
 
   Model.associate = models => {
     models.userTask.hasOne(models.userTaskTag, {
-      foreignKey: "userTaskId"
+      foreignKey: "userTaskId",
+      onDelete: "cascade"
     });
     models.userTask.belongsTo(models.task, {
       foreignKey: "taskId"

@@ -76,7 +76,7 @@ export default {
       const userTask = await this.models.userTask.findOne({
         where: {
           userId,
-          userTaskId: input.userTaskId
+          id: input.userTaskId
         }
       });
 

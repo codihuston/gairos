@@ -35,7 +35,7 @@ input UserInput{
 }
 
 type UserTaskInfo{
-  userTaskId: ID!
+  id: ID!
   name: String!
   description: String
   isPublic: Boolean
