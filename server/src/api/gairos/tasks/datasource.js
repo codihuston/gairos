@@ -84,6 +84,12 @@ export default {
         throw new Error("The given user task does not exist!");
       }
 
+      // throw if found, but not owned by the given userId
+      const doesThisUserOwnThisTask = userTask.userId === userId;
+      if (!doesThisUserOwnThisTask) {
+        throw new Error("The given user task does not own this task!");
+      }
+
       // find or create the given task name
       let [task, created] = await this.models.task.findOrCreate({
         where: {
@@ -122,6 +128,12 @@ export default {
         throw new Error("The given user task does not exist!");
       }
 
+      // throw if found, but not owned by the given userId
+      const doesThisUserOwnThisTask = userTask.userId === userId;
+      if (!doesThisUserOwnThisTask) {
+        throw new Error("The given user task does not own this task!");
+      }
+
       // update the userTask
       await userTask.set(input);
       userTask.save();
@@ -142,9 +154,7 @@ export default {
         throw new Error("The given task does not exist!");
       }
 
-      // throw if found, but not owned by the given user || the given userId
-      // does not match on the found userTask instance, depending on how this
-      // method is being used (gql mutation: deleteMyTask)
+      // throw if found, but not owned by the given userId
       const doesThisUserOwnThisTask = userTask.userId === userId;
       if (!doesThisUserOwnThisTask) {
         throw new Error("The given user does not own this task!");
