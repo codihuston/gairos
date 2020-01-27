@@ -87,7 +87,7 @@ export default {
       // throw if found, but not owned by the given userId
       const doesThisUserOwnThisTask = userTask.userId === userId;
       if (!doesThisUserOwnThisTask) {
-        throw new Error("The given user task does not own this task!");
+        throw new Error("The given user does not own this task!");
       }
 
       // find or create the given task name
@@ -131,7 +131,7 @@ export default {
       // throw if found, but not owned by the given userId
       const doesThisUserOwnThisTask = userTask.userId === userId;
       if (!doesThisUserOwnThisTask) {
-        throw new Error("The given user task does not own this task!");
+        throw new Error("The given user does not own this task!");
       }
 
       // update the userTask

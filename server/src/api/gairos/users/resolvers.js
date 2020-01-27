@@ -40,6 +40,9 @@ export default {
         }
       }
     ),
+    /**
+     * Tasks
+     */
     createMyTask: combineResolvers(
       isAuthenticated,
       isGivenUser,
@@ -112,6 +115,24 @@ export default {
           return task;
         } catch (e) {
           throw SequelizeErrorHandler(e);
+        }
+      }
+    ),
+    /**
+     * Tags
+     */
+    renameMyTag: combineResolvers(
+      isAuthenticated,
+      isGivenUser,
+      async (parent, { input }, { me, dataSources }) => {
+        try {
+          const userId = input.userId ? input.userId : me.id;
+          const task = await dataSources.TagAPI.rename(userId, input);
+          return task;
+        } catch (e) {
+          throw SequelizeErrorHandler(e, [
+            UniqueViolationError("You have already have a tag with this name!")
+          ]);
         }
       }
     )

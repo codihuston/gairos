@@ -94,5 +94,50 @@ export default {
         );
       }
     }
+
+    async rename(userId, input) {
+      // find the existing tag
+      const userTag = await this.models.userTag.findOne({
+        where: {
+          userId,
+          id: input.userTagId
+        }
+      });
+
+      if (!userTag) {
+        throw new Error("The given user tag does not exist!");
+      }
+
+      // throw if found, but not owned by the given userId
+      const doesThisUserOwnThisTag = userTag.userId === userId;
+      if (!doesThisUserOwnThisTag) {
+        throw new Error("The given user does not own this tag!");
+      }
+
+      // find or create the given tag name
+      let [tag, created] = await this.models.tag.findOrCreate({
+        where: {
+          name: input.name
+        },
+        defaults: {
+          name: input.name
+        }
+      });
+
+      // update the userTag reference to tag (in the database)
+      await userTag.setTag(tag);
+
+      // associate this user tag to this tag
+      // EXPECTED: throws unique violation on userId if trying to
+      // recreate the same tag
+      await tag.setUserTagInfo(userTag);
+
+      // join the json together (for gql response)
+      tag.userTagInfo = await tag.getUserTagInfo();
+
+      // console.log("QQQ TEMP", temp);
+
+      return tag;
+    }
   }
 };

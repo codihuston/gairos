@@ -39,7 +39,7 @@ const model = (sequelize, DataTypes) => {
       }
     });
     models.userTag.belongsTo(models.tag, {
-      foreignKey: "taskId"
+      foreignKey: "tagId"
     });
   };
 
