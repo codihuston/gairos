@@ -50,7 +50,7 @@ export default function(error, potentialErrors) {
     }
   }
   // otherwise throw the error as provided by sequelize
-  throw CustomApolloError(`Sequelize Error: ${error.message}`, 422, error);
+  throw CustomApolloError(`Database Error: ${error.message}`, 422, error);
 }
 
 const errorToThrow = (message, additionalProperties) =>

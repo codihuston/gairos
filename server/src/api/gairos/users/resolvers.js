@@ -71,6 +71,21 @@ export default {
           ]);
         }
       }
+    ),
+    renameMyTask: combineResolvers(
+      isAuthenticated,
+      isGivenUser,
+      async (async, { input }, { me, dataSources }) => {
+        try {
+          const userId = input.userId ? input.userId : me.id;
+          const task = await dataSources.TaskAPI.rename(userId, input);
+          return task;
+        } catch (e) {
+          throw SequelizeErrorHandler(e, [
+            UniqueViolationError("You have already have a task with this name!")
+          ]);
+        }
+      }
     )
   }
 };

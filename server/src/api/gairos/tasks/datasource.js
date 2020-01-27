@@ -70,5 +70,44 @@ export default {
 
       return task;
     }
+
+    async rename(userId, input) {
+      // find the existing task
+      const userTask = await this.models.userTask.findOne({
+        where: {
+          userId,
+          userTaskId: input.userTaskId
+        }
+      });
+
+      if (!userTask) {
+        throw new Error("The given user task does not exist!");
+      }
+
+      // find or create the given task name
+      let [task, created] = await this.models.task.findOrCreate({
+        where: {
+          name: input.name
+        },
+        defaults: {
+          name: input.name
+        }
+      });
+
+      // update the userTask reference to task (in the database)
+      await userTask.setTask(task);
+
+      // associate this user task to this task
+      // EXPECTED: throws unique violation on userId if trying to
+      // recreate the same task
+      await task.setUserTaskInfo(userTask);
+
+      // join the json together (for gql response)
+      task.userTaskInfo = await task.getUserTaskInfo();
+
+      // console.log("QQQ TEMP", temp);
+
+      return task;
+    }
   }
 };

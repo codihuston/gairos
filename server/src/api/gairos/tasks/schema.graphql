@@ -28,3 +28,8 @@ input TagTaskInput{
   userTagId: ID!
   taskId: ID!
 }
+
+input RenameUserTaskInput{
+  userTaskId: ID!
+  name: String!
+}

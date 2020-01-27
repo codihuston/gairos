@@ -13,6 +13,7 @@ type Mutation {
   createMyTask(input: TaskInput): Task
   createMyTag(input: TagInput): Tag
   tagMyTask(input: TagTaskInput): UserTaskTag
+  renameMyTask(input: RenameUserTaskInput): Task
 }
 
 type User {
@@ -34,7 +35,7 @@ input UserInput{
 }
 
 type UserTaskInfo{
-  id: ID!
+  userTaskId: ID!
   name: String!
   description: String
   isPublic: Boolean
