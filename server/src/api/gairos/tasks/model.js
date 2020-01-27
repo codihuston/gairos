@@ -17,11 +17,6 @@ const model = (sequelize, DataTypes) => {
       unique: false,
       onDelete: "NO ACTION"
     });
-    models.task.hasMany(models.userTaskHistory, {
-      foreignKey: "taskId",
-      as: "taskHistory",
-      onDelete: "NO ACTION"
-    });
     models.task.hasOne(models.userTask, {
       foreignKey: "taskId",
       as: "userTaskInfo",

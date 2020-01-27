@@ -28,6 +28,9 @@ export default {
     }
   },
   Mutation: {
+    /**
+     * Users
+     */
     updateMyProfile: combineResolvers(
       isAuthenticated,
       isGivenUser,

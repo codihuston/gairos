@@ -51,13 +51,12 @@ type UserTaskInfo{
 }
 
 type UserTaskHistory{
-  userId: ID!
-  taskId: ID!
+  id: ID
   startTime: String
   endTime: String
   createdAt: String
   updatedAt: String
-  task: Task
+  userTaskInfo: UserTaskInfo
 }
 
 type UserTagInfo{

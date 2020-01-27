@@ -84,24 +84,22 @@ export default {
 
     async getTaskHistory(userId) {
       const res = await this.models.userTaskHistory.findAll({
-        where: {
-          userId
-        },
         include: [
           {
-            model: this.models.task,
+            model: this.models.userTask,
+            as: "userTaskInfo",
+            where: {
+              userId
+            },
             include: [
               {
-                model: this.models.userTask,
-                as: "userTaskInfo",
-                where: {
-                  userId
-                }
+                model: this.models.task
               }
             ]
           }
         ]
       });
+
       return res;
     }
 

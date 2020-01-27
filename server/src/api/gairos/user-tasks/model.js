@@ -42,6 +42,11 @@ const model = (sequelize, DataTypes) => {
     models.userTask.belongsTo(models.task, {
       foreignKey: "taskId"
     });
+    models.userTask.hasMany(models.userTaskHistory, {
+      foreignKey: "userTaskId",
+      as: "taskHistory",
+      onDelete: "NO ACTION"
+    });
   };
 
   return Model;

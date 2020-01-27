@@ -44,10 +44,6 @@ const model = (sequelize, DataTypes) => {
       through: models.userTag,
       foreignKey: "userId"
     });
-    models.user.hasMany(models.userTaskHistory, {
-      foreignKey: "userId",
-      as: "taskHistory"
-    });
   };
 
   /**

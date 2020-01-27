@@ -7,10 +7,7 @@ const model = (sequelize, DataTypes) => {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true
       },
-      userId: {
-        type: DataTypes.UUID
-      },
-      taskId: {
+      userTaskId: {
         type: DataTypes.UUID
       },
       googleEventId: {
@@ -30,14 +27,17 @@ const model = (sequelize, DataTypes) => {
       indexes: [
         {
           unique: false,
-          fields: ["userId", "taskId"]
+          fields: ["userTaskId"]
         }
       ]
     }
   );
 
   Model.associate = models => {
-    models.userTaskHistory.belongsTo(models.task);
+    models.userTaskHistory.belongsTo(models.userTask, {
+      foreignKey: "userTaskId",
+      as: "userTaskInfo"
+    });
   };
 
   return Model;

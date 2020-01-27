@@ -62,8 +62,7 @@ export default {
       // sequelize (M:N enforces UNIQUE, we don't want that!) This is the
       // workaround!
       const userTaskHistory = await models.userTaskHistory.create({
-        userId: tempUser.id,
-        taskId: task.id,
+        userTaskId: userTask[0].id,
         googleEventId: "SOME_ID",
         startTime: new Date(),
         endTime: new Date()
