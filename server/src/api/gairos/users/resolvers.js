@@ -99,9 +99,7 @@ export default {
           const task = await dataSources.TaskAPI.updateUserTask(userId, input);
           return task;
         } catch (e) {
-          throw SequelizeErrorHandler(e, [
-            UniqueViolationError("You have already have a task with this name!")
-          ]);
+          throw SequelizeErrorHandler(e);
         }
       }
     ),
