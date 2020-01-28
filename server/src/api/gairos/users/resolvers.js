@@ -172,7 +172,7 @@ export default {
       async (parent, { input }, { me, dataSources }) => {
         try {
           const userId = input.userId ? input.userId : me.id;
-          const user = await dataSources.UserAPI.createTaskHistory(
+          const user = await dataSources.TaskAPI.createUserTaskHistory(
             userId,
             input
           );
@@ -188,7 +188,7 @@ export default {
       async (parent, { input }, { me, dataSources }) => {
         try {
           const userId = input.userId ? input.userId : me.id;
-          const user = await dataSources.UserAPI.updateTaskHistory(
+          const user = await dataSources.TaskAPI.updateUserTaskHistory(
             userId,
             input
           );
@@ -204,7 +204,7 @@ export default {
       async (parent, { input }, { me, dataSources }) => {
         try {
           const userId = input.userId ? input.userId : me.id;
-          const user = await dataSources.UserAPI.deleteTaskHistory(
+          const user = await dataSources.TaskAPI.deleteUserTaskHistory(
             userId,
             input
           );
