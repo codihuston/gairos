@@ -19,6 +19,7 @@ input TagInput{
   name: String!
   description: String
   isPublic: Boolean
+  isArchived: Boolean
 }
 
 input RenameUserTagInput{

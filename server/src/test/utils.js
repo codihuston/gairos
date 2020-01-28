@@ -2,7 +2,7 @@ import { resolveGraphqlDefinitions } from "../api";
 import { ApolloServer } from "apollo-server-express";
 import { models } from "../api/gairos";
 import faker from "faker";
-import { merge } from "lodash";
+import { merge, cloneDeep } from "lodash";
 
 // this is what the async function "context" will return to the apollo server
 const defaultContextReturnValue = {
@@ -10,7 +10,7 @@ const defaultContextReturnValue = {
     isAuthenticated: true,
     tokens: {
       access_token: "",
-      refreshtoken: ""
+      refresh_token: ""
     }
   },
   me: {
@@ -27,9 +27,27 @@ const defaultContext = async ({ req, res }) => {
 
 // if a developer wants to provide custom context, use this instead
 export const getDefaultContext = opts => {
-  return async ({ req, res }) => {
-    // merge the given options into the default context
-    return merge(defaultContextReturnValue, opts);
+  return ({ req, res }) => {
+    /**
+     * Because the tests may setup the apollo testing server back-to-back,
+     * the context object is MUTATED and appears to  attach the property:
+     * `context.dataSources`. As a result, when re-building the testing server,
+     * this property pre-exists on the instance, and throws an exception:
+     *
+     * "Please use the dataSources config option instead of putting dataSources
+     * on the context yourself."
+     *
+     * See: https://github.com/apollographql/apollo-server/issues/2144
+     *
+     * To fix this, just ensure that a new context object is always passed
+     * into the apollo server options...
+     *
+     * This also merges the given options into the default context to allow
+     * external customization
+     */
+    let tempContext = cloneDeep(merge(defaultContextReturnValue, opts));
+
+    return tempContext;
   };
 };
 
