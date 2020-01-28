@@ -122,6 +122,21 @@ export default {
     /**
      * Tags
      */
+    createMyTag: combineResolvers(
+      isAuthenticated,
+      isGivenUser,
+      async (parent, { input }, { me, dataSources }) => {
+        try {
+          const userId = input.userId ? input.userId : me.id;
+          const task = await dataSources.TagAPI.createUserTag(userId, input);
+          return task;
+        } catch (e) {
+          throw SequelizeErrorHandler(e, [
+            UniqueViolationError("You have already have a tag with this name!")
+          ]);
+        }
+      }
+    ),
     renameMyTag: combineResolvers(
       isAuthenticated,
       isGivenUser,

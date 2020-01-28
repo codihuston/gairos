@@ -43,9 +43,10 @@ export default {
       return res;
     }
 
-    async create(userId, input) {
+    async createUserTag(userId, input) {
       let userTag = null;
 
+      // find or create this tag
       const [tag, created] = await this.models.tag.findOrCreate({
         where: {
           name: input.name
@@ -55,6 +56,7 @@ export default {
         }
       });
 
+      // create this user tag
       userTag = await this.models.userTag.create({
         userId,
         tagId: tag.id,
@@ -62,7 +64,11 @@ export default {
         isPublic: input.isPublic
       });
 
+      // associate them
       await tag.setUserTagInfo(userTag);
+
+      // combine json for response
+      tag.userTagInfo = userTag;
 
       return tag;
     }

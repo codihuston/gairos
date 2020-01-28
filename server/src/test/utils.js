@@ -1,24 +1,39 @@
 import { resolveGraphqlDefinitions } from "../api";
 import { ApolloServer } from "apollo-server-express";
+import { models } from "../api/gairos";
+import faker from "faker";
+import { merge } from "lodash";
 
-const defaultContext = async ({ req, res }) => {
-  // pass context into our resolvers
-  return {
-    session: {
-      isAuthenticated: true,
-      tokens: {
-        access_token: "",
-        refreshtoken: ""
-      }
-    },
-    me: {
-      id: "",
-      username: ""
+// this is what the async function "context" will return to the apollo server
+const defaultContextReturnValue = {
+  session: {
+    isAuthenticated: true,
+    tokens: {
+      access_token: "",
+      refreshtoken: ""
     }
+  },
+  me: {
+    id: "",
+    username: ""
+  }
+};
+
+// the context for the apollo server must be an async function
+const defaultContext = async ({ req, res }) => {
+  // which should return our default context as defined above
+  return defaultContextReturnValue;
+};
+
+// if a developer wants to provide custom context, use this instead
+export const getDefaultContext = opts => {
+  return async ({ req, res }) => {
+    // merge the given options into the default context
+    return merge(defaultContextReturnValue, opts);
   };
 };
 
-// set the destructured value to a default value (if not specified)
+// this desctructuring defaults incoming context (if not specified)
 export const buildApolloServer = async ({ context = defaultContext } = {}) => {
   const {
     typeDefs,
@@ -51,3 +66,19 @@ export const defaultUsers = [
     username: "sample user B"
   }
 ];
+
+/**
+ * Used by the integration tests, which may require a user to be applied to the
+ * apollo server context when making authenticated requests
+ *
+ * @param {*} opts: any valid input for the user model
+ */
+export const createTestUser = async (opts = {}) => {
+  const defaultOpts = {
+    id: faker.random.uuid(),
+    username: faker.internet.userName(),
+    email: faker.internet.email()
+  };
+
+  return await models.user.create(merge(defaultOpts, opts));
+};
