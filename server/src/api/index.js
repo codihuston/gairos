@@ -6,12 +6,8 @@ import glob from "glob";
 import { models } from "../db";
 import { GooglePeople, GoogleCalendar } from "./google";
 
-const debug = debugLib("server:api");
-const gqlSchemas = [];
-const gqlResolvers = [];
-const gqlDataSources = {};
-
 // fetch the modules in each sub-directory under /api
+const debug = debugLib("server:api");
 const dirs = glob.sync(join(__dirname, "**/**/index.js"), {
   ignore: [join(__dirname, "index.js"), join(__dirname, "*/index.js")]
 });
@@ -31,6 +27,10 @@ export { models };
  */
 export const resolveGraphqlDefinitions = () =>
   new Promise(function(resolve, reject) {
+    const gqlSchemas = [];
+    const gqlResolvers = [];
+    const gqlDataSources = {};
+
     // import api modules dynamically
     for (let dir of dirs) {
       try {
