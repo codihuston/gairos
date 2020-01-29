@@ -72,6 +72,22 @@ export const mockMutations = {
     mutation deleteMyTag($userId: ID, $userTagId: ID!) {
       deleteMyTag(input: { userId: $userId, userTagId: $userTagId })
     }
+  `,
+  createMyTask: gql`
+    mutation createMyTask($name: String!, $description: String) {
+      createMyTask(input: { name: $name, description: $description }) {
+        id
+        name
+        createdAt
+        updatedAt
+        userTaskInfo {
+          id
+          description
+          createdAt
+          updatedAt
+        }
+      }
+    }
   `
 };
 

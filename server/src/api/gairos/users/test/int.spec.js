@@ -10,10 +10,12 @@ import {
 import { mockResponses, mockQueries, mockMutations } from ".";
 
 const debug = debugLib("test:tags");
-let user = null;
+
 let tag = null;
+let task = null;
+let user = null;
 let userTag = null;
-let tagHistory = [];
+let userTask = null;
 
 describe("user integration tests", function() {
   // pre-configure the test environment
@@ -39,7 +41,7 @@ describe("user integration tests", function() {
         const mutationName = "createMyTag";
         const mutation = mockMutations[mutationName];
         const variables = {
-          name: "FAKE TASK",
+          name: "FAKE TAG",
           description: "FAKE DESCRIPTION"
         };
         // set user in context as expected by the apollo server
@@ -76,6 +78,55 @@ describe("user integration tests", function() {
         // store for additional testing later (if needed)
         tag = res.data[mutationName];
         userTag = res.data[mutationName].userTagInfo;
+      } catch (e) {
+        console.error(e);
+        expect(e).toBeUndefined();
+      }
+    });
+
+    it("creates a user task", async function() {
+      try {
+        // define data used for query/mutation
+        const mutationName = "createMyTask";
+        const mutation = mockMutations[mutationName];
+        const variables = {
+          name: "FAKE TASK",
+          description: "FAKE DESCRIPTION"
+        };
+        // set user in context as expected by the apollo server
+        const context = getDefaultContext({ me: user });
+
+        // create an instance of the server
+        const { server, typeDefs, dataSources } = await buildApolloServer({
+          context
+        });
+
+        debug("context", context({ req: null, res: null }));
+
+        // init the test server
+        const { mutate } = createTestClient(server);
+
+        // submit gql query/mutation
+        const res = await mutate({
+          mutation,
+          variables
+        });
+
+        debug("result", JSON.stringify(res, null, 4));
+
+        expect(res.errors).toBeUndefined();
+        expect(res.data).toHaveProperty(mutationName);
+        expect(res.data[mutationName]).toHaveProperty("id");
+        expect(res.data[mutationName]).toHaveProperty("name", variables.name);
+        expect(res.data[mutationName]).toHaveProperty(
+          "userTaskInfo.description",
+          variables.description
+        );
+        expect(res.data[mutationName]).toHaveProperty("userTaskInfo.id");
+
+        // store for additional testing later (if needed)
+        task = res.data[mutationName];
+        userTask = res.data[mutationName].userTaskInfo;
       } catch (e) {
         console.error(e);
         expect(e).toBeUndefined();
@@ -125,9 +176,6 @@ describe("user integration tests", function() {
           userTag.description
         );
         expect(res.data[mutationName]).toMatchObject(expected);
-
-        // store for additional testing later (if needed)
-        tagHistory.push(res.data[mutationName]);
       } catch (e) {
         console.error(e);
         expect(e).toBeUndefined();
