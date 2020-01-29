@@ -373,5 +373,44 @@ describe("user integration tests", function() {
         expect(e).toBeUndefined();
       }
     });
+
+    it("deletes a user task", async function() {
+      const log = debug("test:deletes a user task");
+
+      try {
+        // define data used for query/mutation
+        const mutationName = "deleteMyTask";
+        const mutation = mockMutations[mutationName];
+        const variables = {
+          userTaskId: userTask.id
+        };
+        // set user in context as expected by the apollo server
+        const context = getDefaultContext({ me: user });
+
+        // create an instance of the server
+        const { server, typeDefs, dataSources } = await buildApolloServer({
+          context
+        });
+
+        log("context", context({ req: null, res: null }));
+
+        // init the test server
+        const { mutate } = createTestClient(server);
+
+        // submit gql query/mutation
+        const res = await mutate({
+          mutation,
+          variables
+        });
+
+        log("result", JSON.stringify(res, null, 4));
+
+        expect(res.errors).toBeUndefined();
+        expect(res.data[mutationName]).toEqual(true);
+      } catch (e) {
+        console.error(e);
+        expect(e).toBeUndefined();
+      }
+    });
   });
 });

@@ -129,6 +129,11 @@ export const mockMutations = {
         updatedAt
       }
     }
+  `,
+  deleteMyTask: gql`
+    mutation($userId: ID, $userTaskId: ID!) {
+      deleteMyTask(input: { userId: $userId, userTaskId: $userTaskId })
+    }
   `
 };
 
