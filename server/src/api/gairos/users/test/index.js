@@ -56,6 +56,11 @@ export const mockMutations = {
         updatedAt
       }
     }
+  `,
+  deleteMyTag: gql`
+    mutation deleteMyTag($userId: ID, $userTagId: ID!) {
+      deleteMyTag(input: { userId: $userId, userTagId: $userTagId })
+    }
   `
 };
 

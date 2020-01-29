@@ -50,7 +50,7 @@ describe("user integration tests", function() {
           context
         });
 
-        debug("context", context);
+        debug("context", context({ req: null, res: null }));
 
         // init the test server
         const { mutate } = createTestClient(server);
@@ -107,7 +107,7 @@ describe("user integration tests", function() {
           context
         });
 
-        debug("context", context);
+        debug("context", context({ req: null, res: null }));
 
         // init the test server
         const { mutate } = createTestClient(server);
@@ -126,6 +126,43 @@ describe("user integration tests", function() {
 
         // store for additional testing later
         tagHistory.push(res.data[mutationName]);
+      } catch (e) {
+        console.error(e);
+        expect(e).toBeUndefined();
+      }
+    });
+
+    it("deletes a user tag", async function() {
+      try {
+        // define data used for query/mutation
+        const mutationName = "deleteMyTag";
+        const mutation = mockMutations[mutationName];
+        const variables = {
+          userTagId: userTag.id
+        };
+        // set user in context as expected by the apollo server
+        const context = getDefaultContext({ me: user });
+
+        // create an instance of the server
+        const { server, typeDefs, dataSources } = await buildApolloServer({
+          context
+        });
+
+        debug("context", context({ req: null, res: null }));
+
+        // init the test server
+        const { mutate } = createTestClient(server);
+
+        // submit gql query/mutation
+        const res = await mutate({
+          mutation,
+          variables
+        });
+
+        debug("result", JSON.stringify(res, null, 4));
+
+        expect(res.errors).toBeUndefined();
+        expect(res.data[mutationName]).toEqual(true);
       } catch (e) {
         console.error(e);
         expect(e).toBeUndefined();
