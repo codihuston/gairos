@@ -78,6 +78,7 @@ type UserTag{
   tagId: ID!
   description: String
   isPublic: Boolean
+  isArchived: Boolean
   tag: Tag
   userTaskTags: [UserTaskTag]
   createdAt: String

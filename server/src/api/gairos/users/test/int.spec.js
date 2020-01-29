@@ -14,93 +14,119 @@ let user = null;
 let tagHistory = [];
 
 describe("user integration tests", function() {
+  // pre-configure the test environment
   beforeAll(async () => {
-    await DatabaseConnector();
-    user = await createTestUser();
+    // use try/catch in async tests to handle unhandled promise rejections
+    try {
+      await expect(DatabaseConnector()).resolves.toBeUndefined();
+      user = await createTestUser();
+      expect(user).toEqual(expect.any(Object));
+
+      // always return to ensure promises resolve before all tests
+      return user;
+    } catch (e) {
+      console.error(e);
+      expect(e).toBeUndefined();
+    }
   });
 
-  it("creates a user tag", async function() {
-    // define data used for query/mutation
-    const mutationName = "createMyTag";
-    const mutation = mockMutations[mutationName];
-    const variables = {
-      name: "FAKE TASK",
-      description: "FAKE DESCRIPTION"
-    };
+  describe("creates entities related to user", function() {
+    it("creates a user tag", async function() {
+      try {
+        // define data used for query/mutation
+        const mutationName = "createMyTag";
+        const mutation = mockMutations[mutationName];
+        const variables = {
+          name: "FAKE TASK",
+          description: "FAKE DESCRIPTION"
+        };
+        // set user in context as expected by the apollo server
+        const context = getDefaultContext({ me: user });
 
-    // create an instance of the server
-    const { server, typeDefs, dataSources } = await buildApolloServer({
-      // set user in context
-      context: getDefaultContext({ me: user })
+        // create an instance of the server
+        const { server, typeDefs, dataSources } = await buildApolloServer({
+          context
+        });
+
+        debug("context", context);
+
+        // init the test server
+        const { mutate } = createTestClient(server);
+
+        // submit gql query/mutation
+        const res = await mutate({
+          mutation,
+          variables
+        });
+
+        debug("result", JSON.stringify(res, null, 4));
+
+        expect(res.errors).toBeUndefined();
+        expect(res.data).toHaveProperty(mutationName);
+        expect(res.data[mutationName]).toHaveProperty("id");
+        expect(res.data[mutationName]).toHaveProperty("name", variables.name);
+        expect(res.data[mutationName]).toHaveProperty(
+          "userTagInfo.description",
+          variables.description
+        );
+        expect(res.data[mutationName]).toHaveProperty("userTagInfo.id");
+
+        // store for additional testing later
+        tagHistory.push(res.data[mutationName]);
+      } catch (e) {
+        console.error(e);
+        expect(e).toBeUndefined();
+      }
     });
-
-    debug("context", getDefaultContext({ me: user })({ req: null, res: null }));
-
-    // init the test server
-    const { mutate } = createTestClient(server);
-
-    // submit gql query/mutation
-    const res = await mutate({
-      mutation,
-      variables
-    });
-
-    debug("result", JSON.stringify(res, null, 4));
-
-    expect(res.errors).toBeUndefined();
-    expect(res.data).toHaveProperty(mutationName);
-    expect(res.data[mutationName]).toHaveProperty("id");
-    expect(res.data[mutationName]).toHaveProperty("name", variables.name);
-    expect(res.data[mutationName]).toHaveProperty(
-      "userTagInfo.description",
-      variables.description
-    );
-
-    // store for additional testing later
-    tagHistory.push(res.data[mutationName]);
   });
 
-  it("updates a user tag", async function() {
-    // define data used for query/mutation
-    const mutationName = "updateMyTag";
-    const mutation = mockMutations[mutationName];
-    const variables = {
-      userTagId: tagHistory[0].userTagInfo.id,
-      description: "UPDATED DESCRIPTION",
-      isPublic: false,
-      isArchived: true
-    };
-    const expected = Object.assign({}, variables);
-    // delete fields that are not expected to be returned
-    delete expected.userTagId;
+  describe("user tags", function() {
+    it("updates a user tag", async function() {
+      try {
+        // define data used for query/mutation
+        const mutationName = "updateMyTag";
+        const mutation = mockMutations[mutationName];
+        const variables = {
+          userTagId: tagHistory[0].userTagInfo.id,
+          description: "UPDATED DESCRIPTION",
+          isPublic: false,
+          isArchived: true
+        };
+        // define the expected response
+        const expected = Object.assign({}, variables);
+        // delete fields that are not expected to be returned
+        delete expected.userTagId;
+        // set user in context as expected by the apollo server
+        const context = getDefaultContext({ me: user });
 
-    // create an instance of the server
-    const { server, typeDefs, dataSources } = await buildApolloServer({
-      // set user in context
-      context: getDefaultContext(user)
+        // create an instance of the server
+        const { server, typeDefs, dataSources } = await buildApolloServer({
+          context
+        });
+
+        debug("context", context);
+
+        // init the test server
+        const { mutate } = createTestClient(server);
+
+        // submit gql query/mutation
+        const res = await mutate({
+          mutation,
+          variables
+        });
+
+        debug("result", JSON.stringify(res, null, 4));
+
+        expect(res.errors).toBeUndefined();
+        expect(res.data).toHaveProperty(mutationName);
+        expect(res.data[mutationName]).toMatchObject(expected);
+
+        // store for additional testing later
+        tagHistory.push(res.data[mutationName]);
+      } catch (e) {
+        console.error(e);
+        expect(e).toBeUndefined();
+      }
     });
-
-    debug(
-      "context",
-      await getDefaultContext({ me: user })({ req: null, res: null })
-    );
-
-    // init the test server
-    const { mutate } = createTestClient(server);
-
-    // submit gql query/mutation
-    const res = await mutate({
-      mutation,
-      variables
-    });
-
-    debug("result", JSON.stringify(res, null, 4));
-
-    expect(res.errors).toBeUndefined();
-    expect(res.data).toHaveProperty(mutationName);
-    expect(res.data[mutationName]).toMatchObject(expected);
-
-    // store for additional testing later
-    tagHistory.concat(res.data[mutationName]);
   });
 });

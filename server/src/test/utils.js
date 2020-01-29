@@ -45,9 +45,7 @@ export const getDefaultContext = opts => {
      * This also merges the given options into the default context to allow
      * external customization
      */
-    let tempContext = cloneDeep(merge(defaultContextReturnValue, opts));
-
-    return tempContext;
+    return cloneDeep(merge(defaultContextReturnValue, opts));
   };
 };
 
