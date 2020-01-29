@@ -11,6 +11,8 @@ import { mockResponses, mockQueries, mockMutations } from ".";
 
 const debug = debugLib("test:tags");
 let user = null;
+let tag = null;
+let userTag = null;
 let tagHistory = [];
 
 describe("user integration tests", function() {
@@ -72,7 +74,8 @@ describe("user integration tests", function() {
         expect(res.data[mutationName]).toHaveProperty("userTagInfo.id");
 
         // store for additional testing later
-        tagHistory.push(res.data[mutationName]);
+        tag = res.data[mutationName];
+        userTag = res.data[mutationName].userTagInfo;
       } catch (e) {
         console.error(e);
         expect(e).toBeUndefined();
@@ -87,7 +90,7 @@ describe("user integration tests", function() {
         const mutationName = "updateMyTag";
         const mutation = mockMutations[mutationName];
         const variables = {
-          userTagId: tagHistory[0].userTagInfo.id,
+          userTagId: userTag.id,
           description: "UPDATED DESCRIPTION",
           isPublic: false,
           isArchived: true
