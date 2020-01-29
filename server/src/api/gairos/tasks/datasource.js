@@ -134,7 +134,7 @@ export default {
 
       // update the userTask
       await userTask.set(input);
-      userTask.save();
+      await userTask.save();
 
       return userTask;
     }

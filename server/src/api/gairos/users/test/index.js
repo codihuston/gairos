@@ -105,6 +105,30 @@ export const mockMutations = {
         }
       }
     }
+  `,
+  updateMyTask: gql`
+    mutation(
+      $userTaskId: ID!
+      $description: String
+      $isPublic: Boolean
+      $isArchived: Boolean
+    ) {
+      updateMyTask(
+        input: {
+          userTaskId: $userTaskId
+          description: $description
+          isPublic: $isPublic
+          isArchived: $isArchived
+        }
+      ) {
+        id
+        description
+        isPublic
+        isArchived
+        createdAt
+        updatedAt
+      }
+    }
   `
 };
 
