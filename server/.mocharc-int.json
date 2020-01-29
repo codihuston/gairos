@@ -1,7 +1,0 @@
-{
-  "timeout": 2000,
-  "spec": [
-    "src/test/*.js",
-    "src/api/**/int.spec.js"
-  ]
-}
