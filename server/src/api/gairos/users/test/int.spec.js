@@ -73,7 +73,7 @@ describe("user integration tests", function() {
         );
         expect(res.data[mutationName]).toHaveProperty("userTagInfo.id");
 
-        // store for additional testing later
+        // store for additional testing later (if needed)
         tag = res.data[mutationName];
         userTag = res.data[mutationName].userTagInfo;
       } catch (e) {
@@ -84,6 +84,56 @@ describe("user integration tests", function() {
   });
 
   describe("user tags", function() {
+    it("renames a user tag", async function() {
+      try {
+        // define data used for query/mutation
+        const mutationName = "renameMyTag";
+        const mutation = mockMutations[mutationName];
+        const variables = {
+          userTagId: userTag.id,
+          name: "NEW TAG NAME"
+        };
+        // define the expected response
+        const expected = Object.assign({}, variables);
+        // delete fields that are not expected to be returned
+        delete expected.userTagId;
+        // set user in context as expected by the apollo server
+        const context = getDefaultContext({ me: user });
+
+        // create an instance of the server
+        const { server, typeDefs, dataSources } = await buildApolloServer({
+          context
+        });
+
+        debug("context", context({ req: null, res: null }));
+
+        // init the test server
+        const { mutate } = createTestClient(server);
+
+        // submit gql query/mutation
+        const res = await mutate({
+          mutation,
+          variables
+        });
+
+        debug("result", JSON.stringify(res, null, 4));
+
+        expect(res.errors).toBeUndefined();
+        expect(res.data).toHaveProperty(mutationName);
+        expect(res.data[mutationName]).toHaveProperty(
+          "userTagInfo.description",
+          userTag.description
+        );
+        expect(res.data[mutationName]).toMatchObject(expected);
+
+        // store for additional testing later (if needed)
+        tagHistory.push(res.data[mutationName]);
+      } catch (e) {
+        console.error(e);
+        expect(e).toBeUndefined();
+      }
+    });
+
     it("updates a user tag", async function() {
       try {
         // define data used for query/mutation
@@ -124,8 +174,8 @@ describe("user integration tests", function() {
         expect(res.data).toHaveProperty(mutationName);
         expect(res.data[mutationName]).toMatchObject(expected);
 
-        // store for additional testing later
-        tagHistory.push(res.data[mutationName]);
+        // update for additional testing later
+        userTag = res.data[mutationName];
       } catch (e) {
         console.error(e);
         expect(e).toBeUndefined();

@@ -33,6 +33,17 @@ export const mockMutations = {
       }
     }
   `,
+  renameMyTag: gql`
+    mutation renameMyTag($userTagId: ID!, $name: String!) {
+      renameMyTag(input: { userTagId: $userTagId, name: $name }) {
+        id
+        name
+        userTagInfo {
+          description
+        }
+      }
+    }
+  `,
   updateMyTag: gql`
     mutation updateMyTag(
       $userTagId: ID!
