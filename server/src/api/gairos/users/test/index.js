@@ -88,6 +88,23 @@ export const mockMutations = {
         }
       }
     }
+  `,
+  renameMyTask: gql`
+    mutation renameMyTask($userTaskId: ID!, $name: String!) {
+      renameMyTask(input: { userTaskId: $userTaskId, name: $name }) {
+        id
+        name
+        userTaskInfo {
+          id
+          description
+          isPublic
+          task {
+            id
+            name
+          }
+        }
+      }
+    }
   `
 };
 
