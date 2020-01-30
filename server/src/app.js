@@ -83,6 +83,8 @@ export default resolveGraphqlDefinitions()
       resolvers,
       dataSources,
       context: async ({ req, res }) => {
+        let user = null;
+
         /**
          * If in development mode, and the user has not logged in
          * (hit /auth/google), auto-populate a seeded user into this
@@ -96,7 +98,7 @@ export default resolveGraphqlDefinitions()
          *  variable to true at least once when setting up your dev environment
          */
         if (!isProductionEnvironment && !req.session.user) {
-          const user = await models.user.findOne({
+          user = await models.user.findOne({
             where: {
               id: users[0].id
             },
@@ -104,8 +106,19 @@ export default resolveGraphqlDefinitions()
           });
 
           req.session.isAuthenticated = true;
-          req.session.user = user;
         }
+        // otherwise, confirm that the user in session exists
+        else {
+          user = await models.user.findOne({
+            where: {
+              id: req.session.user.id
+            },
+            raw: true
+          });
+        }
+
+        // update the user
+        req.session.user = user;
 
         console.log("SESSION: ", req.session);
 

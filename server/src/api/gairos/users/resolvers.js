@@ -38,6 +38,13 @@ export default {
         }
       }
     ),
+    deleteMyAccount: combineResolvers(
+      isAuthenticated,
+      isGivenUser,
+      async (parent, args, { me, dataSources }) => {
+        return await dataSources.UserAPI.deleteAccount(me.id);
+      }
+    ),
     /**
      * Tasks
      */

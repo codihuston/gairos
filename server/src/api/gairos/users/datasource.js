@@ -122,5 +122,27 @@ export default {
 
       return user;
     }
+
+    /**
+     * Deletes an account permanently from the database
+     *
+     * @param {*} userId
+     * @param {*} opts
+     */
+    async deleteAccount(userId) {
+      // remove default scope so we can find any potentially softDeleted user
+      const user = await this.models.user.unscoped().findOne({
+        where: {
+          id: userId
+        }
+      });
+
+      // actually destroy it
+      const res = await user.destroy({
+        force: true
+      });
+
+      return res ? true : false;
+    }
   }
 };

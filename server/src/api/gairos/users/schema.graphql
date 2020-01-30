@@ -10,6 +10,7 @@ extend type Query {
 
 extend type Mutation {
   updateMyProfile(input: UserInput): User
+  deleteMyAccount: Boolean
   createMyTaskHistory(input: CreateTaskHistoryInput): UserTaskHistory
   updateMyTaskHistory(input: UpdateTaskHistoryInput): UserTaskHistory
   deleteMyTaskHistory(input: DeleteTaskHistoryInput): Boolean
