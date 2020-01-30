@@ -99,7 +99,8 @@ export default resolveGraphqlDefinitions()
           const user = await models.user.findOne({
             where: {
               id: users[0].id
-            }
+            },
+            raw: true
           });
 
           req.session.isAuthenticated = true;

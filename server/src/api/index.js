@@ -14,7 +14,6 @@ const dirs = glob.sync(join(__dirname, "**/**/index.js"), {
 
 export { GooglePeople, GoogleCalendar };
 export { models };
-
 /**
  * Dynamically import all `.grapqhl` schema (typeDefs) and their resolvers and
  * format them as required by the graphql server. This is required to ensure

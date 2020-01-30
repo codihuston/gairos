@@ -1,7 +1,4 @@
 import { combineResolvers } from "graphql-resolvers";
-import { HexColorCodeResolver, EmailAddressResolver } from "graphql-scalars";
-import GraphQLJSON, { GraphQLJSONObject } from "graphql-type-json";
-import { GraphQLDate, GraphQLTime, GraphQLDateTime } from "graphql-iso-date";
 
 import SequelizeErrorHandler, {
   UniqueViolationError
@@ -9,21 +6,9 @@ import SequelizeErrorHandler, {
 import { isAuthenticated, isGivenUser } from "../../../middleware/graphql";
 
 export default {
-  HexColorCode: HexColorCodeResolver,
-  EmailAddress: EmailAddressResolver,
-  GraphQLJSON,
-  GraphQLJSONObject,
-  GraphQLDate,
-  GraphQLTime,
-  GraphQLDateTime,
   Query: {
-    // implements middleware for graphql a la combineResolvers()
-    hello: combineResolvers(isAuthenticated, (parent, args, context) => {
-      return "Hello world!";
-    }),
-    me: async (parent, args, { dataSources }) => {
-      // TODO: handle bad response?
-      return dataSources.UserAPI.findByPk(1);
+    me: async (parent, args, { me, dataSources }) => {
+      return me;
     },
     getMyTags: async (parent, args, { me, dataSources }) => {
       const res = await dataSources.UserAPI.getTags(me.id);

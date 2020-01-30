@@ -1,0 +1,20 @@
+# At least one Query and Mutation Type must be initialized somewhere in
+# order for the typedefs to form a valid graphql schema; this file will
+# serve as the "root query and mutation" file. You should should also define any
+# new scalars here as needed. Any other queries or mutations as they may be 
+# defined in the models must `extend` the relative types
+scalar HexColorCode
+scalar EmailAddress
+scalar GraphQLJSON
+scalar GraphQLJSONObject
+scalar GraphQLDate
+scalar GraphQLTime
+scalar GraphQLDateTime
+
+type Query {
+  version: String
+}
+
+type Mutation {
+  version: String
+}

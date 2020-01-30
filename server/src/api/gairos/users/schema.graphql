@@ -1,23 +1,11 @@
-# Note: at least one type Query{} must be initialized somewhere in order
-# for the typedefs to form a valid graphql schema
-
-scalar HexColorCode
-scalar EmailAddress
-scalar GraphQLJSON
-scalar GraphQLJSONObject
-scalar GraphQLDate
-scalar GraphQLTime
-scalar GraphQLDateTime
-
-type Query {
-  hello: String
+extend type Query {
   me: User
   getMyTags: [UserTag]
   getMyTasks: [Task]
   getMyTaskHistory: [UserTaskHistory]
 }
 
-type Mutation {
+extend type Mutation {
   updateMyProfile(input: UserInput): User
   createMyTaskHistory(input: CreateTaskHistoryInput): UserTaskHistory
   updateMyTaskHistory(input: UpdateTaskHistoryInput): UserTaskHistory

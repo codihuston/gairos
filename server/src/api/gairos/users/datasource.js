@@ -118,7 +118,7 @@ export default {
 
       user.set(input);
 
-      user.save();
+      await user.save();
 
       return user;
     }
