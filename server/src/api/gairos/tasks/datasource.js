@@ -37,7 +37,7 @@ export default {
         include: [this.models.user]
       });
 
-      return res.users;
+      return res && res.users ? res.users : null;
     }
 
     async createUserTask(userId, input) {

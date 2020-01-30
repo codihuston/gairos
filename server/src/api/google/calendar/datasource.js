@@ -30,7 +30,7 @@ export default {
       if (res.data && res.data.items) {
         return res.data.items.map(calendar => this.reducer(calendar));
       }
-      return res.data.items;
+      return [];
     }
 
     async createCalendar(opts) {

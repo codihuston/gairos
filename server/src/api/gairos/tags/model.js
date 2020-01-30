@@ -1,14 +1,25 @@
 const model = (sequelize, DataTypes) => {
-  const Model = sequelize.define("tag", {
-    id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true
+  const Model = sequelize.define(
+    "tag",
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true
+      },
+      name: {
+        type: DataTypes.STRING
+      }
     },
-    name: {
-      type: DataTypes.STRING
+    {
+      paranoid: true,
+      defaultScope: {
+        where: {
+          deletedAt: null
+        }
+      }
     }
-  });
+  );
 
   Model.associate = models => {
     models.tag.belongsToMany(models.user, {

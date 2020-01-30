@@ -1,53 +1,67 @@
 const model = (sequelize, DataTypes) => {
-  const User = sequelize.define("user", {
-    id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true
+  const User = sequelize.define(
+    "user",
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true
+      },
+      googleId: {
+        type: DataTypes.STRING,
+        nullable: false
+      },
+      username: {
+        type: DataTypes.STRING,
+        nullable: false
+      },
+      displayNameLastFirst: {
+        type: DataTypes.STRING,
+        nullable: true
+      },
+      email: {
+        type: DataTypes.STRING,
+        nullable: false
+      },
+      isFirstSetupCompleted: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+      },
+      isConfirmed: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+      },
+      isEnabled: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true
+      },
+      confirmationCode: {
+        type: DataTypes.STRING,
+        defaultValue: DataTypes.UUIDV4
+      },
+      calendarId: {
+        type: DataTypes.STRING,
+        defaultValue: null,
+        nullable: true
+      },
+      calendarHexColorCode: {
+        type: DataTypes.STRING,
+        defaultValue: "#5B89C9",
+        nullable: true
+      }
     },
-    googleId: {
-      type: DataTypes.STRING,
-      nullable: false
-    },
-    username: {
-      type: DataTypes.STRING,
-      nullable: false
-    },
-    displayNameLastFirst: {
-      type: DataTypes.STRING,
-      nullable: true
-    },
-    email: {
-      type: DataTypes.STRING,
-      nullable: false
-    },
-    isFirstSetupCompleted: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false
-    },
-    isConfirmed: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false
-    },
-    isEnabled: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: true
-    },
-    confirmationCode: {
-      type: DataTypes.STRING,
-      defaultValue: DataTypes.UUIDV4
-    },
-    calendarId: {
-      type: DataTypes.STRING,
-      defaultValue: null,
-      nullable: true
-    },
-    calendarHexColorCode: {
-      type: DataTypes.STRING,
-      defaultValue: "#5B89C9",
-      nullable: true
+    {
+      // auto-implements soft deletion
+      // see: https://sequelize.org/master/class/lib/model.js~Model.html#static-method-update
+      paranoid: true,
+      // will auto-apply this query statement anytime this model is queried
+      defaultScope: {
+        where: {
+          deletedAt: null
+        }
+      }
     }
-  });
+  );
 
   User.associate = models => {
     models.user.hasMany(models.message, { onDelete: "CASCADE" });

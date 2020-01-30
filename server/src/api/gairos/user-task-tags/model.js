@@ -17,12 +17,18 @@ const model = (sequelize, DataTypes) => {
       }
     },
     {
+      paranoid: true,
       indexes: [
         {
           unique: true,
           fields: ["userTagId", "userTaskId"]
         }
-      ]
+      ],
+      defaultScope: {
+        where: {
+          deletedAt: null
+        }
+      }
     }
   );
 

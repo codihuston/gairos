@@ -79,7 +79,7 @@ export default {
       });
 
       // return data shaped to what the graphql schema expects
-      return res.tasks;
+      return res && res.tasks ? res.tasks : [];
     }
 
     async getTaskHistory(userId) {

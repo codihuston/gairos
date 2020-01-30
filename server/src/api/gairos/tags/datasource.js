@@ -32,7 +32,7 @@ export default {
         include: [this.models.user]
       });
 
-      return res.users[0];
+      return res && res.users[0] ? res.users[0] : null;
     }
 
     async getAllTagsAndUsers() {
