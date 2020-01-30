@@ -35,8 +35,8 @@ describe("user integration tests", function() {
   });
 
   describe("creates entities related to user", function() {
-    it("creates a user tag", async function() {
-      const log = debug("test:creates a user tag");
+    it("creates user tag", async function() {
+      const log = debug("test:creates user tag");
 
       try {
         // define data used for query/mutation
@@ -86,8 +86,8 @@ describe("user integration tests", function() {
       }
     });
 
-    it("creates a user task", async function() {
-      const log = debug("test:creates a user task");
+    it("creates user task", async function() {
+      const log = debug("test:creates user task");
 
       try {
         // define data used for query/mutation
@@ -137,8 +137,8 @@ describe("user integration tests", function() {
       }
     });
 
-    it("creates a user task history", async function() {
-      const log = debug("test:creates a user task");
+    it("creates user task history", async function() {
+      const log = debug("test:creates user task");
 
       try {
         // get current time in milliseconds
@@ -200,8 +200,8 @@ describe("user integration tests", function() {
 
   // do this first, so we don't run into FK error on deleting a user task
   describe("user task history", function() {
-    it("updates a user task history", async function() {
-      const log = debug("test:updates a user tag");
+    it("updates user task history", async function() {
+      const log = debug("test:updates user tag");
 
       try {
         // get current time in milliseconds
@@ -213,6 +213,7 @@ describe("user integration tests", function() {
           id: userTaskHistory.id,
           userTaskId: userTask.id,
           googleEventId: "FAKE ID",
+          eventHexColorCode: "#FF5733",
           startTime: nowAsISO,
           endTime: nowAsISO
         };
@@ -250,8 +251,8 @@ describe("user integration tests", function() {
       }
     });
 
-    it("deletes a user task history", async function() {
-      const log = debug("test:deletes a user task");
+    it("deletes user task history", async function() {
+      const log = debug("test:deletes user task");
 
       try {
         // define data used for query/mutation
@@ -291,8 +292,8 @@ describe("user integration tests", function() {
   });
 
   describe("user tags", function() {
-    it("renames a user tag", async function() {
-      const log = debug("test:renames a user tag");
+    it("renames user tag", async function() {
+      const log = debug("test:renames user tag");
 
       try {
         // define data used for query/mutation
@@ -340,8 +341,8 @@ describe("user integration tests", function() {
       }
     });
 
-    it("updates a user tag", async function() {
-      const log = debug("test:updates a user tag");
+    it("updates user tag", async function() {
+      const log = debug("test:updates user tag");
 
       try {
         // define data used for query/mutation
@@ -390,8 +391,8 @@ describe("user integration tests", function() {
       }
     });
 
-    it("deletes a user tag", async function() {
-      const log = debug("test:deletes a user tag");
+    it("deletes user tag", async function() {
+      const log = debug("test:deletes user tag");
 
       try {
         // define data used for query/mutation
@@ -431,8 +432,8 @@ describe("user integration tests", function() {
   });
 
   describe("user tasks", function() {
-    it("renames a user task", async function() {
-      const log = debug("test: renames a user task");
+    it("renames user task", async function() {
+      const log = debug("test: renames user task");
 
       try {
         // define data used for query/mutation
@@ -480,8 +481,8 @@ describe("user integration tests", function() {
       }
     });
 
-    it("updates a user task", async function() {
-      const log = debug("test:updates a user task");
+    it("updates user task", async function() {
+      const log = debug("test:updates user task");
 
       try {
         // define data used for query/mutation
@@ -528,8 +529,8 @@ describe("user integration tests", function() {
       }
     });
 
-    it("deletes a user task", async function() {
-      const log = debug("test:deletes a user task");
+    it("deletes user task", async function() {
+      const log = debug("test:deletes user task");
 
       try {
         // define data used for query/mutation
@@ -570,7 +571,7 @@ describe("user integration tests", function() {
 
   describe("user profile", function() {
     it("updates user's profile", async function() {
-      const log = debug("test:updates a user profile");
+      const log = debug("test:updates user profile");
 
       try {
         // define data used for query/mutation
@@ -580,7 +581,8 @@ describe("user integration tests", function() {
           username: "TEST USERNAME",
           email: "REAL@EMAIL.COM",
           isFirstSetupCompleted: true,
-          calendarId: "FAKE ID"
+          calendarId: "FAKE ID",
+          calendarHexColorCode: "#FF5733"
         };
         // define the expected response
         const expected = Object.assign({}, variables);

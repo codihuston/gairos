@@ -14,6 +14,11 @@ const model = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         nullable: true
       },
+      eventHexColorCode: {
+        type: DataTypes.STRING,
+        defaultValue: "#5B89C9",
+        nullable: true
+      },
       startTime: {
         type: DataTypes.DATE,
         nullable: false

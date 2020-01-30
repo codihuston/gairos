@@ -141,6 +141,7 @@ export const mockMutations = {
       $googleEventId: ID
       $startTime: GraphQLDateTime!
       $endTime: GraphQLDateTime
+      $eventHexColorCode: HexColorCode
     ) {
       createMyTaskHistory(
         input: {
@@ -148,12 +149,14 @@ export const mockMutations = {
           googleEventId: $googleEventId
           startTime: $startTime
           endTime: $endTime
+          eventHexColorCode: $eventHexColorCode
         }
       ) {
         id
         startTime
         endTime
         googleEventId
+        eventHexColorCode
         createdAt
         updatedAt
         userTaskInfo {
@@ -174,12 +177,14 @@ export const mockMutations = {
       $googleEventId: ID
       $startTime: GraphQLDateTime
       $endTime: GraphQLDateTime
+      $eventHexColorCode: HexColorCode
     ) {
       updateMyTaskHistory(
         input: {
           id: $id
           userTaskId: $userTaskId
           googleEventId: $googleEventId
+          eventHexColorCode: $eventHexColorCode
           startTime: $startTime
           endTime: $endTime
         }
@@ -188,6 +193,7 @@ export const mockMutations = {
         startTime
         endTime
         googleEventId
+        eventHexColorCode
         createdAt
         updatedAt
         userTaskInfo {
@@ -211,6 +217,7 @@ export const mockMutations = {
       $email: EmailAddress
       $isFirstSetupCompleted: Boolean
       $calendarId: ID
+      $calendarHexColorCode: HexColorCode
     ) {
       updateMyProfile(
         input: {
@@ -218,6 +225,7 @@ export const mockMutations = {
           email: $email
           isFirstSetupCompleted: $isFirstSetupCompleted
           calendarId: $calendarId
+          calendarHexColorCode: $calendarHexColorCode
         }
       ) {
         id
@@ -225,6 +233,7 @@ export const mockMutations = {
         email
         isFirstSetupCompleted
         calendarId
+        calendarHexColorCode
         createdAt
         updatedAt
       }

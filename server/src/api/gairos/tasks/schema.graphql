@@ -51,6 +51,7 @@ input DeleteUserTaskInput{
 input CreateTaskHistoryInput{
   userTaskId: ID!
   googleEventId: ID
+  eventHexColorCode: HexColorCode
   startTime: GraphQLDateTime!
   endTime: GraphQLDateTime
 }
@@ -59,6 +60,7 @@ input UpdateTaskHistoryInput{
   id: ID!
   userTaskId: ID
   googleEventId: ID
+  eventHexColorCode: HexColorCode
   startTime: GraphQLDateTime
   endTime: GraphQLDateTime
 }

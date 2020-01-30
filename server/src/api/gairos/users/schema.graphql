@@ -28,6 +28,7 @@ type User {
   email: EmailAddress!
   isFirstSetupCompleted: Boolean
   calendarId: ID
+  calendarHexColorCode: HexColorCode
   tasks: [Task]
   tags: [Tag]
   createdAt: GraphQLDateTime
@@ -39,6 +40,7 @@ input UserInput{
   email: EmailAddress
   isFirstSetupCompleted: Boolean
   calendarId: ID
+  calendarHexColorCode: HexColorCode
 }
 
 type UserTaskInfo{
@@ -47,6 +49,7 @@ type UserTaskInfo{
   description: String
   isPublic: Boolean
   isArchived: Boolean
+  calendarHexColorCode: HexColorCode
   createdAt: GraphQLDateTime
   updatedAt: GraphQLDateTime
   task: Task
@@ -57,6 +60,7 @@ type UserTaskHistory{
   startTime: GraphQLDateTime
   endTime: GraphQLDateTime
   googleEventId: ID
+  eventHexColorCode: HexColorCode
   createdAt: GraphQLDateTime
   updatedAt: GraphQLDateTime
   userTaskInfo: UserTaskInfo
