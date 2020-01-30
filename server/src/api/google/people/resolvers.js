@@ -1,6 +1,6 @@
 export default {
   Query: {
-    getMe: async (parent, args, { dataSources }, info) => {
+    getMyGoogleProfile: async (parent, args, { dataSources }, info) => {
       // TODO: handle bad response?
       const res = await dataSources.PeopleAPI.get({
         resourceName: "people/me",
