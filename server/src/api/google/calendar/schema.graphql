@@ -9,6 +9,7 @@ extend type Query {
 extend type Mutation{
   createMyCalendar(summary: String!, description: String): Calendar
   createMyEvent(input: GoogleEventInput): GoogleEvent
+  createMyCalendarReminder(input: [GoogleCalendarReminderInput]): Boolean
 }
 
 # ------------------------------------------------------------------------------
@@ -81,4 +82,9 @@ input GoogleEventReminderInput{
 input GoogleEventReminderOverridesInput {
   method: String
   minutes: Int
+}
+
+input GoogleCalendarReminderInput{
+  method: String!
+  minutes: Int!
 }

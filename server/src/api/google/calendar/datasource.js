@@ -62,6 +62,7 @@ export default {
         user.calendarId = res.data.id;
         await user.save();
       } else {
+        // TODO: handle google response errors more gracefully?
         throw new Error("Failed to create calendar. Please try again");
       }
 
@@ -83,6 +84,48 @@ export default {
       debug("create calendar result", res);
 
       return this.eventReducer(res.data);
+    }
+
+    /**
+     * NOTE: it appears that this only sets the TIME WINDOW before EACH EVENT
+     * sends out a notification; each event can have a custom notification
+     * window, too.
+     *
+     * As it stands, this does NOT add a visible reminder to your calendar!
+     *
+     * Surely there is a way to do this without having to put an event on the
+     * calendar. This is what I wanted to use when generating/suggesting
+     * schedules, so this is NOT necessary for the Alpha release
+     * @param {*} calendarId
+     * @param {*} input
+     */
+    async createCalendarReminder(calendarId, input) {
+      // get the calendar
+      const calendar = await GoogleCalendar.calendarList.get({
+        calendarId
+      });
+
+      console.log("QQQQ calendar results", calendar);
+      console.log("QQQQ calendar reminders", calendar.data.defaultReminders);
+
+      const args = Object.assign({}, calendar.data);
+      args.defaultReminders.push(input);
+
+      console.log("QQQQ input", input);
+      console.log("QQQQ args", args);
+
+      const res = await GoogleCalendar.calendarList.update({
+        calendarId: "primary",
+        requestBody: {
+          defaultReminders: input
+        }
+      });
+
+      // append to the defaultReminders
+      console.log("QQQQ res reminders", res.data);
+      console.log("QQQQ res reminders", res.data.defaultReminders);
+
+      // save it
     }
   }
 };

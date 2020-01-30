@@ -18,6 +18,16 @@ export default {
     },
     createMyEvent: async (parent, { input }, { me, dataSources }) => {
       return await dataSources.CalendarAPI.createEvent(me.calendarId, input);
+    },
+    createMyCalendarReminder: async (
+      parent,
+      { input },
+      { me, dataSources }
+    ) => {
+      return await dataSources.CalendarAPI.createCalendarReminder(
+        me.calendarId,
+        input
+      );
     }
   }
 };
