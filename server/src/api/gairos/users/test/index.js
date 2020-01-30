@@ -204,6 +204,31 @@ export const mockMutations = {
     mutation($id: ID!) {
       deleteMyTaskHistory(input: { id: $id })
     }
+  `,
+  updateMyProfile: gql`
+    mutation(
+      $username: String
+      $email: EmailAddress
+      $isFirstSetupCompleted: Boolean
+      $calendarId: ID
+    ) {
+      updateMyProfile(
+        input: {
+          username: $username
+          email: $email
+          isFirstSetupCompleted: $isFirstSetupCompleted
+          calendarId: $calendarId
+        }
+      ) {
+        id
+        username
+        email
+        isFirstSetupCompleted
+        calendarId
+        createdAt
+        updatedAt
+      }
+    }
   `
 };
 

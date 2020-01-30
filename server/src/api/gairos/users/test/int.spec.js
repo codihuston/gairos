@@ -567,4 +567,52 @@ describe("user integration tests", function() {
       }
     });
   });
+
+  describe("user profile", function() {
+    it("updates user's profile", async function() {
+      const log = debug("test:updates a user profile");
+
+      try {
+        // define data used for query/mutation
+        const mutationName = "updateMyProfile";
+        const mutation = mockMutations[mutationName];
+        const variables = {
+          username: "TEST USERNAME",
+          email: "REAL@EMAIL.COM",
+          isFirstSetupCompleted: true,
+          calendarId: "FAKE ID"
+        };
+        // define the expected response
+        const expected = Object.assign({}, variables);
+
+        // set user in context as expected by the apollo server
+        const context = getDefaultContext({ me: user });
+
+        // create an instance of the server
+        const { server, typeDefs, dataSources } = await buildApolloServer({
+          context
+        });
+
+        log("context", context({ req: null, res: null }));
+
+        // init the test server
+        const { mutate } = createTestClient(server);
+
+        // submit gql query/mutation
+        const res = await mutate({
+          mutation,
+          variables
+        });
+
+        log("result", JSON.stringify(res, null, 4));
+
+        expect(res.errors).toBeUndefined();
+        expect(res.data).toHaveProperty(mutationName);
+        expect(res.data[mutationName]).toMatchObject(expected);
+      } catch (e) {
+        console.error(e);
+        expect(e).toBeUndefined();
+      }
+    });
+  });
 });

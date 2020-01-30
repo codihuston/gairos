@@ -16,5 +16,5 @@ type GoogleNames {
 }
 
 type GoogleEmails{
-  value: String
+  value: EmailAddress
 }

@@ -1,6 +1,8 @@
 # Note: at least one type Query{} must be initialized somewhere in order
 # for the typedefs to form a valid graphql schema
 
+scalar HexColorCode
+scalar EmailAddress
 scalar GraphQLJSON
 scalar GraphQLJSONObject
 scalar GraphQLDate
@@ -35,17 +37,19 @@ type User {
   id: ID!
   googleId: ID!
   username: String!
-  email: String,
-  isFirstSetupCompleted: Boolean,
+  email: EmailAddress!
+  isFirstSetupCompleted: Boolean
   calendarId: ID
   tasks: [Task]
   tags: [Tag]
+  createdAt: GraphQLDateTime
+  updatedAt: GraphQLDateTime
 }
 
 input UserInput{
   username: String
-  email: String,
-  isFirstSetupCompleted: Boolean,
+  email: EmailAddress
+  isFirstSetupCompleted: Boolean
   calendarId: ID
 }
 
