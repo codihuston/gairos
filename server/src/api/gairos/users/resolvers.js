@@ -1,4 +1,5 @@
 import { combineResolvers } from "graphql-resolvers";
+import GraphQLJSON, { GraphQLJSONObject } from "graphql-type-json";
 import { GraphQLDate, GraphQLTime, GraphQLDateTime } from "graphql-iso-date";
 
 import SequelizeErrorHandler, {
@@ -7,6 +8,8 @@ import SequelizeErrorHandler, {
 import { isAuthenticated, isGivenUser } from "../../../middleware/graphql";
 
 export default {
+  GraphQLJSON,
+  GraphQLJSONObject,
   GraphQLDate,
   GraphQLTime,
   GraphQLDateTime,

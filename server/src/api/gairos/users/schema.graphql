@@ -1,6 +1,8 @@
 # Note: at least one type Query{} must be initialized somewhere in order
 # for the typedefs to form a valid graphql schema
 
+scalar GraphQLJSON
+scalar GraphQLJSONObject
 scalar GraphQLDate
 scalar GraphQLTime
 scalar GraphQLDateTime

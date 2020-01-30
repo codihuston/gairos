@@ -49,6 +49,7 @@
     "graphql-iso-date": "^3.6.1",
     "graphql-resolvers": "^0.3.3",
     "graphql-tag": "^2.10.1",
+    "graphql-type-json": "^0.3.1",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
     "lodash": "^4.17.15",
