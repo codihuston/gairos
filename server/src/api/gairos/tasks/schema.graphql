@@ -22,6 +22,9 @@ input TaskInput{
   userId: ID
   name: String!
   description: String
+  isPublic: Boolean
+  foregroundColor: HexColorCode
+  backgroundColor: HexColorCode
 }
 
 input TagTaskInput{
@@ -39,6 +42,8 @@ input UpdateUserTaskInput{
   description: String
   isPublic: Boolean
   isArchived: Boolean
+  foregroundColor: HexColorCode
+  backgroundColor: HexColorCode
   createdAt: GraphQLDateTime
   updatedat: GraphQLDateTime
 }

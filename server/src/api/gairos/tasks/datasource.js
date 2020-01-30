@@ -57,7 +57,9 @@ export default {
         userId,
         taskId: task.id,
         description: input.description,
-        isPublic: input.isPublic
+        isPublic: input.isPublic,
+        foregroundColor: input.foregroundColor,
+        backgroundColor: input.backgroundColor
       });
 
       // associate this user task to this task

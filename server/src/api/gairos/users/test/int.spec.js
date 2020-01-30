@@ -95,7 +95,9 @@ describe("user integration tests", function() {
         const mutation = mockMutations[mutationName];
         const variables = {
           name: "FAKE TASK",
-          description: "FAKE DESCRIPTION"
+          description: "FAKE DESCRIPTION",
+          foregroundColor: "#FF5733",
+          backgroundColor: "#FF5733"
         };
         // set user in context as expected by the apollo server
         const context = getDefaultContext({ me: user });
@@ -492,7 +494,9 @@ describe("user integration tests", function() {
           userTaskId: userTask.id,
           description: "UPDATED DESCRIPTION",
           isPublic: false,
-          isArchived: true
+          isArchived: true,
+          foregroundColor: "#FF5733",
+          backgroundColor: "#FF5733"
         };
         // define the expected response
         const expected = Object.assign({}, variables);

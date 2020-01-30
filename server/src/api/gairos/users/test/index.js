@@ -74,8 +74,20 @@ export const mockMutations = {
     }
   `,
   createMyTask: gql`
-    mutation createMyTask($name: String!, $description: String) {
-      createMyTask(input: { name: $name, description: $description }) {
+    mutation createMyTask(
+      $name: String!
+      $description: String
+      $foregroundColor: HexColorCode
+      $backgroundColor: HexColorCode
+    ) {
+      createMyTask(
+        input: {
+          name: $name
+          description: $description
+          foregroundColor: $foregroundColor
+          backgroundColor: $backgroundColor
+        }
+      ) {
         id
         name
         createdAt
@@ -83,6 +95,8 @@ export const mockMutations = {
         userTaskInfo {
           id
           description
+          foregroundColor
+          backgroundColor
           createdAt
           updatedAt
         }
@@ -112,6 +126,8 @@ export const mockMutations = {
       $description: String
       $isPublic: Boolean
       $isArchived: Boolean
+      $foregroundColor: HexColorCode
+      $backgroundColor: HexColorCode
     ) {
       updateMyTask(
         input: {
@@ -119,12 +135,16 @@ export const mockMutations = {
           description: $description
           isPublic: $isPublic
           isArchived: $isArchived
+          foregroundColor: $foregroundColor
+          backgroundColor: $backgroundColor
         }
       ) {
         id
         description
         isPublic
         isArchived
+        foregroundColor
+        backgroundColor
         createdAt
         updatedAt
       }
