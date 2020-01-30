@@ -9,6 +9,8 @@ export const mockMutations = {
       $description: String
       $isPublic: Boolean
       $isArchived: Boolean
+      $foregroundColor: HexColorCode
+      $backgroundColor: HexColorCode
     ) {
       createMyTag(
         input: {
@@ -16,6 +18,8 @@ export const mockMutations = {
           description: $description
           isPublic: $isPublic
           isArchived: $isArchived
+          foregroundColor: $foregroundColor
+          backgroundColor: $backgroundColor
         }
       ) {
         id
@@ -27,6 +31,8 @@ export const mockMutations = {
           description
           isPublic
           isArchived
+          foregroundColor
+          backgroundColor
           createdAt
           updatedAt
         }
@@ -50,6 +56,8 @@ export const mockMutations = {
       $description: String
       $isPublic: Boolean
       $isArchived: Boolean
+      $foregroundColor: HexColorCode
+      $backgroundColor: HexColorCode
     ) {
       updateMyTag(
         input: {
@@ -57,12 +65,16 @@ export const mockMutations = {
           description: $description
           isPublic: $isPublic
           isArchived: $isArchived
+          foregroundColor: $foregroundColor
+          backgroundColor: $backgroundColor
         }
       ) {
         id
         description
         isPublic
         isArchived
+        foregroundColor
+        backgroundColor
         createdAt
         updatedAt
       }

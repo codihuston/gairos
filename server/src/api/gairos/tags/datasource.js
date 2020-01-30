@@ -61,7 +61,10 @@ export default {
         userId,
         tagId: tag.id,
         description: input.description,
-        isPublic: input.isPublic
+        isPublic: input.isPublic,
+        isArchived: input.isArchived,
+        foregroundColor: input.foregroundColor,
+        backgroundColor: input.backgroundColor
       });
 
       // associate them

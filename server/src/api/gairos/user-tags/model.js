@@ -23,6 +23,16 @@ const model = (sequelize, DataTypes) => {
       isArchived: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
+      },
+      foregroundColor: {
+        type: DataTypes.STRING,
+        defaultValue: "#ffffff",
+        nullable: true
+      },
+      backgroundColor: {
+        type: DataTypes.STRING,
+        defaultValue: "#5B89C9",
+        nullable: true
       }
     },
     {

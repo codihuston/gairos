@@ -71,6 +71,8 @@ type UserTagInfo{
   description: String
   isPublic: Boolean
   isArchived: Boolean
+  foregroundColor: HexColorCode
+  backgroundColor: HexColorCode
   createdAt: GraphQLDateTime
   updatedAt: GraphQLDateTime
 }
@@ -82,6 +84,8 @@ type UserTag{
   description: String
   isPublic: Boolean
   isArchived: Boolean
+  foregroundColor: HexColorCode
+  backgroundColor: HexColorCode
   tag: Tag
   userTaskTags: [UserTaskTag]
   createdAt: GraphQLDateTime

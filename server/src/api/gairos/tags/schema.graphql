@@ -31,6 +31,8 @@ input TagInput{
   description: String
   isPublic: Boolean
   isArchived: Boolean
+  foregroundColor: HexColorCode
+  backgroundColor: HexColorCode
 }
 
 input RenameTagInput{
@@ -43,6 +45,8 @@ input UpdateTagInput{
   description: String
   isPublic: Boolean
   isArchived: Boolean
+  foregroundColor: HexColorCode
+  backgroundColor: HexColorCode
 }
 
 input DeleteTagInput{
