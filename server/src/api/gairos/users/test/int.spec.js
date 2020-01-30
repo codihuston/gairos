@@ -143,10 +143,6 @@ describe("user integration tests", function() {
       try {
         // get current time in milliseconds
         const nowAsISO = moment().toISOString();
-        const nowAsUnix = moment(nowAsISO)
-          .valueOf()
-          .toString();
-        // define data used for query/mutation
         const mutationName = "createMyTaskHistory";
         const mutation = mockMutations[mutationName];
         const variables = {
@@ -159,8 +155,6 @@ describe("user integration tests", function() {
         const expected = Object.assign({}, variables);
         // delete fields that are not expected to be returned
         delete expected.userTaskId;
-        expected.startTime = nowAsUnix;
-        expected.endTime = nowAsUnix;
         // set user in context as expected by the apollo server
         const context = getDefaultContext({ me: user });
 
@@ -212,9 +206,6 @@ describe("user integration tests", function() {
       try {
         // get current time in milliseconds
         const nowAsISO = moment().toISOString();
-        const nowAsUnix = moment(nowAsISO)
-          .valueOf()
-          .toString();
         // define data used for query/mutation
         const mutationName = "updateMyTaskHistory";
         const mutation = mockMutations[mutationName];
@@ -229,8 +220,6 @@ describe("user integration tests", function() {
         const expected = Object.assign({}, variables);
         // delete fields that are not expected to be returned
         delete expected.userTaskId;
-        expected.startTime = nowAsUnix;
-        expected.endTime = nowAsUnix;
         // set user in context as expected by the apollo server
         const context = getDefaultContext({ me: user });
 

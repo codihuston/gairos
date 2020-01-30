@@ -1,14 +1,18 @@
+// for express
 import createError from "http-errors";
 import express from "express";
-import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
 import session from "express-session";
-import uuid from "uuid/v4";
-import debugLib from "debug";
+import cors from "cors";
+// for data store
 import ConnectSessionStore from "connect-session-sequelize";
 import { ApolloServer } from "apollo-server-express";
-import cors from "cors";
+
+// other
+import path from "path";
+import uuid from "uuid/v4";
+import debugLib from "debug";
 
 import { defaultUsers as users } from "./test/utils";
 import { router as indexRouter } from "./routes/index";

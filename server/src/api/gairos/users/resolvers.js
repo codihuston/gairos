@@ -1,4 +1,5 @@
 import { combineResolvers } from "graphql-resolvers";
+import { GraphQLDate, GraphQLTime, GraphQLDateTime } from "graphql-iso-date";
 
 import SequelizeErrorHandler, {
   UniqueViolationError
@@ -6,6 +7,9 @@ import SequelizeErrorHandler, {
 import { isAuthenticated, isGivenUser } from "../../../middleware/graphql";
 
 export default {
+  GraphQLDate,
+  GraphQLTime,
+  GraphQLDateTime,
   Query: {
     // implements middleware for graphql a la combineResolvers()
     hello: combineResolvers(isAuthenticated, (parent, args, context) => {

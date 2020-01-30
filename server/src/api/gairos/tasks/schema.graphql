@@ -8,8 +8,8 @@ type Task {
   name: ID!
   users: [User]
   userTaskInfo: UserTaskInfo
-  createdAt: String
-  updatedAt: String
+  createdAt: GraphQLDateTime
+  updatedAt: GraphQLDateTime
 }
 
 type TaskUser{
@@ -39,8 +39,8 @@ input UpdateUserTaskInput{
   description: String
   isPublic: Boolean
   isArchived: Boolean
-  createdAt: String
-  updatedat: String
+  createdAt: GraphQLDateTime
+  updatedat: GraphQLDateTime
 }
 
 input DeleteUserTaskInput{
@@ -51,16 +51,16 @@ input DeleteUserTaskInput{
 input CreateTaskHistoryInput{
   userTaskId: ID!
   googleEventId: ID
-  startTime: String!
-  endTime: String
+  startTime: GraphQLDateTime!
+  endTime: GraphQLDateTime
 }
 
 input UpdateTaskHistoryInput{
   id: ID!
   userTaskId: ID
   googleEventId: ID
-  startTime: String
-  endTime: String
+  startTime: GraphQLDateTime
+  endTime: GraphQLDateTime
 }
 
 input DeleteTaskHistoryInput{

@@ -1,5 +1,10 @@
 # Note: at least one type Query{} must be initialized somewhere in order
 # for the typedefs to form a valid graphql schema
+
+scalar GraphQLDate
+scalar GraphQLTime
+scalar GraphQLDateTime
+
 type Query {
   hello: String
   me: User
@@ -48,18 +53,18 @@ type UserTaskInfo{
   description: String
   isPublic: Boolean
   isArchived: Boolean
-  createdAt: String
-  updatedAt: String
+  createdAt: GraphQLDateTime
+  updatedAt: GraphQLDateTime
   task: Task
 }
 
 type UserTaskHistory{
   id: ID
-  startTime: String
-  endTime: String
+  startTime: GraphQLDateTime
+  endTime: GraphQLDateTime
   googleEventId: ID
-  createdAt: String
-  updatedAt: String
+  createdAt: GraphQLDateTime
+  updatedAt: GraphQLDateTime
   userTaskInfo: UserTaskInfo
 }
 
@@ -68,8 +73,8 @@ type UserTagInfo{
   description: String
   isPublic: Boolean
   isArchived: Boolean
-  createdAt: String
-  updatedAt: String
+  createdAt: GraphQLDateTime
+  updatedAt: GraphQLDateTime
 }
 
 type UserTag{
@@ -81,14 +86,14 @@ type UserTag{
   isArchived: Boolean
   tag: Tag
   userTaskTags: [UserTaskTag]
-  createdAt: String
-  updatedAt: String
+  createdAt: GraphQLDateTime
+  updatedAt: GraphQLDateTime
 }
 
 type UserTaskTag{
   id: ID!
   userTagId: ID!
-  createdAt: String
-  updatedAt: String
+  createdAt: GraphQLDateTime
+  updatedAt: GraphQLDateTime
   userTaskInfo: UserTaskInfo
 }

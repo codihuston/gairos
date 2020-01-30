@@ -139,8 +139,8 @@ export const mockMutations = {
     mutation(
       $userTaskId: ID!
       $googleEventId: ID
-      $startTime: String!
-      $endTime: String
+      $startTime: GraphQLDateTime!
+      $endTime: GraphQLDateTime
     ) {
       createMyTaskHistory(
         input: {
@@ -172,8 +172,8 @@ export const mockMutations = {
       $id: ID!
       $userTaskId: ID
       $googleEventId: ID
-      $startTime: String
-      $endTime: String
+      $startTime: GraphQLDateTime
+      $endTime: GraphQLDateTime
     ) {
       updateMyTaskHistory(
         input: {

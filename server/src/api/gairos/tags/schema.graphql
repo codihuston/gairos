@@ -10,8 +10,8 @@ type Tag {
   users: [User]
   userTag: UserTag
   userTagInfo: UserTagInfo
-  createdAt: String
-  updatedAt: String
+  createdAt: GraphQLDateTime
+  updatedAt: GraphQLDateTime
 }
 
 input TagInput{
