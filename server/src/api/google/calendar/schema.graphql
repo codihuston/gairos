@@ -8,6 +8,7 @@ extend type Query {
 
 extend type Mutation{
   createMyCalendar(summary: String!, description: String): Calendar
+  createMyEvent(input: GoogleEventInput): GoogleEvent
 }
 
 # ------------------------------------------------------------------------------
@@ -15,16 +16,69 @@ extend type Mutation{
 # ------------------------------------------------------------------------------
 
 type Calendar {
-  kind: String,
-  etag: String,
-  id: String,
-  summary: String,
-  description: String,
-  location: String,
-  timeZone: String,
+  kind: String
+  etag: String
+  id: String
+  summary: String
+  description: String
+  location: String
+  timeZone: String
    conferenceProperties: ConferenceProperties
 }
 
 type ConferenceProperties{
   allowedConferenceSolutionTypes: [String]
+}
+
+type  GoogleEvent{
+  summary: String!
+  location: String
+  description: String
+  start: GoogleEventTime!
+  end: GoogleEventTime!
+  recurrence: [String]
+  reminders: GoogleEventReminder
+}
+
+type GoogleEventTime {
+  dateTime: GraphQLDateTime
+  timeZone: String
+}
+
+type GoogleEventReminder{
+  useDefault: Boolean
+  overrides: [GoogleEventReminderOverrides]
+}
+
+type GoogleEventReminderOverrides {
+  method: String
+  minutes: Int
+}
+
+# ------------------------------------------------------------------------------
+# INPUTS
+# ------------------------------------------------------------------------------
+input GoogleEventInput{
+  summary: String
+  location: String
+  description: String
+  start: GoogleEventTimeInput
+  end: GoogleEventTimeInput
+  recurrence: [String]
+  reminders: GoogleEventReminderInput
+}
+
+input GoogleEventTimeInput {
+  dateTime: GraphQLDateTime
+  timeZone: String
+}
+
+input GoogleEventReminderInput{
+  useDefault: Boolean
+  overrides: [GoogleEventReminderOverridesInput]
+}
+
+input GoogleEventReminderOverridesInput {
+  method: String
+  minutes: Int
 }

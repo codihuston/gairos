@@ -1,7 +1,8 @@
 import { mockResponses } from ".";
 import DataSource from "../datasource";
+import { models } from "../../";
 
-const api = new DataSource.Class();
+const api = new DataSource.Class({ models });
 
 describe("google calendar unit tests", function() {
   beforeAll(function() {

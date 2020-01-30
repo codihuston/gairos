@@ -9,12 +9,15 @@ export default {
     createMyCalendar: async (
       parent,
       { summary, description },
-      { dataSources }
+      { me, dataSources }
     ) => {
-      return await dataSources.CalendarAPI.createCalendar({
+      return await dataSources.CalendarAPI.createCalendar(me.id, {
         summary,
         description
       });
+    },
+    createMyEvent: async (parent, { input }, { me, dataSources }) => {
+      return await dataSources.CalendarAPI.createEvent(me.calendarId, input);
     }
   }
 };
