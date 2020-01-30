@@ -1,3 +1,7 @@
+# ------------------------------------------------------------------------------
+# QUERY AND MUTATION TYPES
+# ------------------------------------------------------------------------------
+
 extend type Query {
   getMyCalendars: [Calendar]
 }
@@ -5,6 +9,10 @@ extend type Query {
 extend type Mutation{
   createMyCalendar(summary: String!, description: String): Calendar
 }
+
+# ------------------------------------------------------------------------------
+# TYPES
+# ------------------------------------------------------------------------------
 
 type Calendar {
   kind: String,

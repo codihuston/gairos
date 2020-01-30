@@ -11,6 +11,10 @@ scalar GraphQLDate
 scalar GraphQLTime
 scalar GraphQLDateTime
 
+# ------------------------------------------------------------------------------
+# QUERY AND MUTATION TYPES
+# ------------------------------------------------------------------------------
+
 type Query {
   version: String
 }

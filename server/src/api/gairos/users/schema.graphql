@@ -1,3 +1,6 @@
+# ------------------------------------------------------------------------------
+# QUERY AND MUTATION TYPES
+# ------------------------------------------------------------------------------
 extend type Query {
   me: User
   getMyTags: [UserTag]
@@ -11,15 +14,19 @@ extend type Mutation {
   updateMyTaskHistory(input: UpdateTaskHistoryInput): UserTaskHistory
   deleteMyTaskHistory(input: DeleteTaskHistoryInput): Boolean
   createMyTask(input: TaskInput): Task
-  renameMyTask(input: RenameUserTaskInput): Task
-  updateMyTask(input: UpdateUserTaskInput): UserTaskInfo
-  deleteMyTask(input: DeleteUserTaskInput): Boolean
+  renameMyTask(input: RenameTaskInput): Task
+  updateMyTask(input: UpdateTaskInput): UserTaskInfo
+  deleteMyTask(input: DeleteTaskInput): Boolean
   createMyTag(input: TagInput): Tag
-  renameMyTag(input: RenameUserTagInput): Tag
-  updateMyTag(input: UpdateUserTagInput): UserTagInfo
-  deleteMyTag(input: DeleteUserTagInput): Boolean
+  renameMyTag(input: RenameTagInput): Tag
+  updateMyTag(input: UpdateTagInput): UserTagInfo
+  deleteMyTag(input: DeleteTagInput): Boolean
   tagMyTask(input: TagTaskInput): UserTaskTag
 }
+
+# ------------------------------------------------------------------------------
+# TYPES
+# ------------------------------------------------------------------------------
 
 type User {
   id: ID!
@@ -33,14 +40,6 @@ type User {
   tags: [Tag]
   createdAt: GraphQLDateTime
   updatedAt: GraphQLDateTime
-}
-
-input UserInput{
-  username: String
-  email: EmailAddress
-  isFirstSetupCompleted: Boolean
-  calendarId: ID
-  calendarHexColorCode: HexColorCode
 }
 
 type UserTaskInfo{
@@ -95,4 +94,15 @@ type UserTaskTag{
   createdAt: GraphQLDateTime
   updatedAt: GraphQLDateTime
   userTaskInfo: UserTaskInfo
+}
+
+# ------------------------------------------------------------------------------
+# INPUTS
+# ------------------------------------------------------------------------------
+input UserInput{
+  username: String
+  email: EmailAddress
+  isFirstSetupCompleted: Boolean
+  calendarId: ID
+  calendarHexColorCode: HexColorCode
 }

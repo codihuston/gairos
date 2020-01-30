@@ -1,8 +1,15 @@
+# ------------------------------------------------------------------------------
+# QUERY AND MUTATION TYPES
+# ------------------------------------------------------------------------------
 extend type Query {
   getTags: [Tag]
   getTagUsers(tagId: ID!): User
   getAllTagsAndUsers: [Tag]
 }
+
+# ------------------------------------------------------------------------------
+# TYPES
+# ------------------------------------------------------------------------------
 
 type Tag {
   id: ID!
@@ -14,6 +21,10 @@ type Tag {
   updatedAt: GraphQLDateTime
 }
 
+# ------------------------------------------------------------------------------
+# INPUTS
+# ------------------------------------------------------------------------------
+
 input TagInput{
   userId: ID
   name: String!
@@ -22,19 +33,19 @@ input TagInput{
   isArchived: Boolean
 }
 
-input RenameUserTagInput{
+input RenameTagInput{
   userTagId: ID!
   name: String!
 }
 
-input UpdateUserTagInput{
+input UpdateTagInput{
   userTagId: ID!
   description: String
   isPublic: Boolean
   isArchived: Boolean
 }
 
-input DeleteUserTagInput{
+input DeleteTagInput{
   userId: ID
   userTagId: ID!
 }

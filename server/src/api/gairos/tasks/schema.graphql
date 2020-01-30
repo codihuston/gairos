@@ -1,3 +1,6 @@
+# ------------------------------------------------------------------------------
+# QUERY AND MUTATION TYPES
+# ------------------------------------------------------------------------------
 extend type Query {
   getTasks: [Task]
   getTaskUsers(taskId: ID!): [TaskUser]
@@ -12,11 +15,19 @@ type Task {
   updatedAt: GraphQLDateTime
 }
 
+# ------------------------------------------------------------------------------
+# TYPES
+# ------------------------------------------------------------------------------
+
 type TaskUser{
   id: ID!
   username: String,
   isPublic: Boolean
 }
+
+# ------------------------------------------------------------------------------
+# INPUTS
+# ------------------------------------------------------------------------------
 
 input TaskInput{
   userId: ID
@@ -32,12 +43,12 @@ input TagTaskInput{
   taskId: ID!
 }
 
-input RenameUserTaskInput{
+input RenameTaskInput{
   userTaskId: ID!
   name: String!
 }
 
-input UpdateUserTaskInput{
+input UpdateTaskInput{
   userTaskId: ID!
   description: String
   isPublic: Boolean
@@ -48,7 +59,7 @@ input UpdateUserTaskInput{
   updatedat: GraphQLDateTime
 }
 
-input DeleteUserTaskInput{
+input DeleteTaskInput{
   userId: ID
   userTaskId: ID!
 }
