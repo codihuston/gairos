@@ -93,7 +93,8 @@ export const createTestUser = async (opts = {}) => {
   const defaultOpts = {
     id: faker.random.uuid(),
     username: faker.internet.userName(),
-    email: faker.internet.email()
+    email: faker.internet.email(),
+    isConfirmed: true
   };
 
   return await models.user.create(merge(defaultOpts, opts));

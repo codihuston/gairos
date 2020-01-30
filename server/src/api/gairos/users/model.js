@@ -25,6 +25,18 @@ const model = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       defaultValue: false
     },
+    isConfirmed: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
+    isEnabled: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true
+    },
+    confirmationCode: {
+      type: DataTypes.STRING,
+      defaultValue: DataTypes.UUIDV4
+    },
     calendarId: {
       type: DataTypes.STRING,
       defaultValue: null,
