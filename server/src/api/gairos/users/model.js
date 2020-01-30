@@ -55,11 +55,13 @@ const model = (sequelize, DataTypes) => {
     models.user.belongsToMany(models.task, {
       through: models.userTask,
       foreignKey: "userId",
-      unique: false
+      unique: false,
+      onDelete: "CASCADE"
     });
     models.user.belongsToMany(models.tag, {
       through: models.userTag,
-      foreignKey: "userId"
+      foreignKey: "userId",
+      onDelete: "CASCADE"
     });
   };
 

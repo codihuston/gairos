@@ -74,13 +74,17 @@ export const defaultUsers = [
   {
     id: "0bdc487a-8ad7-4264-b28d-d02dbbef787b",
     googleId: "people/some-fake-id-01",
-    username: "sample user A",
+    username: "user A",
+    displayNameLastFirst: "A user",
+    email: "sampleA@email.com",
     isConfirmed: true
   },
   {
     id: "0bdc487a-8ad7-4264-b28d-d02dbbef787c",
     googleId: "people/some-fake-id-02",
-    username: "sample user B",
+    username: "sample user A",
+    displayNameLastFirst: "B user",
+    email: "sampleB@email.com",
     isConfirmed: true
   }
 ];
@@ -94,7 +98,9 @@ export const defaultUsers = [
 export const createTestUser = async (opts = {}) => {
   const defaultOpts = {
     id: faker.random.uuid(),
+    googleId: "people/test-user-id-03",
     username: faker.internet.userName(),
+    displayNameLastFirst: `${faker.name.lastName()} ${faker.name.firstName()}`,
     email: faker.internet.email(),
     isConfirmed: true
   };
