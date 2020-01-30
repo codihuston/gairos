@@ -50,7 +50,7 @@ input DeleteUserTaskInput{
 
 input CreateTaskHistoryInput{
   userTaskId: ID!
-  googleEventId: String
+  googleEventId: ID
   startTime: String!
   endTime: String
 }
@@ -58,7 +58,7 @@ input CreateTaskHistoryInput{
 input UpdateTaskHistoryInput{
   id: ID!
   userTaskId: ID
-  googleEventId: String
+  googleEventId: ID
   startTime: String
   endTime: String
 }

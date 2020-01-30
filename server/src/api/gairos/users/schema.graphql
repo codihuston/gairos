@@ -57,7 +57,7 @@ type UserTaskHistory{
   id: ID
   startTime: String
   endTime: String
-  googleEventId: String
+  googleEventId: ID
   createdAt: String
   updatedAt: String
   userTaskInfo: UserTaskInfo

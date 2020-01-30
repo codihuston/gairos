@@ -134,6 +134,76 @@ export const mockMutations = {
     mutation($userId: ID, $userTaskId: ID!) {
       deleteMyTask(input: { userId: $userId, userTaskId: $userTaskId })
     }
+  `,
+  createMyTaskHistory: gql`
+    mutation(
+      $userTaskId: ID!
+      $googleEventId: ID
+      $startTime: String!
+      $endTime: String
+    ) {
+      createMyTaskHistory(
+        input: {
+          userTaskId: $userTaskId
+          googleEventId: $googleEventId
+          startTime: $startTime
+          endTime: $endTime
+        }
+      ) {
+        id
+        startTime
+        endTime
+        googleEventId
+        createdAt
+        updatedAt
+        userTaskInfo {
+          id
+          description
+          task {
+            id
+            name
+          }
+        }
+      }
+    }
+  `,
+  updateMyTaskHistory: gql`
+    mutation(
+      $id: ID!
+      $userTaskId: ID
+      $googleEventId: ID
+      $startTime: String
+      $endTime: String
+    ) {
+      updateMyTaskHistory(
+        input: {
+          id: $id
+          userTaskId: $userTaskId
+          googleEventId: $googleEventId
+          startTime: $startTime
+          endTime: $endTime
+        }
+      ) {
+        id
+        startTime
+        endTime
+        googleEventId
+        createdAt
+        updatedAt
+        userTaskInfo {
+          id
+          description
+          task {
+            name
+          }
+        }
+      }
+    }
+  `,
+  deleteMyTaskHistory: gql`
+    mutation($id: ID!) {
+      deleteMyTaskHistory(input: { id: $id })
+    }
   `
 };
 

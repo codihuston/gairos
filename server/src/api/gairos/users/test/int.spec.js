@@ -1,5 +1,6 @@
 import { createTestClient } from "apollo-server-testing";
 import debug from "debug";
+import moment from "moment";
 
 import DatabaseConnector from "../../../../db";
 import {
@@ -14,6 +15,7 @@ let task = null;
 let user = null;
 let userTag = null;
 let userTask = null;
+let userTaskHistory = null;
 
 describe("user integration tests", function() {
   // pre-configure the test environment
@@ -129,6 +131,169 @@ describe("user integration tests", function() {
         // store for additional testing later (if needed)
         task = res.data[mutationName];
         userTask = res.data[mutationName].userTaskInfo;
+      } catch (e) {
+        console.error(e);
+        expect(e).toBeUndefined();
+      }
+    });
+
+    it("creates a user task history", async function() {
+      const log = debug("test:creates a user task");
+
+      try {
+        // get current time in milliseconds
+        const nowAsISO = moment().toISOString();
+        const nowAsUnix = moment(nowAsISO)
+          .valueOf()
+          .toString();
+        // define data used for query/mutation
+        const mutationName = "createMyTaskHistory";
+        const mutation = mockMutations[mutationName];
+        const variables = {
+          userTaskId: userTask.id,
+          googleEventId: "FAKE ID",
+          startTime: nowAsISO,
+          endTime: nowAsISO
+        };
+        // define the expected response
+        const expected = Object.assign({}, variables);
+        // delete fields that are not expected to be returned
+        delete expected.userTaskId;
+        expected.startTime = nowAsUnix;
+        expected.endTime = nowAsUnix;
+        // set user in context as expected by the apollo server
+        const context = getDefaultContext({ me: user });
+
+        // create an instance of the server
+        const { server, typeDefs, dataSources } = await buildApolloServer({
+          context
+        });
+
+        log("context", context({ req: null, res: null }));
+
+        // init the test server
+        const { mutate } = createTestClient(server);
+
+        // submit gql query/mutation
+        const res = await mutate({
+          mutation,
+          variables
+        });
+
+        log("result", JSON.stringify(res, null, 4));
+
+        expect(res.errors).toBeUndefined();
+        expect(res.data).toHaveProperty(mutationName);
+        expect(res.data[mutationName]).toHaveProperty("id");
+        expect(res.data[mutationName]).toHaveProperty(
+          "googleEventId",
+          variables.googleEventId
+        );
+        expect(res.data[mutationName]).toHaveProperty(
+          "userTaskInfo.id",
+          variables.userTaskId
+        );
+        expect(res.data[mutationName]).toMatchObject(expected);
+
+        // store for additional testing later (if needed)
+        userTaskHistory = res.data[mutationName];
+      } catch (e) {
+        console.error(e);
+        expect(e).toBeUndefined();
+      }
+    });
+  });
+
+  // do this first, so we don't run into FK error on deleting a user task
+  describe("user task history", function() {
+    it("updates a user task history", async function() {
+      const log = debug("test:updates a user tag");
+
+      try {
+        // get current time in milliseconds
+        const nowAsISO = moment().toISOString();
+        const nowAsUnix = moment(nowAsISO)
+          .valueOf()
+          .toString();
+        // define data used for query/mutation
+        const mutationName = "updateMyTaskHistory";
+        const mutation = mockMutations[mutationName];
+        const variables = {
+          id: userTaskHistory.id,
+          userTaskId: userTask.id,
+          googleEventId: "FAKE ID",
+          startTime: nowAsISO,
+          endTime: nowAsISO
+        };
+        // define the expected response
+        const expected = Object.assign({}, variables);
+        // delete fields that are not expected to be returned
+        delete expected.userTaskId;
+        expected.startTime = nowAsUnix;
+        expected.endTime = nowAsUnix;
+        // set user in context as expected by the apollo server
+        const context = getDefaultContext({ me: user });
+
+        // create an instance of the server
+        const { server, typeDefs, dataSources } = await buildApolloServer({
+          context
+        });
+
+        log("context", context({ req: null, res: null }));
+
+        // init the test server
+        const { mutate } = createTestClient(server);
+
+        // submit gql query/mutation
+        const res = await mutate({
+          mutation,
+          variables
+        });
+
+        log("result", JSON.stringify(res, null, 4));
+
+        expect(res.errors).toBeUndefined();
+        expect(res.data).toHaveProperty(mutationName);
+        expect(res.data[mutationName]).toMatchObject(expected);
+      } catch (e) {
+        console.error(e);
+        expect(e).toBeUndefined();
+      }
+    });
+
+    it("deletes a user task history", async function() {
+      const log = debug("test:deletes a user task");
+
+      try {
+        // define data used for query/mutation
+        const mutationName = "deleteMyTaskHistory";
+        const mutation = mockMutations[mutationName];
+        const variables = {
+          id: userTaskHistory.id
+        };
+        // set user in context as expected by the apollo server
+        const context = getDefaultContext({ me: user });
+
+        // create an instance of the server
+        const { server, typeDefs, dataSources } = await buildApolloServer({
+          context
+        });
+
+        log("context", context({ req: null, res: null }));
+
+        // init the test server
+        const { mutate } = createTestClient(server);
+
+        // submit gql query/mutation
+        const res = await mutate({
+          mutation,
+          variables
+        });
+
+        log("result", JSON.stringify(res, null, 4));
+
+        expect(res.errors).toBeUndefined();
+        expect(res.data[mutationName]).toEqual(true);
       } catch (e) {
         console.error(e);
         expect(e).toBeUndefined();
