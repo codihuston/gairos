@@ -24,6 +24,8 @@ import { CustomApolloError } from "../graphql";
  * options[X].errorToThrow: ApolloError|Function (that returns an Apollo Error)
  */
 export default function(error, potentialErrors) {
+  console.error(error);
+
   if (error.errors) {
     for (const e of error.errors) {
       for (const potentialError of potentialErrors) {
@@ -50,7 +52,7 @@ export default function(error, potentialErrors) {
     }
   }
   // otherwise throw the error as provided by sequelize
-  throw CustomApolloError(`Database Error: ${error.message}`, 422, error);
+  throw CustomApolloError(`${error.message}`, 422, error);
 }
 
 const errorToThrow = (message, additionalProperties) =>
