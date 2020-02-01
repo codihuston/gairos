@@ -296,3 +296,17 @@ after the server restarts.
 
 In your browser, go to your app URL `localhost:APP_PORT/graphql` to test the
 graphql API.
+
+#### GraphiQL Setup (GraphQL IDE)
+If this is your first time setting up the environment, apply this fix
+to your GraphiQL Settings: https://github.com/codihuston/gairos/issues/14
+
+This is required in order to test the GraphQL Mutations that use the GoogleAPI;
+you must auth through `localhost:APP_PORT/auth/google`, and then subsequent
+requests sent through the GraphiQL IDE will have your google auth tokens
+attached to them.
+
+NOTE: This does not apply to the testing environment because the google API
+requests are mocked out. This should also not apply to production because
+the session should be properly managed between the front-end and back-end
+without the `same-origin` issue described in the linked issue.
