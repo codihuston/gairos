@@ -31,7 +31,8 @@ type ConferenceProperties{
   allowedConferenceSolutionTypes: [String]
 }
 
-type  GoogleEvent{
+type GoogleEvent{
+  id: ID!
   summary: String!
   location: String
   description: String

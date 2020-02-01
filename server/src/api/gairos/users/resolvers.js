@@ -189,11 +189,28 @@ export default {
       async (parent, { input }, { me, dataSources }) => {
         try {
           const userId = input.userId ? input.userId : me.id;
-          const user = await dataSources.TaskAPI.createUserTaskHistory(
+
+          // if the end time is specified
+          if (input.endTime) {
+            // save to google calendar with useterTaskInfo
+            const event = await dataSources.CalendarAPI.createEventWithUserTask(
+              input.userTaskId,
+              me.id,
+              me.calendarId,
+              input
+            );
+
+            // set eventId (to be used by the TaskAPI)
+            input.googleEventId = event.id;
+          }
+
+          // save to gairos db
+          const userTaskHistory = await dataSources.TaskAPI.createUserTaskHistory(
             userId,
             input
           );
-          return user;
+
+          return userTaskHistory;
         } catch (e) {
           throw SequelizeErrorHandler(e);
         }

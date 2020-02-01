@@ -142,7 +142,7 @@ describe("user integration tests", function() {
     });
 
     it("creates user task history", async function() {
-      const log = debug("test:creates user task");
+      const log = debug("test:creates user task history");
 
       try {
         // get current time in milliseconds
@@ -165,6 +165,24 @@ describe("user integration tests", function() {
         // create an instance of the server
         const { server, typeDefs, dataSources } = await buildApolloServer({
           context
+        });
+
+        // mock the 3rd party API used in this call
+        const { CalendarAPI } = dataSources;
+
+        CalendarAPI.createEventWithUserTask = jest.fn();
+        CalendarAPI.createEventWithUserTask.mockReturnValue({
+          id: variables.googleEventId,
+          summary: "SOME GOOGLE CALENDAR EVENT NAME",
+          location: "SOME ADDRESS",
+          description: "SOME DESCRIPTION",
+          start: variables.startTime,
+          end: variables.endTime,
+          recurrence: ["SOME RECURRANCE VALUE"],
+          reminders: {
+            useDefault: true,
+            overrides: []
+          }
         });
 
         log("context", context({ req: null, res: null }));
@@ -205,7 +223,7 @@ describe("user integration tests", function() {
   // do this first, so we don't run into FK error on deleting a user task
   describe("user task history", function() {
     it("updates user task history", async function() {
-      const log = debug("test:updates user tag");
+      const log = debug("test:updates user task history");
 
       try {
         // get current time in milliseconds
@@ -256,7 +274,7 @@ describe("user integration tests", function() {
     });
 
     it("deletes user task history", async function() {
-      const log = debug("test:deletes user task");
+      const log = debug("test:deletes user task history");
 
       try {
         // define data used for query/mutation

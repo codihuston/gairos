@@ -1,5 +1,6 @@
 import { DataSource } from "apollo-datasource";
 import debugLib from "debug";
+
 import { GoogleCalendar } from "../../";
 
 const debug = debugLib("server:calendar api");
@@ -84,6 +85,46 @@ export default {
       debug("create calendar result", res);
 
       return this.eventReducer(res.data);
+    }
+
+    /**
+     *
+     * @param {*} userTaskId
+     * @param {*} calendarId
+     * @param {*} input : input for createUserTaskHistory
+     */
+    async createEventWithUserTask(userTaskId, userId, calendarId, input) {
+      const { startTime, endTime } = input;
+
+      // get the user task info
+      const userTask = await this.models.userTask.findOne({
+        where: {
+          id: userTaskId,
+          userId
+        },
+        include: [this.models.task]
+      });
+
+      if (!userTask) {
+        throw new Error("The given user task does not exist!");
+      }
+
+      // create the event
+      const event = await this.createEvent(calendarId, {
+        summary: userTask.getEventName(startTime, endTime),
+        description: userTask.getEventDescription(),
+        start: {
+          dateTime: startTime
+        },
+        end: {
+          dateTime: endTime
+        }
+      });
+
+      debug("create calendar w/ user task result", event);
+
+      // return the event
+      return event;
     }
 
     /**
