@@ -205,17 +205,15 @@ export const mockMutations = {
   updateMyTaskHistory: gql`
     mutation(
       $id: ID!
-      $userTaskId: ID
-      $googleEventId: ID
-      $startTime: GraphQLDateTime
-      $endTime: GraphQLDateTime
+      $userTaskId: ID!
+      $startTime: GraphQLDateTime!
+      $endTime: GraphQLDateTime!
       $eventHexColorCode: HexColorCode
     ) {
       updateMyTaskHistory(
         input: {
           id: $id
           userTaskId: $userTaskId
-          googleEventId: $googleEventId
           eventHexColorCode: $eventHexColorCode
           startTime: $startTime
           endTime: $endTime
