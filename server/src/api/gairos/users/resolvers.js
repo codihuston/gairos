@@ -230,13 +230,30 @@ export default {
 
           // if it does, we need to update to google calendar
           if (userTaskHistory.googleEventId) {
-            // update the existing calendar
-            await dataSources.CalendarAPI.updateEvent(
-              me.calendarId,
-              userTaskHistory.googleEventId,
-              input,
-              userTaskHistory
-            );
+            try {
+              // update the existing calendar
+              await dataSources.CalendarAPI.updateEvent(
+                me.calendarId,
+                userTaskHistory.googleEventId,
+                input,
+                userTaskHistory
+              );
+            } catch (e) {
+              /**
+               * if we get a "not found" error, then let's assume that the event
+               * does not exist; let's clear out the userTaskInfo.googleEventId
+               * and tell the end-user to re-submit; this should force it down the
+               * code path in which a new event is added to the calendar.
+               *
+               * if the error persists, the calendar likely does not exist.
+               */
+              userTaskHistory.googleEventId = null;
+              await userTaskHistory.save();
+
+              throw new Error(
+                `There was a problem updating this task in your google calendar. Please try re-submitting. Error from google: ${e.message}`
+              );
+            }
           }
           // if it does not, we need to create event in google calendar
           else {

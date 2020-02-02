@@ -147,8 +147,7 @@ export default {
         );
       }
 
-      // TODO: handle error if event does not exist! (should create it)
-      // NOTE: 404 error is returned if calendar and/or event does not exist!
+      // update it
       const res = await GoogleCalendar.events.update({
         calendarId,
         eventId,
