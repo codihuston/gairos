@@ -222,11 +222,40 @@ export default {
       async (parent, { input }, { me, dataSources }) => {
         try {
           const userId = input.userId ? input.userId : me.id;
-          const user = await dataSources.TaskAPI.updateUserTaskHistory(
+          // TODO: check if this instance has a googleID
+          const userTaskHistory = await dataSources.TaskAPI.updateUserTaskHistory(
             userId,
             input
           );
-          return user;
+
+          // if it does, we need to update to google calendar
+          if (userTaskHistory.googleEventId) {
+            // update the existing calendar
+            await dataSources.CalendarAPI.updateEvent(
+              me.calendarId,
+              userTaskHistory.googleEventId,
+              input,
+              userTaskHistory
+            );
+          }
+          // if it does not, we need to create event in google calendar
+          else {
+            // save to google calendar with useterTaskInfo
+            const event = await dataSources.CalendarAPI.createEventWithUserTask(
+              input.userTaskId,
+              me.id,
+              me.calendarId,
+              input
+            );
+
+            // set eventId (to be used by the TaskAPI)
+            userTaskHistory.googleEventId = event.id;
+
+            // save the userTaskHistory again
+            await userTaskHistory.save();
+          }
+
+          return userTaskHistory;
         } catch (e) {
           throw SequelizeErrorHandler(e);
         }

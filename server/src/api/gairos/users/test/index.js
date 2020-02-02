@@ -271,4 +271,61 @@ export const mockMutations = {
   `
 };
 
-export const mockResponses = {};
+export const mockResponses = {
+  updateEvent: {
+    raw: variables => ({
+      id: variables.googleEventId,
+      summary: "SOME GOOGLE CALENDAR EVENT NAME",
+      location: "SOME ADDRESS",
+      description: "SOME DESCRIPTION",
+      start: variables.startTime,
+      end: variables.endTime,
+      recurrence: ["SOME RECURRANCE VALUE"],
+      reminders: {
+        useDefault: true,
+        overrides: []
+      }
+    }),
+    reduced: variables => ({
+      id: variables.googleEventId,
+      summary: "SOME GOOGLE CALENDAR EVENT NAME",
+      location: "SOME ADDRESS",
+      description: "SOME DESCRIPTION",
+      start: variables.startTime,
+      end: variables.endTime,
+      recurrence: ["SOME RECURRANCE VALUE"],
+      reminders: {
+        useDefault: true,
+        overrides: []
+      }
+    })
+  },
+  createEventWithUserTask: {
+    raw: variables => ({
+      id: variables.googleEventId,
+      summary: "SOME GOOGLE CALENDAR EVENT NAME",
+      location: "SOME ADDRESS",
+      description: "SOME DESCRIPTION",
+      start: variables.startTime,
+      end: variables.endTime,
+      recurrence: ["SOME RECURRANCE VALUE"],
+      reminders: {
+        useDefault: true,
+        overrides: []
+      }
+    }),
+    reduced: variables => ({
+      id: variables.googleEventId,
+      summary: "SOME GOOGLE CALENDAR EVENT NAME",
+      location: "SOME ADDRESS",
+      description: "SOME DESCRIPTION",
+      start: variables.startTime,
+      end: variables.endTime,
+      recurrence: ["SOME RECURRANCE VALUE"],
+      reminders: {
+        useDefault: true,
+        overrides: []
+      }
+    })
+  }
+};

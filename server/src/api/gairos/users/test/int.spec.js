@@ -234,7 +234,6 @@ describe("user integration tests", function() {
         const variables = {
           id: userTaskHistory.id,
           userTaskId: userTask.id,
-          googleEventId: "FAKE ID",
           eventHexColorCode: "#FF5733",
           startTime: nowAsISO,
           endTime: nowAsISO
@@ -250,6 +249,19 @@ describe("user integration tests", function() {
         const { server, typeDefs, dataSources } = await buildApolloServer({
           context
         });
+
+        // mock the 3rd party API used in this call
+        const { CalendarAPI } = dataSources;
+
+        // we really don't care what these return in either case
+        CalendarAPI.createEventWithUserTask = jest.fn();
+        CalendarAPI.createEventWithUserTask.mockReturnValue(
+          mockResponses.createEventWithUserTask.reduced(variables)
+        );
+        CalendarAPI.updateEvent = jest.fn();
+        CalendarAPI.updateEvent.mockReturnValue(
+          mockResponses.updateEvent.reduced(variables)
+        );
 
         log("context", context({ req: null, res: null }));
 

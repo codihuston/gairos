@@ -128,6 +128,48 @@ export default {
     }
 
     /**
+     *
+     * @param {*} calendarId
+     * @param {*} eventId
+     * @param {*} input
+     * @param {*} userTaskHistory: an instance of userTaskHistory with
+     *            userTaskInfo (userTask) loaded
+     */
+    async updateEvent(calendarId, eventId, input, userTaskHistory) {
+      const { startTime, endTime } = input;
+      const { userTaskInfo } = userTaskHistory;
+
+      // throw if the userTaskInfo association is not loaded
+      if (!userTaskInfo) {
+        // this is a developer problem
+        throw new Error(
+          "The given user task instance does not have the user task information loaded! Please report this error to a developer."
+        );
+      }
+
+      // TODO: handle error if event does not exist! (should create it)
+      // NOTE: 404 error is returned if calendar and/or event does not exist!
+      const res = await GoogleCalendar.events.update({
+        calendarId,
+        eventId,
+        resource: {
+          summary: userTaskInfo.getEventName(startTime, endTime),
+          description: userTaskInfo.getEventDescription(),
+          start: {
+            dateTime: startTime
+          },
+          end: {
+            dateTime: endTime
+          }
+        }
+      });
+
+      debug("update calendar result", res);
+
+      return this.eventReducer(res.data);
+    }
+
+    /**
      * NOTE: it appears that this only sets the TIME WINDOW before EACH EVENT
      * sends out a notification; each event can have a custom notification
      * window, too.
