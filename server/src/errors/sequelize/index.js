@@ -23,7 +23,7 @@ import { CustomApolloError } from "../graphql";
  *  this is passed as an argument into errorToThrow() (if it is a function)
  * options[X].errorToThrow: ApolloError|Function (that returns an Apollo Error)
  */
-export default function(error, potentialErrors) {
+export default function(error, potentialErrors = []) {
   console.error(error);
 
   if (error.errors) {
