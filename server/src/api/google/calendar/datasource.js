@@ -39,6 +39,27 @@ export default {
       return [];
     }
 
+    /**
+     * Returns an existing google calendar instance
+     *
+     * @param {*} calendarId
+     */
+    async doesCalendarExist(calendarId) {
+      try {
+        return await GoogleCalendar.calendars.get({
+          calendarId
+        });
+      } catch (e) {
+        if (e.code && e.code === 404) {
+          // TODO: add a link to re-create a calendar in this case?
+          throw new Error(
+            "Your Google Calendar no longer exists; please visit your profile to re-create it."
+          );
+        }
+        throw e;
+      }
+    }
+
     async createCalendar(userId, opts) {
       // get the current user
       const user = await this.models.user.findOne({
@@ -77,6 +98,9 @@ export default {
      * @param {*} opts
      */
     async createEvent(calendarId, input) {
+      // ensure calendar exists before operating on it...
+      await this.doesCalendarExist(calendarId);
+
       const res = await GoogleCalendar.events.insert({
         calendarId,
         resource: input
@@ -95,6 +119,9 @@ export default {
      */
     async createEventWithUserTask(userTaskId, userId, calendarId, input) {
       const { startTime, endTime } = input;
+
+      // ensure calendar exists before operating on it...
+      await this.doesCalendarExist(calendarId);
 
       // get the user task info
       const userTask = await this.models.userTask.findOne({
@@ -138,6 +165,9 @@ export default {
     async updateEvent(calendarId, eventId, input, userTaskHistory) {
       const { startTime, endTime } = input;
       const { userTaskInfo } = userTaskHistory;
+
+      // ensure calendar exists before operating on it...
+      await this.doesCalendarExist(calendarId);
 
       // throw if the userTaskInfo association is not loaded
       if (!userTaskInfo) {
