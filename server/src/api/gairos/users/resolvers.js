@@ -247,12 +247,15 @@ export default {
                *
                * if the error persists, the calendar likely does not exist.
                */
-              userTaskHistory.googleEventId = null;
-              await userTaskHistory.save();
+              if (e.code && e.code === 404) {
+                userTaskHistory.googleEventId = null;
+                await userTaskHistory.save();
 
-              throw new Error(
-                `There was a problem updating this task in your google calendar. Please try re-submitting. Error from google: ${e.message}`
-              );
+                throw new Error(
+                  `There was a problem updating this task in your google calendar. Please try re-submitting. Error from google: ${e.message}`
+                );
+              }
+              throw e;
             }
           }
           // if it does not, we need to create event in google calendar
