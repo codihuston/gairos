@@ -28,6 +28,9 @@ export default {
         me.calendarId,
         input
       );
+    },
+    deleteMyEvent: async (parent, { eventId }, { me, dataSources }) => {
+      return await dataSources.CalendarAPI.deleteEvent(me.calendarId, eventId);
     }
   }
 };

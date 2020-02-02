@@ -94,6 +94,7 @@ export default {
     }
 
     /**
+     * Creates an event in google calendar
      *
      * @param {*} opts
      */
@@ -196,6 +197,25 @@ export default {
       debug("update calendar result", res);
 
       return this.eventReducer(res.data);
+    }
+
+    /**
+     * Deletes an event from google calendar (not from gairos!)
+     *
+     * @param {*} opts
+     */
+    async deleteEvent(calendarId, eventId) {
+      // ensure calendar exists before operating on it...
+      await this.doesCalendarExist(calendarId);
+
+      const res = await GoogleCalendar.events.delete({
+        calendarId,
+        eventId
+      });
+
+      debug("delete calendar result", res);
+
+      return res ? true : false;
     }
 
     /**

@@ -9,6 +9,7 @@ extend type Query {
 extend type Mutation{
   createMyCalendar(summary: String!, description: String): Calendar
   createMyEvent(input: GoogleEventInput): GoogleEvent
+  deleteMyEvent(eventId: ID): Boolean
   createMyCalendarReminder(input: [GoogleCalendarReminderInput]): Boolean
 }
 
