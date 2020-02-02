@@ -287,11 +287,36 @@ export default {
       async (parent, { input }, { me, dataSources }) => {
         try {
           const userId = input.userId ? input.userId : me.id;
-          const user = await dataSources.TaskAPI.deleteUserTaskHistory(
-            userId,
-            input
-          );
-          return user;
+
+          // delete from gairos
+          const [
+            userTaskHistory,
+            deletionResult
+          ] = await dataSources.TaskAPI.deleteUserTaskHistory(userId, input);
+
+          // delete from google
+          // TODO: there is an issue here that if another kind of google
+          // exception is thrown, the task history is deleted in gairos but
+          // not google, and as a result, is undeletable from here
+          // we need to delete it from google first, then gairos
+          try {
+            await dataSources.CalendarAPI.deleteEvent(
+              me.calendarId,
+              userTaskHistory.googleEventId
+            );
+          } catch (e) {
+            // google returns 410 if a resource was already deleted; if this
+            // is the case, then this is not an error, and is what we expect
+            if (e.code !== 410) {
+              // otherwise, throw an error, and undo the deletion from gairos
+              // so that the end-user can re-delete it
+              userTaskHistory.deletedAt = null;
+              await userTaskHistory.save();
+              throw e;
+            }
+          }
+
+          return deletionResult;
         } catch (e) {
           throw SequelizeErrorHandler(e);
         }

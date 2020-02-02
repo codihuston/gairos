@@ -317,7 +317,7 @@ export default {
         }
       });
 
-      return res;
+      return [userTaskHistory, res];
     }
   }
 };
