@@ -29,6 +29,10 @@ export default {
       });
     }
 
+    async getOneUserTask(opts = {}) {
+      return await this.models.userTask.findOne(opts);
+    }
+
     async getUsers(id) {
       const res = await this.models.task.findOne({
         where: {
@@ -75,7 +79,7 @@ export default {
 
     async renameUserTask(userId, input) {
       // find the existing task
-      const userTask = await this.models.userTask.findOne({
+      const userTask = await this.getOneUserTask({
         where: {
           userId,
           id: input.userTaskId
@@ -118,7 +122,7 @@ export default {
 
     async updateUserTask(userId, input) {
       // find the existing task
-      const userTask = await this.models.userTask.findOne({
+      const userTask = await this.getOneUserTask({
         where: {
           id: input.userTaskId
         }
@@ -143,7 +147,7 @@ export default {
 
     async deleteUserTask(userId, input) {
       // find the existing userTask
-      const userTask = await this.models.userTask.findOne({
+      const userTask = await this.getOneUserTask({
         where: {
           id: input.userTaskId
         }
@@ -179,7 +183,7 @@ export default {
       { userTaskId, googleEventId, startTime, endTime }
     ) {
       // find the given userTaskId
-      const userTask = await this.models.userTask.findOne({
+      const userTask = await this.getOneUserTask({
         where: {
           userId,
           id: userTaskId
