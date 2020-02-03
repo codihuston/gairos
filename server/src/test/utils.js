@@ -82,7 +82,7 @@ export const defaultUsers = [
   {
     id: "0bdc487a-8ad7-4264-b28d-d02dbbef787c",
     googleId: "people/some-fake-id-02",
-    username: "sample user A",
+    username: "sample user B",
     displayNameLastFirst: "B user",
     email: "sampleB@email.com",
     isConfirmed: true
