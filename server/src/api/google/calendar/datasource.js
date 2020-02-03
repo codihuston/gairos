@@ -60,6 +60,12 @@ export default {
       }
     }
 
+    /**
+     * Creates a calendar in google calendar
+     *
+     * @param {*} userId
+     * @param {*} opts
+     */
     async createCalendar(userId, opts) {
       // get the current user
       const user = await this.models.user.findOne({
@@ -91,6 +97,26 @@ export default {
       debug("create calendar result", res);
 
       return this.reducer(res && res.data ? res.data : null);
+    }
+
+    /**
+     * Deletes a calendar from google
+     * @param {*} userId
+     * @param {*} opts
+     */
+    async deleteCalendar(calendarId) {
+      if (!calendarId) {
+        throw new Error(
+          `The logged-in user does not have a google calendar associated with their account!`
+        );
+      }
+
+      // delete the google calendar; throws if not found
+      await GoogleCalendar.calendars.delete({
+        calendarId
+      });
+
+      return true;
     }
 
     /**

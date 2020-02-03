@@ -6,6 +6,9 @@ export default {
     }
   },
   Mutation: {
+    /**
+     * Calendar
+     */
     createMyCalendar: async (
       parent,
       { summary, description },
@@ -16,8 +19,12 @@ export default {
         description
       });
     },
-    createMyEvent: async (parent, { input }, { me, dataSources }) => {
-      return await dataSources.CalendarAPI.createEvent(me.calendarId, input);
+    deleteMyCalendar: async (
+      parent,
+      { summary, description },
+      { me, dataSources }
+    ) => {
+      return await dataSources.CalendarAPI.deleteCalendar(me.calendarId);
     },
     createMyCalendarReminder: async (
       parent,
@@ -28,6 +35,12 @@ export default {
         me.calendarId,
         input
       );
+    },
+    /**
+     * Events
+     */
+    createMyEvent: async (parent, { input }, { me, dataSources }) => {
+      return await dataSources.CalendarAPI.createEvent(me.calendarId, input);
     },
     deleteMyEvent: async (parent, { eventId }, { me, dataSources }) => {
       return await dataSources.CalendarAPI.deleteEvent(me.calendarId, eventId);

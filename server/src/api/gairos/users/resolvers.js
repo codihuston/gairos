@@ -41,7 +41,24 @@ export default {
     deleteMyAccount: combineResolvers(
       isAuthenticated,
       isGivenUser,
-      async (parent, args, { me, dataSources }) => {
+      async (parent, { deleteCalendar }, { me, dataSources }) => {
+        const { CalendarAPI } = dataSources;
+
+        // delete their google calendar (conditionally)
+        try {
+          if (deleteCalendar) {
+            CalendarAPI.deleteCalendar(me.calendarId);
+          }
+        } catch (e) {
+          // if an exception is thrown while deleting
+          if (e.code === 410 || e.code === 404) {
+            // ignore it if the calendar doesn't exist / was already deleted
+          } else {
+            throw e;
+          }
+        }
+
+        // then delete their account
         return await dataSources.UserAPI.deleteAccount(me.id);
       }
     ),
