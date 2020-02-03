@@ -62,7 +62,7 @@ type UserTaskHistory{
   id: ID
   startTime: GraphQLDateTime
   endTime: GraphQLDateTime
-  googleEventId: ID
+  eventId: ID
   eventHexColorCode: HexColorCode
   createdAt: GraphQLDateTime
   updatedAt: GraphQLDateTime

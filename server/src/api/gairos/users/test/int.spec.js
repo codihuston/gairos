@@ -151,7 +151,7 @@ describe("user integration tests", function() {
         const mutation = mockMutations[mutationName];
         const variables = {
           userTaskId: userTask.id,
-          googleEventId: "FAKE ID",
+          eventId: "FAKE ID",
           startTime: nowAsISO,
           endTime: nowAsISO
         };
@@ -192,8 +192,8 @@ describe("user integration tests", function() {
         expect(res.data).toHaveProperty(mutationName);
         expect(res.data[mutationName]).toHaveProperty("id");
         expect(res.data[mutationName]).toHaveProperty(
-          "googleEventId",
-          variables.googleEventId
+          "eventId",
+          variables.eventId
         );
         expect(res.data[mutationName]).toHaveProperty(
           "userTaskInfo.id",

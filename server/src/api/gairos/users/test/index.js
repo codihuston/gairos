@@ -170,7 +170,7 @@ export const mockMutations = {
   createMyTaskHistory: gql`
     mutation(
       $userTaskId: ID!
-      $googleEventId: ID
+      $eventId: ID
       $startTime: GraphQLDateTime!
       $endTime: GraphQLDateTime
       $eventHexColorCode: HexColorCode
@@ -178,7 +178,7 @@ export const mockMutations = {
       createMyTaskHistory(
         input: {
           userTaskId: $userTaskId
-          googleEventId: $googleEventId
+          eventId: $eventId
           startTime: $startTime
           endTime: $endTime
           eventHexColorCode: $eventHexColorCode
@@ -187,7 +187,7 @@ export const mockMutations = {
         id
         startTime
         endTime
-        googleEventId
+        eventId
         eventHexColorCode
         createdAt
         updatedAt
@@ -222,7 +222,7 @@ export const mockMutations = {
         id
         startTime
         endTime
-        googleEventId
+        eventId
         eventHexColorCode
         createdAt
         updatedAt
@@ -280,7 +280,7 @@ export const mockMutations = {
 export const mockResponses = {
   updateEvent: {
     raw: variables => ({
-      id: variables.googleEventId,
+      id: variables.eventId,
       summary: "SOME GOOGLE CALENDAR EVENT NAME",
       location: "SOME ADDRESS",
       description: "SOME DESCRIPTION",
@@ -293,7 +293,7 @@ export const mockResponses = {
       }
     }),
     reduced: variables => ({
-      id: variables.googleEventId,
+      id: variables.eventId,
       summary: "SOME GOOGLE CALENDAR EVENT NAME",
       location: "SOME ADDRESS",
       description: "SOME DESCRIPTION",
@@ -308,7 +308,7 @@ export const mockResponses = {
   },
   createEventWithUserTask: {
     raw: variables => ({
-      id: variables.googleEventId,
+      id: variables.eventId,
       summary: "SOME GOOGLE CALENDAR EVENT NAME",
       location: "SOME ADDRESS",
       description: "SOME DESCRIPTION",
@@ -321,7 +321,7 @@ export const mockResponses = {
       }
     }),
     reduced: variables => ({
-      id: variables.googleEventId,
+      id: variables.eventId,
       summary: "SOME GOOGLE CALENDAR EVENT NAME",
       location: "SOME ADDRESS",
       description: "SOME DESCRIPTION",

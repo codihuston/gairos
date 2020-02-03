@@ -10,7 +10,7 @@ const model = (sequelize, DataTypes) => {
       userTaskId: {
         type: DataTypes.UUID
       },
-      googleEventId: {
+      eventId: {
         type: DataTypes.STRING,
         nullable: true
       },

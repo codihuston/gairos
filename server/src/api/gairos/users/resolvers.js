@@ -218,7 +218,7 @@ export default {
             );
 
             // set eventId (to be used by the TaskAPI)
-            input.googleEventId = event.id;
+            input.eventId = event.id;
           }
 
           // save to gairos db
@@ -247,12 +247,12 @@ export default {
           );
 
           // if it does, we need to update to google calendar (if there is one)
-          if (userTaskHistory.googleEventId) {
+          if (userTaskHistory.eventId) {
             try {
               // update the existing google calendar event
               await dataSources.CalendarAPI.updateEvent(
                 me.calendarId,
-                userTaskHistory.googleEventId,
+                userTaskHistory.eventId,
                 input,
                 userTaskHistory
               );
@@ -260,14 +260,14 @@ export default {
               /**
                * if we get a "not found" error from the google API, then let's
                * assume that the google event does not exist; let's clear out
-               * the userTaskInfo.googleEventId and tell the end-user to
+               * the userTaskInfo.eventId and tell the end-user to
                * re-submit; this should force it down the code path in which
                * a new event is added to the google calendar.
                *
                * if the error persists, the calendar likely does not exist.
                */
               if (e.code && e.code === 404) {
-                userTaskHistory.googleEventId = null;
+                userTaskHistory.eventId = null;
                 await userTaskHistory.save();
 
                 throw new Error(
@@ -288,7 +288,7 @@ export default {
             );
 
             // set eventId (to be used by the TaskAPI)
-            userTaskHistory.googleEventId = event.id;
+            userTaskHistory.eventId = event.id;
 
             // save the userTaskHistory again
             await userTaskHistory.save();
@@ -331,7 +331,7 @@ export default {
           try {
             await CalendarAPI.deleteEvent(
               me.calendarId,
-              userTaskHistory.googleEventId
+              userTaskHistory.eventId
             );
           } catch (e) {
             // google returns 410 if a resource was already deleted; 404 if the
