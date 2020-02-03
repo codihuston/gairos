@@ -617,7 +617,9 @@ describe("user integration tests", function() {
           email: "REAL@EMAIL.COM",
           isFirstSetupCompleted: true,
           calendarId: "FAKE ID",
-          calendarHexColorCode: "#FF5733"
+          calendarColorId: "3",
+          scheduleCalendarId: "FAKE ID",
+          scheduleCalendarColorId: "4"
         };
         // define the expected response
         const expected = Object.assign({}, variables);

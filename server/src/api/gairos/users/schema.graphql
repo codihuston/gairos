@@ -36,7 +36,9 @@ type User {
   email: EmailAddress!
   isFirstSetupCompleted: Boolean
   calendarId: ID
-  calendarHexColorCode: HexColorCode
+  calendarColorId: String
+  scheduleCalendarId: ID
+  scheduleCalendarColorId: String
   tasks: [Task]
   tags: [Tag]
   createdAt: GraphQLDateTime
@@ -109,5 +111,7 @@ input UserInput{
   email: EmailAddress
   isFirstSetupCompleted: Boolean
   calendarId: ID
-  calendarHexColorCode: HexColorCode
+  calendarColorId: String
+  scheduleCalendarId: ID
+  scheduleCalendarColorId: String
 }

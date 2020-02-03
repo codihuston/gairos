@@ -247,7 +247,9 @@ export const mockMutations = {
       $email: EmailAddress
       $isFirstSetupCompleted: Boolean
       $calendarId: ID
-      $calendarHexColorCode: HexColorCode
+      $calendarColorId: String
+      $scheduleCalendarId: ID
+      $scheduleCalendarColorId: String
     ) {
       updateMyProfile(
         input: {
@@ -255,7 +257,9 @@ export const mockMutations = {
           email: $email
           isFirstSetupCompleted: $isFirstSetupCompleted
           calendarId: $calendarId
-          calendarHexColorCode: $calendarHexColorCode
+          calendarColorId: $calendarColorId
+          scheduleCalendarId: $scheduleCalendarId
+          scheduleCalendarColorId: $scheduleCalendarColorId
         }
       ) {
         id
@@ -263,7 +267,9 @@ export const mockMutations = {
         email
         isFirstSetupCompleted
         calendarId
-        calendarHexColorCode
+        calendarColorId
+        scheduleCalendarId
+        scheduleCalendarColorId
         createdAt
         updatedAt
       }
