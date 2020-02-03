@@ -231,7 +231,7 @@ export default {
           summary: userTaskInfo.getEventName(startTime, endTime),
           description: userTaskInfo.getEventDescription(),
           // use given colorId, or default to colorId defaulted in userTask
-          colorId: eventColorId ? eventColorId : userTaskInfo.eventColorId,
+          colorId: colorDefault,
           start: {
             dateTime: startTime
           },

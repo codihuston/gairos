@@ -228,6 +228,8 @@ export default {
     }
 
     async updateUserTaskHistory(userId, input) {
+      let colorDefault = null;
+
       // find the existing history object
       const userTaskHistory = await this.getUserTaskHistory({
         where: {
@@ -274,8 +276,19 @@ export default {
         }
       }
 
+      // if given value is null, default to the color for this instance
+      if (input.eventColorId === null) {
+        colorDefault = userTaskHistory.eventColorId;
+        // if that is null, default to the color of the userTaskInfo
+        if (colorDefault === null) {
+          colorDefault = userTaskHistory.userTaskInfo.eventColorId;
+        }
+      }
+
       // update history
-      userTaskHistory.set(input);
+      const newValues = Object.assign({}, input);
+      newValues.eventColorId = colorDefault;
+      userTaskHistory.set(newValues);
       await userTaskHistory.save();
 
       return userTaskHistory;
