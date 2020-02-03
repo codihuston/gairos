@@ -89,15 +89,13 @@ export const mockMutations = {
     mutation createMyTask(
       $name: String!
       $description: String
-      $foregroundColor: HexColorCode
-      $backgroundColor: HexColorCode
+      $eventColorId: String
     ) {
       createMyTask(
         input: {
           name: $name
           description: $description
-          foregroundColor: $foregroundColor
-          backgroundColor: $backgroundColor
+          eventColorId: $eventColorId
         }
       ) {
         id
@@ -107,8 +105,7 @@ export const mockMutations = {
         userTaskInfo {
           id
           description
-          foregroundColor
-          backgroundColor
+          eventColorId
           createdAt
           updatedAt
         }
@@ -138,8 +135,7 @@ export const mockMutations = {
       $description: String
       $isPublic: Boolean
       $isArchived: Boolean
-      $foregroundColor: HexColorCode
-      $backgroundColor: HexColorCode
+      $eventColorId: String
     ) {
       updateMyTask(
         input: {
@@ -147,16 +143,14 @@ export const mockMutations = {
           description: $description
           isPublic: $isPublic
           isArchived: $isArchived
-          foregroundColor: $foregroundColor
-          backgroundColor: $backgroundColor
+          eventColorId: $eventColorId
         }
       ) {
         id
         description
         isPublic
         isArchived
-        foregroundColor
-        backgroundColor
+        eventColorId
         createdAt
         updatedAt
       }

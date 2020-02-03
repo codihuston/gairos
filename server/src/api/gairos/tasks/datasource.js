@@ -213,7 +213,7 @@ export default {
       const userTaskHistory = await this.models.userTaskHistory.create({
         userTaskId,
         eventId,
-        eventColorId,
+        eventColorId: eventColorId ? eventColorId : userTask.eventColorId,
         startTime,
         endTime
       });

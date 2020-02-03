@@ -51,8 +51,7 @@ type UserTaskInfo{
   description: String
   isPublic: Boolean
   isArchived: Boolean
-  foregroundColor: HexColorCode
-  backgroundColor: HexColorCode
+  eventColorId: String
   createdAt: GraphQLDateTime
   updatedAt: GraphQLDateTime
   task: Task

@@ -170,8 +170,8 @@ export default {
         // use the userTask instance to get event name/desc
         summary: userTask.getEventName(startTime, endTime),
         description: userTask.getEventDescription(),
-        // use the input for the rest of the values
-        colorId: eventColorId,
+        // use given colorId, or default to colorId defaulted in userTask
+        colorId: eventColorId ? eventColorId : userTask.eventColorId,
         start: {
           dateTime: startTime
         },
@@ -209,6 +209,20 @@ export default {
         );
       }
 
+      // define the defaults for this event color:
+
+      // if color defined in taskHistory is set, use it
+      let colorDefault = userTaskHistory.eventColorId
+        ? userTaskHistory.eventColorId
+        : null;
+      // if it isn't, then use the given color (input)
+      colorDefault = colorDefault
+        ? colorDefault
+        : eventColorId
+        ? // if no color given, default to the color defined in userTask
+          eventColorId
+        : userTaskInfo.eventColorId;
+
       // update it
       const res = await GoogleCalendar.events.update({
         calendarId,
@@ -216,7 +230,8 @@ export default {
         resource: {
           summary: userTaskInfo.getEventName(startTime, endTime),
           description: userTaskInfo.getEventDescription(),
-          colorId: eventColorId,
+          // use given colorId, or default to colorId defaulted in userTask
+          colorId: eventColorId ? eventColorId : userTaskInfo.eventColorId,
           start: {
             dateTime: startTime
           },

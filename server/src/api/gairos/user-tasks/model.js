@@ -26,14 +26,9 @@ const model = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false
       },
-      foregroundColor: {
+      eventColorId: {
         type: DataTypes.STRING,
-        defaultValue: "#ffffff",
-        nullable: true
-      },
-      backgroundColor: {
-        type: DataTypes.STRING,
-        defaultValue: "#5B89C9",
+        defaultValue: "1",
         nullable: true
       }
     },

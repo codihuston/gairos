@@ -98,8 +98,7 @@ describe("user integration tests", function() {
         const variables = {
           name: "FAKE TASK",
           description: "FAKE DESCRIPTION",
-          foregroundColor: "#ffffff",
-          backgroundColor: "#000000"
+          eventColorId: "1"
         };
         // set user in context as expected by the apollo server
         const context = getDefaultContext({ me: user });
@@ -526,8 +525,7 @@ describe("user integration tests", function() {
           description: "UPDATED DESCRIPTION",
           isPublic: false,
           isArchived: true,
-          foregroundColor: "#000000",
-          backgroundColor: "#ffffff"
+          eventColorId: "1"
         };
         // define the expected response
         const expected = Object.assign({}, variables);
