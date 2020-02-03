@@ -9,11 +9,11 @@ const model = (sequelize, DataTypes) => {
       },
       userTagId: {
         type: DataTypes.UUID,
-        nullable: false
+        allowNull: false
       },
       userTaskId: {
         type: DataTypes.UUID,
-        nullable: false
+        allowNull: false
       }
     },
     {

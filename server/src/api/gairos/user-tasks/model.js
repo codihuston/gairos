@@ -29,7 +29,7 @@ const model = (sequelize, DataTypes) => {
       eventColorId: {
         type: DataTypes.STRING,
         defaultValue: "1",
-        nullable: true
+        allowNull: false
       }
     },
     {

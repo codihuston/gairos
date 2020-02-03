@@ -9,19 +9,19 @@ const model = (sequelize, DataTypes) => {
       },
       googleId: {
         type: DataTypes.STRING,
-        nullable: false
+        allowNull: false
       },
       username: {
         type: DataTypes.STRING,
-        nullable: false
+        allowNull: false
       },
       displayNameLastFirst: {
         type: DataTypes.STRING,
-        nullable: true
+        allowNull: true
       },
       email: {
         type: DataTypes.STRING,
-        nullable: false
+        allowNull: false
       },
       isFirstSetupCompleted: {
         type: DataTypes.BOOLEAN,
@@ -42,22 +42,22 @@ const model = (sequelize, DataTypes) => {
       calendarId: {
         type: DataTypes.STRING,
         defaultValue: null,
-        nullable: true
+        allowNull: true
       },
       calendarColorId: {
         type: DataTypes.STRING,
         defaultValue: "1",
-        nullable: true
+        allowNull: true
       },
       scheduleCalendarId: {
         type: DataTypes.STRING,
         defaultValue: null,
-        nullable: true
+        allowNull: true
       },
       scheduleCalendarColorId: {
         type: DataTypes.STRING,
         defaultValue: "2",
-        nullable: true
+        allowNull: true
       }
     },
     {

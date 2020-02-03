@@ -12,20 +12,20 @@ const model = (sequelize, DataTypes) => {
       },
       eventId: {
         type: DataTypes.STRING,
-        nullable: true
+        allowNull: true
       },
       eventColorId: {
         type: DataTypes.STRING,
         defaultValue: "1",
-        nullable: true
+        allowNull: false
       },
       startTime: {
         type: DataTypes.DATE,
-        nullable: false
+        allowNull: false
       },
       endTime: {
         type: DataTypes.DATE,
-        nullable: true
+        allowNull: true
       }
     },
     {
