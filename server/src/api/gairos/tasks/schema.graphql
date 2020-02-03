@@ -67,7 +67,7 @@ input DeleteTaskInput{
 input CreateTaskHistoryInput{
   userTaskId: ID!
   eventId: ID
-  eventHexColorCode: HexColorCode
+  eventColorId: String
   startTime: GraphQLDateTime!
   endTime: GraphQLDateTime
 }
@@ -75,7 +75,7 @@ input CreateTaskHistoryInput{
 input UpdateTaskHistoryInput{
   id: ID!
   userTaskId: ID!
-  eventHexColorCode: HexColorCode
+  eventColorId: String
   startTime: GraphQLDateTime!
   endTime: GraphQLDateTime!
 }

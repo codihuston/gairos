@@ -224,7 +224,7 @@ describe("user integration tests", function() {
         const variables = {
           id: userTaskHistory.id,
           userTaskId: userTask.id,
-          eventHexColorCode: "#FF5733",
+          eventColorId: "2",
           startTime: nowAsISO,
           endTime: nowAsISO
         };

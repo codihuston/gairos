@@ -173,7 +173,7 @@ export const mockMutations = {
       $eventId: ID
       $startTime: GraphQLDateTime!
       $endTime: GraphQLDateTime
-      $eventHexColorCode: HexColorCode
+      $eventColorId: String
     ) {
       createMyTaskHistory(
         input: {
@@ -181,14 +181,14 @@ export const mockMutations = {
           eventId: $eventId
           startTime: $startTime
           endTime: $endTime
-          eventHexColorCode: $eventHexColorCode
+          eventColorId: $eventColorId
         }
       ) {
         id
         startTime
         endTime
         eventId
-        eventHexColorCode
+        eventColorId
         createdAt
         updatedAt
         userTaskInfo {
@@ -208,13 +208,13 @@ export const mockMutations = {
       $userTaskId: ID!
       $startTime: GraphQLDateTime!
       $endTime: GraphQLDateTime!
-      $eventHexColorCode: HexColorCode
+      $eventColorId: String
     ) {
       updateMyTaskHistory(
         input: {
           id: $id
           userTaskId: $userTaskId
-          eventHexColorCode: $eventHexColorCode
+          eventColorId: $eventColorId
           startTime: $startTime
           endTime: $endTime
         }
@@ -223,7 +223,7 @@ export const mockMutations = {
         startTime
         endTime
         eventId
-        eventHexColorCode
+        eventColorId
         createdAt
         updatedAt
         userTaskInfo {
