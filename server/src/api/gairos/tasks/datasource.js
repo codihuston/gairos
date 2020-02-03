@@ -184,7 +184,7 @@ export default {
 
     async createUserTaskHistory(
       userId,
-      { userTaskId, eventId, startTime, endTime }
+      { userTaskId, eventId, eventColorId, startTime, endTime }
     ) {
       // find the given userTaskId
       const userTask = await this.getUserTask({
@@ -213,6 +213,7 @@ export default {
       const userTaskHistory = await this.models.userTaskHistory.create({
         userTaskId,
         eventId,
+        eventColorId,
         startTime,
         endTime
       });

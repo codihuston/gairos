@@ -139,13 +139,15 @@ export default {
     }
 
     /**
+     * Creates a google event with a pre-existing gairos user task history
      *
      * @param {*} userTaskId
      * @param {*} calendarId
      * @param {*} input : input for createUserTaskHistory
      */
     async createEventWithUserTask(userTaskId, userId, calendarId, input) {
-      const { startTime, endTime } = input;
+      // destructured given input
+      const { startTime, endTime, eventColorId } = input;
 
       // ensure calendar exists before operating on it...
       await this.doesCalendarExist(calendarId);
@@ -165,8 +167,11 @@ export default {
 
       // create the event
       const event = await this.createEvent(calendarId, {
+        // use the userTask instance to get event name/desc
         summary: userTask.getEventName(startTime, endTime),
         description: userTask.getEventDescription(),
+        // use the input for the rest of the values
+        colorId: eventColorId,
         start: {
           dateTime: startTime
         },
@@ -189,8 +194,8 @@ export default {
      * @param {*} userTaskHistory: an instance of userTaskHistory with
      *            userTaskInfo (userTask) loaded
      */
-    async updateEvent(calendarId, eventId, input, userTaskHistory) {
-      const { startTime, endTime } = input;
+    async updateEventWithUserTask(calendarId, eventId, input, userTaskHistory) {
+      const { startTime, endTime, eventColorId } = input;
       const { userTaskInfo } = userTaskHistory;
 
       // ensure calendar exists before operating on it...
@@ -211,6 +216,7 @@ export default {
         resource: {
           summary: userTaskInfo.getEventName(startTime, endTime),
           description: userTaskInfo.getEventDescription(),
+          colorId: eventColorId,
           start: {
             dateTime: startTime
           },

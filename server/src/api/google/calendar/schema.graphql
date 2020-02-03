@@ -38,6 +38,7 @@ type GoogleEvent{
   summary: String!
   location: String
   description: String
+  colorId: String
   start: GoogleEventTime!
   end: GoogleEventTime!
   recurrence: [String]
@@ -66,6 +67,7 @@ input GoogleEventInput{
   summary: String
   location: String
   description: String
+  colorId: String
   start: GoogleEventTimeInput
   end: GoogleEventTimeInput
   recurrence: [String]

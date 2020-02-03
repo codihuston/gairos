@@ -278,7 +278,7 @@ export const mockMutations = {
 };
 
 export const mockResponses = {
-  updateEvent: {
+  updateEventWithUserTask: {
     raw: variables => ({
       id: variables.eventId,
       summary: "SOME GOOGLE CALENDAR EVENT NAME",

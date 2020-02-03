@@ -248,9 +248,9 @@ describe("user integration tests", function() {
         CalendarAPI.createEventWithUserTask.mockReturnValue(
           mockResponses.createEventWithUserTask.reduced(variables)
         );
-        CalendarAPI.updateEvent = jest.fn();
-        CalendarAPI.updateEvent.mockReturnValue(
-          mockResponses.updateEvent.reduced(variables)
+        CalendarAPI.updateEventWithUserTask = jest.fn();
+        CalendarAPI.updateEventWithUserTask.mockReturnValue(
+          mockResponses.updateEventWithUserTask.reduced(variables)
         );
 
         log("context", context({ req: null, res: null }));

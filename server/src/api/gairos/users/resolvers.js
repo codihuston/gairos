@@ -207,6 +207,7 @@ export default {
         try {
           const userId = input.userId ? input.userId : me.id;
 
+          // TODO: maybe save to gairos first, then add to google?
           // if the end time is specified
           if (input.endTime) {
             // save to google calendar with useterTaskInfo
@@ -250,7 +251,7 @@ export default {
           if (userTaskHistory.eventId) {
             try {
               // update the existing google calendar event
-              await dataSources.CalendarAPI.updateEvent(
+              await dataSources.CalendarAPI.updateEventWithUserTask(
                 me.calendarId,
                 userTaskHistory.eventId,
                 input,
