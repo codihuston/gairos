@@ -305,6 +305,13 @@ describe("user integration tests", function() {
 
         log("context", context({ req: null, res: null }));
 
+        // mock the 3rd party API used in this call
+        const { CalendarAPI } = dataSources;
+
+        // we really don't care what these return in either case
+        CalendarAPI.deleteEvent = jest.fn();
+        CalendarAPI.deleteEvent.mockReturnValue(mockResponses.deleteEvent);
+
         // init the test server
         const { mutate } = createTestClient(server);
 

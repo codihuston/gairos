@@ -327,5 +327,6 @@ export const mockResponses = {
         overrides: []
       }
     })
-  }
+  },
+  deleteEvent: true
 };
