@@ -29,8 +29,12 @@ export default {
       });
     }
 
-    async getOneUserTask(opts = {}) {
+    async getUserTask(opts = {}) {
       return await this.models.userTask.findOne(opts);
+    }
+
+    async getUserTaskHistory(opts = {}) {
+      return await this.models.userTaskHistory.findOne(opts);
     }
 
     async getUsers(id) {
@@ -79,7 +83,7 @@ export default {
 
     async renameUserTask(userId, input) {
       // find the existing task
-      const userTask = await this.getOneUserTask({
+      const userTask = await this.getUserTask({
         where: {
           userId,
           id: input.userTaskId
@@ -122,7 +126,7 @@ export default {
 
     async updateUserTask(userId, input) {
       // find the existing task
-      const userTask = await this.getOneUserTask({
+      const userTask = await this.getUserTask({
         where: {
           id: input.userTaskId
         }
@@ -147,7 +151,7 @@ export default {
 
     async deleteUserTask(userId, input) {
       // find the existing userTask
-      const userTask = await this.getOneUserTask({
+      const userTask = await this.getUserTask({
         where: {
           id: input.userTaskId
         }
@@ -183,7 +187,7 @@ export default {
       { userTaskId, googleEventId, startTime, endTime }
     ) {
       // find the given userTaskId
-      const userTask = await this.getOneUserTask({
+      const userTask = await this.getUserTask({
         where: {
           userId,
           id: userTaskId
@@ -224,7 +228,7 @@ export default {
 
     async updateUserTaskHistory(userId, input) {
       // find the existing history object
-      const userTaskHistory = await this.models.userTaskHistory.findOne({
+      const userTaskHistory = await this.getUserTaskHistory({
         where: {
           id: input.id
         },
@@ -276,20 +280,7 @@ export default {
       return userTaskHistory;
     }
 
-    async deleteUserTaskHistory(userId, input) {
-      // find the existing userTask
-      const userTaskHistory = await this.models.userTaskHistory.findOne({
-        where: {
-          id: input.id
-        },
-        include: [
-          {
-            model: this.models.userTask,
-            as: "userTaskInfo"
-          }
-        ]
-      });
-
+    async deleteUserTaskHistoryByInstance(userTaskHistory, userId, input) {
       // throw if it doesn't exist
       if (!userTaskHistory) {
         throw new Error("The given user task history does not exist!");
@@ -322,6 +313,26 @@ export default {
       });
 
       return [userTaskHistory, res];
+    }
+
+    async deleteUserTaskHistory(userId, input) {
+      // find the existing userTask
+      const userTaskHistory = await this.getUserTaskHistory({
+        where: {
+          id: input.id
+        },
+        include: [
+          {
+            model: this.models.userTask,
+            as: "userTaskInfo"
+          }
+        ]
+      });
+      return this.deleteUserTaskHistoryByInstance(
+        userTaskHistory,
+        userId,
+        input
+      );
     }
   }
 };

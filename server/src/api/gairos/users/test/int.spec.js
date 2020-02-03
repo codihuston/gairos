@@ -171,19 +171,9 @@ describe("user integration tests", function() {
         const { CalendarAPI } = dataSources;
 
         CalendarAPI.createEventWithUserTask = jest.fn();
-        CalendarAPI.createEventWithUserTask.mockReturnValue({
-          id: variables.googleEventId,
-          summary: "SOME GOOGLE CALENDAR EVENT NAME",
-          location: "SOME ADDRESS",
-          description: "SOME DESCRIPTION",
-          start: variables.startTime,
-          end: variables.endTime,
-          recurrence: ["SOME RECURRANCE VALUE"],
-          reminders: {
-            useDefault: true,
-            overrides: []
-          }
-        });
+        CalendarAPI.createEventWithUserTask.mockReturnValue(
+          mockResponses.createEventWithUserTask.reduced(variables)
+        );
 
         log("context", context({ req: null, res: null }));
 

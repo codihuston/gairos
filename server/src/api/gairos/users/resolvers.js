@@ -222,16 +222,17 @@ export default {
       async (parent, { input }, { me, dataSources }) => {
         try {
           const userId = input.userId ? input.userId : me.id;
-          // TODO: check if this instance has a googleID
+
+          // update in gairos
           const userTaskHistory = await dataSources.TaskAPI.updateUserTaskHistory(
             userId,
             input
           );
 
-          // if it does, we need to update to google calendar
+          // if it does, we need to update to google calendar (if there is one)
           if (userTaskHistory.googleEventId) {
             try {
-              // update the existing calendar
+              // update the existing google calendar event
               await dataSources.CalendarAPI.updateEvent(
                 me.calendarId,
                 userTaskHistory.googleEventId,
@@ -240,10 +241,11 @@ export default {
               );
             } catch (e) {
               /**
-               * if we get a "not found" error, then let's assume that the event
-               * does not exist; let's clear out the userTaskInfo.googleEventId
-               * and tell the end-user to re-submit; this should force it down the
-               * code path in which a new event is added to the calendar.
+               * if we get a "not found" error from the google API, then let's
+               * assume that the google event does not exist; let's clear out
+               * the userTaskInfo.googleEventId and tell the end-user to
+               * re-submit; this should force it down the code path in which
+               * a new event is added to the google calendar.
                *
                * if the error persists, the calendar likely does not exist.
                */
@@ -260,7 +262,7 @@ export default {
           }
           // if it does not, we need to create event in google calendar
           else {
-            // save to google calendar with useterTaskInfo
+            // save to google calendar with userTaskInfo
             const event = await dataSources.CalendarAPI.createEventWithUserTask(
               input.userTaskId,
               me.id,
@@ -287,36 +289,57 @@ export default {
       async (parent, { input }, { me, dataSources }) => {
         try {
           const userId = input.userId ? input.userId : me.id;
+          const { TaskAPI, CalendarAPI } = dataSources;
 
-          // delete from gairos
-          const [
-            userTaskHistory,
-            deletionResult
-          ] = await dataSources.TaskAPI.deleteUserTaskHistory(userId, input);
+          // get existing instance from gairos
+          let userTaskHistory = await TaskAPI.getUserTaskHistory({
+            where: {
+              id: input.id
+            },
+            include: [
+              {
+                model: TaskAPI.models.userTask,
+                as: "userTaskInfo"
+              }
+            ]
+          });
 
-          // delete from google
-          // TODO: there is an issue here that if another kind of google
-          // exception is thrown, the task history is deleted in gairos but
-          // not google, and as a result, is undeletable from here
-          // we need to delete it from google first, then gairos
+          // if no task was found, no deletion occured
+          if (!userTaskHistory) {
+            throw new Error("The given user task history does not exist!");
+          }
+
+          // delete from google before gairos (in case google throws an error
+          // that we can handle)
           try {
-            await dataSources.CalendarAPI.deleteEvent(
+            await CalendarAPI.deleteEvent(
               me.calendarId,
               userTaskHistory.googleEventId
             );
           } catch (e) {
-            // google returns 410 if a resource was already deleted; if this
-            // is the case, then this is not an error, and is what we expect
-            if (e.code !== 410) {
-              // otherwise, throw an error, and undo the deletion from gairos
-              // so that the end-user can re-delete it
-              userTaskHistory.deletedAt = null;
-              await userTaskHistory.save();
+            // google returns 410 if a resource was already deleted; 404 if the
+            // event or calendar could not be found. If either is the case,
+            // let's continue to delete the record from gairos after this
+            // exception occurs
+            if (e.code === 410 || e.code === 404) {
+              // do nothing
+            } else {
+              // otherwise, throw this error
               throw e;
             }
           }
 
-          return deletionResult;
+          // then delete from gairos
+          const [
+            taskHistoryInstance,
+            wasDeleted
+          ] = await TaskAPI.deleteUserTaskHistoryByInstance(
+            userTaskHistory,
+            userId,
+            input
+          );
+
+          return wasDeleted;
         } catch (e) {
           throw SequelizeErrorHandler(e);
         }
