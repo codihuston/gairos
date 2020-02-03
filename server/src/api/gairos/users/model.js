@@ -44,6 +44,11 @@ const model = (sequelize, DataTypes) => {
         defaultValue: null,
         nullable: true
       },
+      scheduleCalendarId: {
+        type: DataTypes.STRING,
+        defaultValue: null,
+        nullable: true
+      },
       calendarHexColorCode: {
         type: DataTypes.STRING,
         defaultValue: "#5B89C9",
