@@ -1,3 +1,8 @@
+/**
+ * See:
+ * - https://www.apollographql.com/docs/react/data/queries/#prerequisites
+ * - in the code editor on the docs site, select "HOOKS (JS)" from the dropdown
+ */
 import React from "react";
 import { useQuery } from "react-apollo";
 

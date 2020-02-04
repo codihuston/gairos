@@ -8,6 +8,7 @@ import { component as ExampleComponent } from "./components/Examples/ExampleComp
 import GoogleSignInButton from "./components/GoogleSignInButton";
 import { component as ApiVersionComponent } from "./components/Examples/ApiVersionQueryComponent";
 import { component as APIVersionQueryHookComponent } from "./components/Examples/ApiVersionQueryHook";
+import { component as APIVersionQueryHOC } from "./components/Examples/ApiVersionQueryHOC";
 
 function App({ apolloClient, isLoading }) {
   if (isLoading) {
@@ -30,6 +31,7 @@ function App({ apolloClient, isLoading }) {
           >
             Learn React
           </a>
+          <APIVersionQueryHOC />
           <ApiVersionComponent />
           <APIVersionQueryHookComponent />
           <ExampleComponent />

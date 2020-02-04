@@ -1,3 +1,9 @@
+/**
+ * See:
+ * - https://www.apollographql.com/docs/react/api/react-components/#query
+ * - https://www.apollographql.com/docs/react/data/queries/#prerequisites
+ * - in the code editor on the docs site, select "JavaScript" from the dropdown
+ */
 import React from "react";
 import { Query } from "react-apollo";
 
