@@ -26,20 +26,40 @@ export default {
      * instead
      */
     async get() {
-      return await this.models.task.findAll({
+      debug("call get()");
+
+      const res = await this.models.task.findAll({
         include: [this.models.user]
       });
+
+      debug("\tresult", res);
+
+      return res;
     }
 
     async getUserTask(opts = {}) {
-      return await this.models.userTask.findOne(opts);
+      debug("call getUserTask() with args", opts);
+
+      const res = await this.models.userTask.findOne(opts);
+
+      debug("\tresult", res);
+
+      return res;
     }
 
     async getUserTaskHistory(opts = {}) {
-      return await this.models.userTaskHistory.findOne(opts);
+      debug("call getUserTaskHistory() with args", opts);
+
+      const res = await this.models.userTaskHistory.findOne(opts);
+
+      debug("\tresult", res);
+
+      return res;
     }
 
     async getUsers(id) {
+      debug("call getUserTaskHistory() with args", id);
+
       const res = await this.models.task.findOne({
         where: {
           id
@@ -47,10 +67,14 @@ export default {
         include: [this.models.user]
       });
 
+      debug("\tresult", res);
+
       return res && res.users ? res.users : null;
     }
 
     async createUserTask(userId, input) {
+      debug("call createUserTask() with args", userId, input);
+
       let userTask = null;
 
       const [task, created] = await this.models.task.findOrCreate({
@@ -61,6 +85,9 @@ export default {
           name: input.name
         }
       });
+
+      debug("\ttask was created", created);
+      debug("\tcreated/found task", task);
 
       // create the user task
       userTask = await this.models.userTask.create({
@@ -80,10 +107,14 @@ export default {
       // join the json together (for gql response)
       task.userTaskInfo = await task.getUserTaskInfo();
 
+      debug("\tcreated userTask", userTask);
+      debug("\tresult", task);
+
       return task;
     }
 
     async renameUserTask(userId, input) {
+      debug("call renameUserTask() with args", userId, input);
       // find the existing task
       const userTask = await this.getUserTask({
         where: {
@@ -96,8 +127,13 @@ export default {
         throw new Error("The given user task does not exist!");
       }
 
+      debug("\tfound userTask", userTask);
+
       // throw if found, but not owned by the given userId
       const doesThisUserOwnThisTask = userTask.userId === userId;
+
+      debug("\tdoes user own this task?", doesThisUserOwnThisTask);
+
       if (!doesThisUserOwnThisTask) {
         throw new Error("The given user does not own this task!");
       }
@@ -112,6 +148,8 @@ export default {
         }
       });
 
+      debug("\ttask was created?", created);
+
       // update the userTask reference to task (in the database)
       await userTask.setTask(task);
 
@@ -123,10 +161,14 @@ export default {
       // join the json together (for gql response)
       task.userTaskInfo = await task.getUserTaskInfo();
 
+      debug("\tresult", task);
+
       return task;
     }
 
     async updateUserTask(userId, input) {
+      debug("\tcall updateUserTask() with args", userId, input);
+
       // find the existing task
       const userTask = await this.getUserTask({
         where: {
@@ -134,12 +176,17 @@ export default {
         }
       });
 
+      debug("\tfound userTask", userTask);
+
       if (!userTask) {
         throw new Error("The given user task does not exist!");
       }
 
       // throw if found, but not owned by the given userId
       const doesThisUserOwnThisTask = userTask.userId === userId;
+
+      debug("\tdoes user own this task?", doesThisUserOwnThisTask);
+
       if (!doesThisUserOwnThisTask) {
         throw new Error("The given user does not own this task!");
       }
@@ -148,16 +195,22 @@ export default {
       await userTask.set(input);
       await userTask.save();
 
+      debug("\tresult", userTask);
+
       return userTask;
     }
 
     async deleteUserTask(userId, input) {
+      debug("call deleteUserTask() with args", userId, input);
+
       // find the existing userTask
       const userTask = await this.getUserTask({
         where: {
           id: input.userTaskId
         }
       });
+
+      debug("\tfound userTask", userTask);
 
       // throw if it doesn't exist
       if (!userTask) {
@@ -166,6 +219,9 @@ export default {
 
       // throw if found, but not owned by the given userId
       const doesThisUserOwnThisTask = userTask.userId === userId;
+
+      debug("\tdoes user own this task", doesThisUserOwnThisTask);
+
       if (!doesThisUserOwnThisTask) {
         throw new Error("The given user does not own this task!");
       }
@@ -180,6 +236,8 @@ export default {
           id: input.userTaskId
         }
       });
+
+      debug("\tresult", res);
 
       return res;
     }
@@ -347,6 +405,13 @@ export default {
     }
 
     async deleteUserTaskHistoryByInstance(userTaskHistory, userId, input) {
+      debug(
+        "call deleteUserTaskHistoryByInstance() with args",
+        userTaskHistory,
+        userId,
+        input
+      );
+
       // throw if it doesn't exist
       if (!userTaskHistory) {
         throw new Error("The given user task history does not exist!");
@@ -365,6 +430,9 @@ export default {
       // confirm that the user owns it
       const doesThisUserOwnUserTask =
         userTaskHistory.userTaskInfo.userId === userId;
+
+      debug("\t does user own this task", doesThisUserOwnUserTask);
+
       if (!doesThisUserOwnUserTask) {
         throw new Error(
           "This user does not own the given task history record!"
@@ -378,10 +446,14 @@ export default {
         }
       });
 
+      debug("\t result (as array)", [userTaskHistory, res]);
+
       return [userTaskHistory, res];
     }
 
     async deleteUserTaskHistory(userId, input) {
+      debug("call deleteUserTaskHistory() with args", userId, input);
+
       // find the existing userTask
       const userTaskHistory = await this.getUserTaskHistory({
         where: {
