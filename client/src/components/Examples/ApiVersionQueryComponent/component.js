@@ -1,5 +1,5 @@
 import React from "react";
-import { graphql, Query } from "react-apollo";
+import { Query } from "react-apollo";
 
 import { getVersion } from "./queries";
 
@@ -28,4 +28,4 @@ class ApiVersion extends React.Component {
   }
 }
 
-export default graphql(getVersion)(ApiVersion);
+export default ApiVersion;
