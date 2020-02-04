@@ -1,4 +1,7 @@
 import { DataSource } from "apollo-datasource";
+import debugLib from "debug";
+
+const debug = debugLib("server:UserAPI");
 
 export default {
   name: "UserAPI",
@@ -28,6 +31,8 @@ export default {
     }
 
     async getTags(userId) {
+      debug("call getTags() with args", userId);
+
       const res = await this.models.userTag.findAll({
         include: [
           {
@@ -56,10 +61,14 @@ export default {
         }
       });
 
+      debug("\tresult", res);
+
       return res;
     }
 
     async getTasks(userId) {
+      debug("call getTasks() with args", userId);
+
       // fetch data
       const res = await this.models.user.findOne({
         where: {
@@ -78,11 +87,15 @@ export default {
         ]
       });
 
+      debug("\tresult", res);
+
       // return data shaped to what the graphql schema expects
       return res && res.tasks ? res.tasks : [];
     }
 
     async getTaskHistory(userId) {
+      debug("call getTaskHistory() with args", userId);
+
       const res = await this.models.userTaskHistory.findAll({
         include: [
           {
@@ -100,6 +113,8 @@ export default {
         ]
       });
 
+      debug("\tresult", res);
+
       return res;
     }
 
@@ -110,6 +125,8 @@ export default {
      * @param {*} opts
      */
     async update(userId, input) {
+      debug("call update() with args", userId, input);
+
       const user = await this.models.user.findOne({
         where: {
           id: userId
@@ -119,6 +136,8 @@ export default {
       user.set(input);
 
       await user.save();
+
+      debug("\tresult after save", user);
 
       return user;
     }
@@ -130,6 +149,8 @@ export default {
      * @param {*} opts
      */
     async deleteAccount(userId) {
+      debug("call update() with args", userId);
+
       // remove default scope so we can find any potentially softDeleted user
       const user = await this.models.user.unscoped().findOne({
         where: {
@@ -137,10 +158,14 @@ export default {
         }
       });
 
+      debug("\tfound user", user);
+
       // actually destroy it
       const res = await user.destroy({
         force: true
       });
+
+      debug("\tresult after delete", res);
 
       return res ? true : false;
     }
