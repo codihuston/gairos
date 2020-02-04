@@ -7,20 +7,32 @@ import { isAuthenticated, isGivenUser } from "../../../middleware/graphql";
 
 export default {
   Query: {
-    me: async (parent, args, { me, dataSources }) => {
-      return me;
-    },
-    getMyTags: async (parent, args, { me, dataSources }) => {
-      const res = await dataSources.UserAPI.getTags(me.id);
-      return res;
-    },
-    getMyTasks: async (parent, args, { me, dataSources }) => {
-      const res = await dataSources.UserAPI.getTasks(me.id);
-      return res;
-    },
-    getMyTaskHistory: async (parent, args, { me, dataSources }) => {
-      return await dataSources.UserAPI.getTaskHistory(me.id);
-    }
+    me: combineResolvers(
+      isAuthenticated,
+      async (parent, args, { me, dataSources }) => {
+        return me;
+      }
+    ),
+    getMyTags: combineResolvers(
+      isAuthenticated,
+      async (parent, args, { me, dataSources }) => {
+        const res = await dataSources.UserAPI.getTags(me.id);
+        return res;
+      }
+    ),
+    getMyTasks: combineResolvers(
+      isAuthenticated,
+      async (parent, args, { me, dataSources }) => {
+        const res = await dataSources.UserAPI.getTasks(me.id);
+        return res;
+      }
+    ),
+    getMyTaskHistory: combineResolvers(
+      isAuthenticated,
+      async (parent, args, { me, dataSources }) => {
+        return await dataSources.UserAPI.getTaskHistory(me.id);
+      }
+    )
   },
   Mutation: {
     /**
