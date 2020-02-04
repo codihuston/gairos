@@ -1,5 +1,5 @@
 import { createTestClient } from "apollo-server-testing";
-import debug from "debug";
+import debugLib from "debug";
 import moment from "moment";
 
 import DatabaseConnector from "../../../../db";
@@ -36,7 +36,7 @@ describe("user integration tests", function() {
 
   describe("creates entities related to user", function() {
     it("creates user tag", async function() {
-      const log = debug("test:creates user tag");
+      const debug = debugLib("test:creates user tag");
 
       try {
         // define data used for query/mutation
@@ -56,7 +56,7 @@ describe("user integration tests", function() {
           context
         });
 
-        log("context", context({ req: null, res: null }));
+        debug("context", context({ req: null, res: null }));
 
         // init the test server
         const { mutate } = createTestClient(server);
@@ -67,7 +67,7 @@ describe("user integration tests", function() {
           variables
         });
 
-        log("result", JSON.stringify(res, null, 4));
+        debug("result", JSON.stringify(res, null, 4));
 
         expect(res.errors).toBeUndefined();
         expect(res.data).toHaveProperty(mutationName);
@@ -89,7 +89,7 @@ describe("user integration tests", function() {
     });
 
     it("creates user task", async function() {
-      const log = debug("test:creates user task");
+      const debug = debugLib("test:creates user task");
 
       try {
         // define data used for query/mutation
@@ -108,7 +108,7 @@ describe("user integration tests", function() {
           context
         });
 
-        log("context", context({ req: null, res: null }));
+        debug("context", context({ req: null, res: null }));
 
         // init the test server
         const { mutate } = createTestClient(server);
@@ -119,7 +119,7 @@ describe("user integration tests", function() {
           variables
         });
 
-        log("result", JSON.stringify(res, null, 4));
+        debug("result", JSON.stringify(res, null, 4));
 
         expect(res.errors).toBeUndefined();
         expect(res.data).toHaveProperty(mutationName);
@@ -141,7 +141,7 @@ describe("user integration tests", function() {
     });
 
     it("creates user task history", async function() {
-      const log = debug("test:creates user task history");
+      const debug = debugLib("test:creates user task history");
 
       try {
         // get current time in milliseconds
@@ -174,7 +174,7 @@ describe("user integration tests", function() {
           mockResponses.createEventWithUserTask.reduced(variables)
         );
 
-        log("context", context({ req: null, res: null }));
+        debug("context", context({ req: null, res: null }));
 
         // init the test server
         const { mutate } = createTestClient(server);
@@ -185,7 +185,7 @@ describe("user integration tests", function() {
           variables
         });
 
-        log("result", JSON.stringify(res, null, 4));
+        debug("result", JSON.stringify(res, null, 4));
 
         expect(res.errors).toBeUndefined();
         expect(res.data).toHaveProperty(mutationName);
@@ -212,7 +212,7 @@ describe("user integration tests", function() {
   // do this first, so we don't run into FK error on deleting a user task
   describe("user task history", function() {
     it("updates user task history", async function() {
-      const log = debug("test:updates user task history");
+      const debug = debugLib("test:updates user task history");
 
       try {
         // get current time in milliseconds
@@ -252,7 +252,7 @@ describe("user integration tests", function() {
           mockResponses.updateEventWithUserTask.reduced(variables)
         );
 
-        log("context", context({ req: null, res: null }));
+        debug("context", context({ req: null, res: null }));
 
         // init the test server
         const { mutate } = createTestClient(server);
@@ -263,7 +263,7 @@ describe("user integration tests", function() {
           variables
         });
 
-        log("result", JSON.stringify(res, null, 4));
+        debug("result", JSON.stringify(res, null, 4));
 
         expect(res.errors).toBeUndefined();
         expect(res.data).toHaveProperty(mutationName);
@@ -275,7 +275,7 @@ describe("user integration tests", function() {
     });
 
     it("deletes user task history", async function() {
-      const log = debug("test:deletes user task history");
+      const debug = debugLib("test:deletes user task history");
 
       try {
         // define data used for query/mutation
@@ -292,7 +292,7 @@ describe("user integration tests", function() {
           context
         });
 
-        log("context", context({ req: null, res: null }));
+        debug("context", context({ req: null, res: null }));
 
         // mock the 3rd party API used in this call
         const { CalendarAPI } = dataSources;
@@ -310,7 +310,7 @@ describe("user integration tests", function() {
           variables
         });
 
-        log("result", JSON.stringify(res, null, 4));
+        debug("result", JSON.stringify(res, null, 4));
 
         expect(res.errors).toBeUndefined();
         expect(res.data[mutationName]).toEqual(true);
@@ -323,7 +323,7 @@ describe("user integration tests", function() {
 
   describe("user tags", function() {
     it("renames user tag", async function() {
-      const log = debug("test:renames user tag");
+      const debug = debugLib("test:renames user tag");
 
       try {
         // define data used for query/mutation
@@ -345,7 +345,7 @@ describe("user integration tests", function() {
           context
         });
 
-        log("context", context({ req: null, res: null }));
+        debug("context", context({ req: null, res: null }));
 
         // init the test server
         const { mutate } = createTestClient(server);
@@ -356,7 +356,7 @@ describe("user integration tests", function() {
           variables
         });
 
-        log("result", JSON.stringify(res, null, 4));
+        debug("result", JSON.stringify(res, null, 4));
 
         expect(res.errors).toBeUndefined();
         expect(res.data).toHaveProperty(mutationName);
@@ -372,7 +372,7 @@ describe("user integration tests", function() {
     });
 
     it("updates user tag", async function() {
-      const log = debug("test:updates user tag");
+      const debug = debugLib("test:updates user tag");
 
       try {
         // define data used for query/mutation
@@ -398,7 +398,7 @@ describe("user integration tests", function() {
           context
         });
 
-        log("context", context({ req: null, res: null }));
+        debug("context", context({ req: null, res: null }));
 
         // init the test server
         const { mutate } = createTestClient(server);
@@ -409,7 +409,7 @@ describe("user integration tests", function() {
           variables
         });
 
-        log("result", JSON.stringify(res, null, 4));
+        debug("result", JSON.stringify(res, null, 4));
 
         expect(res.errors).toBeUndefined();
         expect(res.data).toHaveProperty(mutationName);
@@ -424,7 +424,7 @@ describe("user integration tests", function() {
     });
 
     it("deletes user tag", async function() {
-      const log = debug("test:deletes user tag");
+      const debug = debugLib("test:deletes user tag");
 
       try {
         // define data used for query/mutation
@@ -441,7 +441,7 @@ describe("user integration tests", function() {
           context
         });
 
-        log("context", context({ req: null, res: null }));
+        debug("context", context({ req: null, res: null }));
 
         // init the test server
         const { mutate } = createTestClient(server);
@@ -452,7 +452,7 @@ describe("user integration tests", function() {
           variables
         });
 
-        log("result", JSON.stringify(res, null, 4));
+        debug("result", JSON.stringify(res, null, 4));
 
         expect(res.errors).toBeUndefined();
         expect(res.data[mutationName]).toEqual(true);
@@ -465,7 +465,7 @@ describe("user integration tests", function() {
 
   describe("user tasks", function() {
     it("renames user task", async function() {
-      const log = debug("test: renames user task");
+      const debug = debugLib("test: renames user task");
 
       try {
         // define data used for query/mutation
@@ -487,7 +487,7 @@ describe("user integration tests", function() {
           context
         });
 
-        log("context", context({ req: null, res: null }));
+        debug("context", context({ req: null, res: null }));
 
         // init the test server
         const { mutate } = createTestClient(server);
@@ -498,7 +498,7 @@ describe("user integration tests", function() {
           variables
         });
 
-        log("result", JSON.stringify(res, null, 4));
+        debug("result", JSON.stringify(res, null, 4));
 
         expect(res.errors).toBeUndefined();
         expect(res.data).toHaveProperty(mutationName);
@@ -514,7 +514,7 @@ describe("user integration tests", function() {
     });
 
     it("updates user task", async function() {
-      const log = debug("test:updates user task");
+      const debug = debugLib("test:updates user task");
 
       try {
         // define data used for query/mutation
@@ -540,7 +540,7 @@ describe("user integration tests", function() {
           context
         });
 
-        log("context", context({ req: null, res: null }));
+        debug("context", context({ req: null, res: null }));
 
         // init the test server
         const { mutate } = createTestClient(server);
@@ -551,7 +551,7 @@ describe("user integration tests", function() {
           variables
         });
 
-        log("result", JSON.stringify(res, null, 4));
+        debug("result", JSON.stringify(res, null, 4));
 
         expect(res.errors).toBeUndefined();
         expect(res.data).toHaveProperty(mutationName);
@@ -563,7 +563,7 @@ describe("user integration tests", function() {
     });
 
     it("deletes user task", async function() {
-      const log = debug("test:deletes user task");
+      const debug = debugLib("test:deletes user task");
 
       try {
         // define data used for query/mutation
@@ -580,7 +580,7 @@ describe("user integration tests", function() {
           context
         });
 
-        log("context", context({ req: null, res: null }));
+        debug("context", context({ req: null, res: null }));
 
         // init the test server
         const { mutate } = createTestClient(server);
@@ -591,7 +591,7 @@ describe("user integration tests", function() {
           variables
         });
 
-        log("result", JSON.stringify(res, null, 4));
+        debug("result", JSON.stringify(res, null, 4));
 
         expect(res.errors).toBeUndefined();
         expect(res.data[mutationName]).toEqual(true);
@@ -604,7 +604,7 @@ describe("user integration tests", function() {
 
   describe("user profile", function() {
     it("updates user's profile", async function() {
-      const log = debug("test:updates user profile");
+      const debug = debugLib("test:updates user profile");
 
       try {
         // define data used for query/mutation
@@ -630,7 +630,7 @@ describe("user integration tests", function() {
           context
         });
 
-        log("context", context({ req: null, res: null }));
+        debug("context", context({ req: null, res: null }));
 
         // init the test server
         const { mutate } = createTestClient(server);
@@ -641,7 +641,7 @@ describe("user integration tests", function() {
           variables
         });
 
-        log("result", JSON.stringify(res, null, 4));
+        debug("result", JSON.stringify(res, null, 4));
 
         expect(res.errors).toBeUndefined();
         expect(res.data).toHaveProperty(mutationName);
