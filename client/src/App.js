@@ -6,6 +6,7 @@ import logo from "./logo.svg";
 import "./App.css";
 import { component as ExampleComponent } from "./components/ExampleComponent";
 import GoogleSignInButton from "./components/GoogleSignInButton";
+import ApiVersionComponent from "./components/ApiVersion/component";
 
 function App({ apolloClient, isLoading }) {
   if (isLoading) {
@@ -28,6 +29,7 @@ function App({ apolloClient, isLoading }) {
           >
             Learn React
           </a>
+          <ApiVersionComponent />
           <ExampleComponent />
           <GoogleSignInButton />
         </header>
