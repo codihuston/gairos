@@ -3,7 +3,7 @@ import debugLib from "debug";
 
 import { GoogleCalendar } from "../../";
 
-const debug = debugLib("server:calendar api");
+const debug = debugLib("server:CalendarAPI");
 
 /**
  * TODO: possibly revert to OAuth2 web requests instead of nodejs client for
