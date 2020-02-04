@@ -22,6 +22,15 @@ function App({ apolloClient, isLoading }) {
         <div>TODO: IMPLEMENT NAVIGATION</div>
         <Switch>
           <Route path="/login">QQ</Route>
+          <Route path="/examples/api-version/higher-order-component">
+            <APIVersionQueryHOC />
+          </Route>
+          <Route path="/examples/api-version/hook">
+            <APIVersionQueryHookComponent />
+          </Route>
+          <Route path="/examples/api-version/component">
+            <ApiVersionComponent />
+          </Route>
           <Route path="/">
             <div className="App">
               <header className="App-header">
@@ -37,9 +46,6 @@ function App({ apolloClient, isLoading }) {
                 >
                   Learn React
                 </a>
-                <APIVersionQueryHOC />
-                <ApiVersionComponent />
-                <APIVersionQueryHookComponent />
                 <ExampleComponent />
                 <GoogleSignInButton />
               </header>
