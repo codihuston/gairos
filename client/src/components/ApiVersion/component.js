@@ -1,16 +1,30 @@
 import React from "react";
-import { graphql } from "react-apollo";
+import { graphql, Query } from "react-apollo";
 
 import { getVersion } from "./queries";
 
 class ApiVersion extends React.Component {
   render() {
-    const { version } = this.props.data;
-
-    if (!version) {
-      return <div>Loading...</div>;
-    }
-    return <div>API Version: {version}</div>;
+    return (
+      <Query query={getVersion} errorPolicy="all">
+        {({ error, data, loading }) => {
+          if (loading) {
+            return <span>loading...</span>;
+          }
+          if (error) {
+            return (
+              <pre>
+                Bad:{" "}
+                {error.graphQLErrors.map(({ message }, i) => (
+                  <span key={i}>{message}</span>
+                ))}
+              </pre>
+            );
+          }
+          return <div>API Version: {data.version}</div>;
+        }}
+      </Query>
+    );
   }
 }
 

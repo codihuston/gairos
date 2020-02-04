@@ -1,16 +1,35 @@
-import { ApolloClient } from "apollo-boost";
-import { HttpLink, InMemoryCache } from "apollo-boost";
+import {
+  ApolloClient,
+  ApolloLink,
+  HttpLink,
+  InMemoryCache
+} from "apollo-boost";
 import { CachePersistor } from "apollo-cache-persist";
 import { getApiGraphqlUrl } from "../config";
+import { onError } from "apollo-link-error";
 
 const API_HOST = "http://localhost:8000/graphql";
 const SCHEMA_VERSION = "1";
 const SCHEMA_VERSION_KEY = "apollo-schema-version";
 
+const httpLink = new HttpLink({
+  uri: getApiGraphqlUrl()
+});
+
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors)
+    graphQLErrors.map(({ message, locations, path }) =>
+      console.log(
+        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+      )
+    );
+
+  if (networkError) console.log(`[Network error]: ${networkError}`);
+});
+
 const getApolloClient = async () => {
-  const httpLink = new HttpLink({
-    uri: getApiGraphqlUrl()
-  });
+  const link = ApolloLink.from([errorLink, httpLink]);
+
   const cache = new InMemoryCache();
 
   const persistor = new CachePersistor({
@@ -27,7 +46,7 @@ const getApolloClient = async () => {
     window.localStorage.setItem(SCHEMA_VERSION_KEY, SCHEMA_VERSION);
   }
 
-  return new ApolloClient({ link: httpLink, cache });
+  return new ApolloClient({ link, cache });
 };
 
 export default getApolloClient;
