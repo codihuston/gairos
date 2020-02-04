@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { ApolloProvider } from "react-apollo";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 import logo from "./logo.svg";
 import "./App.css";
@@ -17,27 +18,35 @@ function App({ apolloClient, isLoading }) {
 
   return (
     <ApolloProvider client={apolloClient}>
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          <APIVersionQueryHOC />
-          <ApiVersionComponent />
-          <APIVersionQueryHookComponent />
-          <ExampleComponent />
-          <GoogleSignInButton />
-        </header>
-      </div>
+      <Router>
+        <div>TODO: IMPLEMENT NAVIGATION</div>
+        <Switch>
+          <Route path="/login">QQ</Route>
+          <Route path="/">
+            <div className="App">
+              <header className="App-header">
+                <img src={logo} className="App-logo" alt="logo" />
+                <p>
+                  Edit <code>src/App.js</code> and save to reload.
+                </p>
+                <a
+                  className="App-link"
+                  href="https://reactjs.org"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Learn React
+                </a>
+                <APIVersionQueryHOC />
+                <ApiVersionComponent />
+                <APIVersionQueryHookComponent />
+                <ExampleComponent />
+                <GoogleSignInButton />
+              </header>
+            </div>
+          </Route>
+        </Switch>
+      </Router>
     </ApolloProvider>
   );
 }
