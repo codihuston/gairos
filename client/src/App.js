@@ -1,9 +1,9 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { ApolloProvider } from "react-apollo";
 
 import logo from "./logo.svg";
 import "./App.css";
-import "./config/globals";
 import { component as ExampleComponent } from "./components/ExampleComponent";
 import GoogleSignInButton from "./components/GoogleSignInButton";
 
@@ -35,5 +35,10 @@ function App({ apolloClient, isLoading }) {
     </ApolloProvider>
   );
 }
+
+App.propTypes = {
+  apolloClient: PropTypes.object,
+  isLoading: PropTypes.bool
+};
 
 export default App;
