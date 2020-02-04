@@ -1,6 +1,7 @@
 import { ApolloClient } from "apollo-boost";
 import { HttpLink, InMemoryCache } from "apollo-boost";
 import { CachePersistor } from "apollo-cache-persist";
+import { getApiGraphqlUrl } from "../config";
 
 const API_HOST = "http://localhost:8000/graphql";
 const SCHEMA_VERSION = "1";
@@ -8,7 +9,7 @@ const SCHEMA_VERSION_KEY = "apollo-schema-version";
 
 const getApolloClient = async () => {
   const httpLink = new HttpLink({
-    uri: API_HOST
+    uri: getApiGraphqlUrl()
   });
   const cache = new InMemoryCache();
 

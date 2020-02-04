@@ -3,6 +3,9 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import * as serviceWorker from "./serviceWorker";
 
+// init any custom globals
+import "./config";
+
 // import custom app container
 import AppContainer from "./components/AppContainer/component";
 
