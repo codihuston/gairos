@@ -4,9 +4,9 @@ import { ApolloProvider } from "react-apollo";
 
 import logo from "./logo.svg";
 import "./App.css";
-import { component as ExampleComponent } from "./components/ExampleComponent";
+import { component as ExampleComponent } from "./components/Examples/ExampleComponent";
 import GoogleSignInButton from "./components/GoogleSignInButton";
-import ApiVersionComponent from "./components/ApiVersion/component";
+import { component as ApiVersionComponent } from "./components/Examples/ApiVersionQueryComponent";
 
 function App({ apolloClient, isLoading }) {
   if (isLoading) {
