@@ -7,7 +7,7 @@ class GoogleSignInButton extends React.Component {
       // TODO: variablize href
       <a className="btn-google" href={window.API_AUTH_URL}>
         <div className="btn-google__content">
-          <img src={GoogleSignin}></img>
+          <img src={GoogleSignin} alt="Google Sign In Button"></img>
           <span>Sign in with Google</span>
         </div>
       </a>
