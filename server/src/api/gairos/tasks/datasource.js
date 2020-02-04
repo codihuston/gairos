@@ -1,4 +1,6 @@
 import { DataSource } from "apollo-datasource";
+import debug from "debug";
+const log = debug("server:TaskAPI");
 
 export default {
   name: "TaskAPI",
@@ -186,6 +188,14 @@ export default {
       userId,
       { userTaskId, eventId, eventColorId, startTime, endTime }
     ) {
+      log("call createUserTaskHistory() with args", userId, {
+        userTaskId,
+        eventId,
+        eventColorId,
+        startTime,
+        endTime
+      });
+
       // find the given userTaskId
       const userTask = await this.getUserTask({
         where: {
@@ -199,12 +209,17 @@ export default {
         ]
       });
 
+      log("\tfound userTask", userTask);
+
       if (!userTask) {
         throw new Error("The given user task does not exist!");
       }
 
       // confirm that this user owns this task
       const doesThisUserOwnThisUserTask = userTask.userId === userId;
+
+      log("\tdoes user own this task?", doesThisUserOwnThisUserTask);
+
       if (!doesThisUserOwnThisUserTask) {
         throw new Error("This user does not own the given task!");
       }
@@ -224,11 +239,14 @@ export default {
       // combine json for response
       userTaskHistory.userTaskInfo = userTask;
 
+      log("\tcreated user task history", userTaskHistory);
       return userTaskHistory;
     }
 
     async updateUserTaskHistory(userId, input) {
-      let colorDefault = null;
+      let colorDefault = input.eventColorId;
+
+      log("call updateUserTaskHistory() with args", userId, input);
 
       // find the existing history object
       const userTaskHistory = await this.getUserTaskHistory({
@@ -251,6 +269,8 @@ export default {
         ]
       });
 
+      log("\tfound userTaskHistory", userTaskHistory);
+
       if (!userTaskHistory) {
         throw new Error("The given user task history does not exist!");
       }
@@ -260,36 +280,65 @@ export default {
         // TODO: an exception is thrown if a given userTaskId does not exist
         // in userTask table
 
+        log("\tbegin updating userTaskId");
+
         // confirm that the user task exists (should be eager loaded by now)
-        if (
-          !userTaskHistory.userTaskInfo &&
-          userTaskHistory.userTaskInfo.userId
-        ) {
+        const doesUserTaskExist =
+          !userTaskHistory.userTaskInfo && userTaskHistory.userTaskInfo.userId;
+
+        log("\t does this userTask exist on this instance?", doesUserTaskExist);
+
+        if (doesUserTaskExist) {
           throw new Error("The given user task does not exist!");
         }
 
         // confirm that the user owns it
         const doesThisUserOwnUserTask =
           userTaskHistory.userTaskInfo.userId === userId;
+
+        log("\t does this user own this userTask?", doesThisUserOwnUserTask);
+
         if (!doesThisUserOwnUserTask) {
           throw new Error("This user does not own the given task!");
         }
+
+        log(
+          "\tbegin updating userTaskId from",
+          userTaskHistory.userTaskInfo.id,
+          "to",
+          input.userTaskId,
+          "(can be the same)"
+        );
       }
 
-      // if given value is null, default to the color for this instance
-      if (input.eventColorId === null) {
+      // always use a given eventColorId
+      log("\tdefault color id to input value", colorDefault);
+
+      // if it is null, fall back to the eventColorId in the userTaskHistory
+      if (colorDefault === null) {
         colorDefault = userTaskHistory.eventColorId;
-        // if that is null, default to the color of the userTaskInfo
-        if (colorDefault === null) {
-          colorDefault = userTaskHistory.userTaskInfo.eventColorId;
-        }
+        log("\tdefault color id to userTaskHistory value", colorDefault);
       }
+
+      // if the color for this history instance is null, use the userTask color
+      if (
+        colorDefault === null &&
+        userTaskHistory.userTaskInfo &&
+        userTaskHistory.userTaskInfo.eventColorId
+      ) {
+        log("\tdefault color id to userTask value", colorDefault);
+        colorDefault = userTaskHistory.userTaskInfo.eventColorId;
+      }
+
+      log("\tdetermined color id", colorDefault);
 
       // update history
       const newValues = Object.assign({}, input);
       newValues.eventColorId = colorDefault;
       userTaskHistory.set(newValues);
       await userTaskHistory.save();
+
+      log("\tresults", userTaskHistory);
 
       return userTaskHistory;
     }
