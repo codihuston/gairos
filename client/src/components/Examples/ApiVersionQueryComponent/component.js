@@ -21,7 +21,7 @@ class ApiVersion extends React.Component {
               </pre>
             );
           }
-          return <div>API Version: {data.version}</div>;
+          return <div>API Version (Using Query Component): {data.version}</div>;
         }}
       </Query>
     );
