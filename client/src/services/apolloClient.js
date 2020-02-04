@@ -18,11 +18,12 @@ const httpLink = new HttpLink({
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
-    graphQLErrors.map(({ message, locations, path }) =>
-      console.log(
-        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
-      )
-    );
+    graphQLErrors.map(({ message, locations, path }) => {
+      console.log(`[GraphQL error]: Message: ${message}`);
+      // TODO: do not display this in production
+      console.log(`[GraphQL error]: Location`, locations);
+      console.log(`[GraphQL error]: Path`, path);
+    });
 
   if (networkError) console.log(`[Network error]: ${networkError}`);
 });
