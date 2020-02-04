@@ -13,14 +13,14 @@ import { getVersion } from "./queries";
 
 class ApiVersion extends React.Component {
   render() {
-    if (this.props.loading) {
+    if (this.props.data.loading) {
       return <span>loading...</span>;
     }
-    if (this.props.error) {
+    if (this.props.data.error) {
       return (
         <pre>
           Bad:{" "}
-          {this.props.error.graphQLErrors.map(({ message }, i) => (
+          {this.props.data.error.graphQLErrors.map(({ message }, i) => (
             <span key={i}>{message}</span>
           ))}
         </pre>

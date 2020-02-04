@@ -8,6 +8,7 @@ import React from "react";
 import { Query } from "react-apollo";
 
 import { getVersion } from "./queries";
+import { component as Loading } from "../../LoadingComponent";
 
 class ApiVersion extends React.Component {
   render() {
@@ -15,7 +16,7 @@ class ApiVersion extends React.Component {
       <Query query={getVersion} errorPolicy="all">
         {({ error, data, loading }) => {
           if (loading) {
-            return <span>loading...</span>;
+            return <Loading />;
           }
           if (error) {
             return (
