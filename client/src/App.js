@@ -4,7 +4,7 @@ import { ApolloProvider } from "react-apollo";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import logo from "./logo.svg";
-import "./App.css";
+import "./scss/main.scss";
 import { component as ExampleComponent } from "./components/Examples/ExampleComponent";
 import GoogleSignInButton from "./components/GoogleSignInButton";
 import { component as ApiVersionComponent } from "./components/Examples/ApiVersionQueryComponent";
