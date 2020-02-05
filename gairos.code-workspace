@@ -12,5 +12,7 @@
       "editor.formatOnSave": true,
       "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
-    "workbench.editor.labelFormat": "short"
+    "workbench.editor.labelFormat": "short",
+    "emmet.includeLanguages": { "javascript": "html" }
+  }
 }

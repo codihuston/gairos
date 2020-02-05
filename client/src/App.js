@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import logo from "./logo.svg";
 import "./scss/main.scss";
+import "./scss/vendors/materialize.min.css";
 import { component as ExampleComponent } from "./components/Examples/ExampleComponent";
 import GoogleSignInButton from "./components/GoogleSignInButton";
 import { component as ApiVersionComponent } from "./components/Examples/ApiVersionQueryComponent";
