@@ -29,18 +29,20 @@ const corsWhitelist = [
   `${process.env.APP_CLIENT_HTTP_SCHEME}://${process.env.APP_CLIENT_HOST}:${process.env.APP_CLIENT_PORT}`
 ];
 
+// cors config required for the express app AND apollo-server
+const corsMiddleware = {
+  // TODO: configure for prod environment
+  credentials: true,
+  origin: corsWhitelist
+};
+
 export default resolveGraphqlDefinitions()
   .then(result => {
     const { typeDefs, resolvers, dataSources } = result;
     var app = express();
 
-    app.use(
-      cors({
-        // TODO: configure for prod environment
-        credentials: true,
-        origin: corsWhitelist
-      })
-    );
+    // apply cors
+    app.use(cors(corsMiddleware));
 
     // init session
     app.use(
@@ -133,7 +135,13 @@ export default resolveGraphqlDefinitions()
         };
       }
     });
-    server.applyMiddleware({ app });
+
+    // apply our web server as middleware to apollo-server
+    server.applyMiddleware({
+      app,
+      // apply cors
+      cors: corsMiddleware
+    });
 
     // catch 404 and forward to error handler
     app.use(function(req, res, next) {
