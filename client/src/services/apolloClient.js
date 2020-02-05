@@ -8,7 +8,8 @@ import { CachePersistor } from "apollo-cache-persist";
 import { getApiGraphqlUrl } from "../config";
 import { onError } from "apollo-link-error";
 
-const API_HOST = "http://localhost:8000/graphql";
+import { isDevelopment } from "../utils";
+
 const SCHEMA_VERSION = "1";
 const SCHEMA_VERSION_KEY = "apollo-schema-version";
 
@@ -20,10 +21,13 @@ const httpLink = new HttpLink({
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
     graphQLErrors.map(({ message, locations, path }) => {
-      console.log(`[GraphQL error]: Message: ${message}`);
-      // TODO: do not display this in production
-      console.log(`[GraphQL error]: Location`, locations);
-      console.log(`[GraphQL error]: Path`, path);
+      console.error(`[GraphQL error]: Message: ${message}`);
+
+      // do not display this in production
+      if (isDevelopment) {
+        console.log(`[GraphQL error]: Location`, locations);
+        console.log(`[GraphQL error]: Path`, path);
+      }
     });
 
   if (networkError) console.log(`[Network error]: ${networkError}`);

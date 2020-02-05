@@ -1,8 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { ApolloProvider } from "react-apollo";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { useQuery } from "react-apollo";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import logo from "./logo.svg";
 import "./App.css";

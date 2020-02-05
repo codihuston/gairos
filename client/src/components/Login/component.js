@@ -30,7 +30,7 @@ class LoginComponent extends React.Component {
     } else {
       console.log(this.props);
       // TODO: if we get here, the user is logged in, redirect to homepage
-      return <div>My Info: Username: {this.props.data.me.username}</div>;
+      return <div>My Info: Username: {this.props.data.me.username} </div>;
     }
   }
 }
