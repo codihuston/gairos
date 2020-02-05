@@ -12,9 +12,12 @@ const router = express.Router();
  *  GET /auth/google
  */
 router.get("/google", function(req, res) {
-  debug("QQQ set state", req.session.id, req.connection.remoteAddress);
-  const url = getAuthUrl({ state: req.session.id });
+  const state = Buffer.from(req.session.id).toString("base64");
+  const url = getAuthUrl({ state });
+
+  debug("set state", state);
   debug(oauth2Client, url);
+
   res.redirect(url);
 });
 
@@ -23,15 +26,22 @@ router.get("/google", function(req, res) {
  */
 router.get("/google/cb", async function(req, response, next) {
   try {
-    // TODO: handle errors
     const { code, state } = req.query;
-
+    // use state to restore client session (if needed) and prevent CSRF
+    const sessionId = Buffer.from(state, "base64").toString("ascii");
+    const ip = req.header("x-forwarded-for") || req.connection.remoteAddress;
     const { tokens, res } = await oauth2Client.getToken(code);
 
     oauth2Client.setCredentials(tokens);
 
-    // TODO: use state to restore client session (if needed) and prevent CSRF
-    debug("got state back", state);
+    debug("got state back (decoded)", sessionId);
+
+    if (sessionId !== req.session.id) {
+      throw new Error(
+        `Authorization Code State was invalid! This is a security threat from ${ip}, and this incident has been reported.`
+      );
+    }
+
     debug("session before set", req.session, req.session.id);
 
     const people = await GooglePeople.people.get({
@@ -44,6 +54,7 @@ router.get("/google/cb", async function(req, response, next) {
 
     // if no errors, init a session
     debug("store user in session", user);
+
     req.session.isAuthenticated = true;
     req.session.tokens = tokens;
     req.session.user = user;

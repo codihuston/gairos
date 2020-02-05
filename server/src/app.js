@@ -124,7 +124,7 @@ export default resolveGraphqlDefinitions()
         // update the user
         req.session.user = user;
 
-        console.log("SESSION: ", req.session, req.session.id, req.headers);
+        debug("SESSION: ", req.session, req.session.id, req.headers);
 
         // pass context into our resolvers
         return {
