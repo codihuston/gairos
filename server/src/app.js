@@ -19,7 +19,11 @@ import { router as indexRouter } from "./routes/index";
 import { router as authRouter } from "./routes/auth";
 import { resolveGraphqlDefinitions } from "./api";
 import { sequelize, models } from "./db";
-import { isProductionEnvironment, isDevelopmentEnvironment } from "./utils";
+import {
+  isProductionEnvironment,
+  isDevelopmentEnvironment,
+  shouldAutoLogin
+} from "./utils";
 
 const debug = debugLib("server:app");
 const SequelizeStore = ConnectSessionStore(session.Store);
@@ -104,7 +108,7 @@ export default resolveGraphqlDefinitions()
          *  is set to true (default). It is recommended to set that environment
          *  variable to true at least once when setting up your dev environment
          */
-        if (!isProductionEnvironment && !req.session.user) {
+        if (!isProductionEnvironment && shouldAutoLogin && !req.session.user) {
           user = await models.user.findOne({
             where: {
               id: users[0].id

@@ -10,6 +10,8 @@ export const isDevelopmentEnvironment = process.env.NODE_ENV.toLowerCase().inclu
   "dev"
 );
 
+export const shouldAutoLogin = process.env.DEV_AUTO_LOGIN === "true";
+
 // there should be a webpack loader for this: https://www.npmjs.com/package/graphql-tag
 export const loadGQLFile = (fileDirectory, filePath) => {
   return fs.readFileSync(join(fileDirectory, filePath), "utf-8");
