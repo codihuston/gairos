@@ -13,7 +13,8 @@ const SCHEMA_VERSION = "1";
 const SCHEMA_VERSION_KEY = "apollo-schema-version";
 
 const httpLink = new HttpLink({
-  uri: getApiGraphqlUrl()
+  uri: getApiGraphqlUrl(),
+  credentials: "include"
 });
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {

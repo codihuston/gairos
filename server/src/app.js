@@ -24,6 +24,11 @@ import { isProductionEnvironment, isDevelopmentEnvironment } from "./utils";
 const debug = debugLib("server:app");
 const SequelizeStore = ConnectSessionStore(session.Store);
 
+// TODO: implement feat to persist these in storage (for scalability?)
+const corsWhitelist = [
+  `${process.env.APP_CLIENT_HTTP_SCHEME}://${process.env.APP_CLIENT_HOST}:${process.env.APP_CLIENT_PORT}`
+];
+
 export default resolveGraphqlDefinitions()
   .then(result => {
     const { typeDefs, resolvers, dataSources } = result;
@@ -33,7 +38,7 @@ export default resolveGraphqlDefinitions()
       cors({
         // TODO: configure for prod environment
         credentials: true,
-        origin: true
+        origin: corsWhitelist
       })
     );
 
@@ -104,7 +109,6 @@ export default resolveGraphqlDefinitions()
             },
             raw: true
           });
-
           req.session.isAuthenticated = true;
         }
         // otherwise, confirm that the user in session exists
@@ -120,7 +124,7 @@ export default resolveGraphqlDefinitions()
         // update the user
         req.session.user = user;
 
-        console.log("SESSION: ", req.session);
+        console.log("SESSION: ", req.session, req.session.id, req.headers);
 
         // pass context into our resolvers
         return {

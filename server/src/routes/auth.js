@@ -1,7 +1,7 @@
 import express from "express";
 import debugLib from "debug";
 
-import { oauth2Client, url } from "../services/auth/google";
+import { oauth2Client, getAuthUrl } from "../services/auth/google";
 import { GooglePeople, GoogleCalendar } from "../api";
 import { models } from "../api";
 
@@ -12,6 +12,8 @@ const router = express.Router();
  *  GET /auth/google
  */
 router.get("/google", function(req, res) {
+  debug("QQQ set state", req.session.id, req.connection.remoteAddress);
+  const url = getAuthUrl({ state: req.session.id });
   debug(oauth2Client, url);
   res.redirect(url);
 });
@@ -22,13 +24,15 @@ router.get("/google", function(req, res) {
 router.get("/google/cb", async function(req, response, next) {
   try {
     // TODO: handle errors
-    const { code } = req.query;
+    const { code, state } = req.query;
 
     const { tokens, res } = await oauth2Client.getToken(code);
 
     oauth2Client.setCredentials(tokens);
 
-    debug("session", req.session);
+    // TODO: use state to restore client session (if needed) and prevent CSRF
+    debug("got state back", state);
+    debug("session before set", req.session, req.session.id);
 
     const people = await GooglePeople.people.get({
       resourceName: "people/me",
@@ -49,6 +53,8 @@ router.get("/google/cb", async function(req, response, next) {
       people,
       calendars: await GoogleCalendar.calendarList.list()
     });
+
+    debug("session after set", req.session);
 
     // now redirect to the front-end login uri, where it will
     // send a query to the graphql endpoint; if it succeeds, so too, should

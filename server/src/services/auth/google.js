@@ -1,3 +1,5 @@
+// see: https://github.com/googleapis/google-api-nodejs-client
+
 import { google } from "googleapis";
 
 const scopes = [
@@ -13,15 +15,18 @@ export const oauth2Client = new google.auth.OAuth2(
   process.env.GOOGLE_CALLBACK_URL
 );
 
-export const url = oauth2Client.generateAuthUrl({
-  scope: scopes,
-  // request access token
-  access_type: "offline"
-  /*force end-user to see the consent screen, even if they've auth'd before
+export const getAuthUrl = ({ state }) =>
+  oauth2Client.generateAuthUrl({
+    scope: scopes,
+    // a session identifier, so this server knows which end-user auth'd originally
+    state,
+    // request refresh token
+    access_type: "offline"
+    /*force end-user to see the consent screen, even if they've auth'd before
   this is the only way to get a refresh token if access_type=offline was
   not set during that first auth.*/
-  // prompt: "consent"
-});
+    // prompt: "consent"
+  });
 
 oauth2Client.on("tokens", tokens => {
   if (tokens.refresh_token) {
