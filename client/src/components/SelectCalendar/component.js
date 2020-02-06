@@ -15,7 +15,7 @@ export const CalendarNameInput = ({ onChange, value }) => {
         id="name"
         type="text"
         onChange={onChange}
-        placeholder="Enter a Calendar Name"
+        placeholder="Enter a calendar name"
         value={value ? value : ""}
       ></input>
     </div>
@@ -55,11 +55,7 @@ function SelectCalendarComponent(props) {
   const onChange = event => {
     const value = event.target.value;
 
-    if (value) {
-      setIsNextDisabled(false);
-    } else {
-      setIsNextDisabled(true);
-    }
+    value ? setIsNextDisabled(false) : setIsNextDisabled(true);
 
     setName(event.target.value);
   };
@@ -69,7 +65,10 @@ function SelectCalendarComponent(props) {
   };
 
   const selectCalendar = event => {
-    setName(event.target.innerText);
+    const value = event.target.innerText;
+    value ? setIsNextDisabled(false) : setIsNextDisabled(true);
+
+    setName(value);
   };
 
   const clearCalendar = event => {
