@@ -7,6 +7,7 @@
  * the server
  */
 import React from "react";
+import PropTypes from "prop-types";
 import { graphql } from "react-apollo";
 
 import { getVersion } from "./queries";
@@ -34,5 +35,13 @@ class ApiVersion extends React.Component {
     );
   }
 }
+
+ApiVersion.propTypes = {
+  data: PropTypes.shape({
+    loading: PropTypes.bool,
+    version: PropTypes.string,
+    error: PropTypes.object
+  })
+};
 
 export default graphql(getVersion)(ApiVersion);

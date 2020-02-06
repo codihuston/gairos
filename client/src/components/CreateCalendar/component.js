@@ -1,7 +1,8 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { graphql } from "react-apollo";
 
-import { me } from "./queries";
+import { getMyCalendars } from "./queries";
 import GoogleSignInButton from "../GoogleSignInButton";
 import { component as Loading } from "../LoadingComponent";
 
@@ -31,23 +32,23 @@ class CreateCalendarComponent extends React.Component {
       const { getMyCalendars } = this.props.data;
       return (
         <div>
-          <div class="row">
-            <div class="col s12">
-              <div class="row">
-                <div class="input-field col s12">
-                  <i class="material-icons prefix">textsms</i>
+          <div className="row">
+            <div className="col s12">
+              <div className="row">
+                <div className="input-field col s12">
+                  <i className="material-icons prefix">textsms</i>
                   <input
                     type="text"
                     id="autocomplete-input"
-                    class="autocomplete"
+                    className="autocomplete"
                   />
-                  <label for="autocomplete-input">Autocomplete</label>
+                  <label htmlFor="autocomplete-input">Autocomplete</label>
                 </div>
               </div>
             </div>
           </div>
           {getMyCalendars.map(calendar => {
-            return <div>{calendar.summary}</div>;
+            return <div key={calendar}>{calendar.summary}</div>;
           })}
         </div>
       );
@@ -55,6 +56,22 @@ class CreateCalendarComponent extends React.Component {
   }
 }
 
-// TODO: this query, at least in this context, must always be pulled freshly
-// (not from the apollo cache)!
-export default graphql(me)(CreateCalendarComponent);
+CreateCalendarComponent.propTypes = {
+  data: PropTypes.shape({
+    loading: PropTypes.bool,
+    getMyCalendars: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string,
+        summary: PropTypes.string,
+        description: PropTypes.string
+      })
+    ),
+    error: PropTypes.object
+  })
+};
+
+export default graphql(getMyCalendars, {
+  options: {
+    fetchPolicy: "cache-and-network"
+  }
+})(CreateCalendarComponent);
