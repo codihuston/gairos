@@ -1,0 +1,26 @@
+.btn-google{
+  &:link{
+    text-decoration: none;
+    color: #777;
+  }
+
+  &:visited{
+    text-decoration: none;
+    color: #777;
+  }
+
+  &__content{
+    display: flex;
+    align-items: center;
+    font-size: 1.2rem;
+    background: #ffffff;
+    padding: .2rem 1rem;
+    border-radius: 0.2rem;
+    text-transform: uppercase;
+    font-weight: 700;
+
+    img{
+      padding: 0;
+    }
+  }
+}

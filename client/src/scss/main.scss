@@ -7,6 +7,8 @@
 @import "base/typography";
 @import "base/utilities";
 
-@import "layout/navigation.scss";
+@import "components/google-button";
+
+@import "layout/navigation";
 
 @import "pages/dashboard";
