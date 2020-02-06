@@ -1,17 +1,19 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Switch, Route, Link, Redirect, useRouteMatch } from "react-router-dom";
+import { useMutation } from "react-apollo";
 
 import { APP_NAME } from "../../config";
 import { component as SelectCalendar } from "../FirstSetupCalendar";
 import { component as AddTaskForm } from "../FirstSetupTasks";
 import { TaskList } from "../FirstSetupTasks";
+import { createMyCalendar as CREATE_MY_CALENDAR } from "../FirstSetupCalendar/queries";
 
 function FirstSetupComponent() {
   const [calendar, setCalendar] = useState(null);
   const [tasks, setTasks] = useState([]);
-
   let match = useRouteMatch();
+  const [createMyCalendar] = useMutation(CREATE_MY_CALENDAR);
 
   const handleSetCalendar = name => {
     setCalendar(name);
@@ -23,6 +25,26 @@ function FirstSetupComponent() {
 
     // set the new list of tasks
     setTasks(temp);
+  };
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+
+    // TODO: handle graphql errors?
+
+    // create calendar
+    const res = await createMyCalendar({
+      variables: {
+        summary: "FAKE CAL",
+        description: "FAKE DESCR"
+      }
+    });
+
+    // TODO: create each task
+
+    // TODO: update user profile (isFirstSetupCompleted)
+
+    console.log("RES", res);
   };
 
   return (
@@ -69,6 +91,7 @@ function FirstSetupComponent() {
               {calendar}
             </div>
             <TaskList tasks={tasks} />
+            <button onClick={handleSubmit}>Submit</button>
           </Route>
           <Route path={`${match.path}`}>
             <Redirect to={`${match.path}/start`} />

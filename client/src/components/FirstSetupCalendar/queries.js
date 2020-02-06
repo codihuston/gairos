@@ -9,3 +9,13 @@ export const getMyCalendars = gql`
     }
   }
 `;
+
+export const createMyCalendar = gql`
+  mutation($summary: String!, $description: String) {
+    createMyCalendar(summary: $summary, description: $description) {
+      id
+      summary
+      description
+    }
+  }
+`;
