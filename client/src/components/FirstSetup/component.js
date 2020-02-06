@@ -5,6 +5,7 @@ import { Switch, Route, Link, Redirect, useRouteMatch } from "react-router-dom";
 import { APP_NAME } from "../../config";
 import { component as SelectCalendar } from "../FirstSetupCalendar";
 import { component as AddTaskForm } from "../FirstSetupTasks";
+import { TaskList } from "../FirstSetupTasks";
 
 function FirstSetupComponent() {
   const [calendar, setCalendar] = useState(null);
@@ -26,7 +27,6 @@ function FirstSetupComponent() {
 
   return (
     <div>
-      <div>Calendar is: {calendar}</div>
       <div>
         <Switch>
           <Route path={`${match.path}/start`}>
@@ -56,15 +56,20 @@ function FirstSetupComponent() {
             />
           </Route>
           <Route path={`${match.path}/create-task`}>
-            <div>
-              <AddTaskForm
-                tasks={tasks}
-                handleAddTask={handleAddTask}
-                nextPath={`${match.path}/confirm`}
-              />
-            </div>
+            <AddTaskForm
+              tasks={tasks}
+              handleAddTask={handleAddTask}
+              nextPath={`${match.path}/confirm`}
+            />
           </Route>
-          <Route path={`${match.path}/confirm`}>Confirm</Route>
+          <Route path={`${match.path}/confirm`}>
+            <h1>Confirm Your Setup</h1>
+            <div>
+              <h3>Your Calendar</h3>
+              {calendar}
+            </div>
+            <TaskList tasks={tasks} />
+          </Route>
           <Route path={`${match.path}`}>
             <Redirect to={`${match.path}/start`} />
           </Route>

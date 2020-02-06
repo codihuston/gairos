@@ -1,3 +1,3 @@
-import component from "./component";
+import component, { TaskList } from "./component";
 
-export { component };
+export { component, TaskList };

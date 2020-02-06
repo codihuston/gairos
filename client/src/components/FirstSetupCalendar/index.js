@@ -1,3 +1,3 @@
-import component from "./component";
+import component, { CalendarNameInput, CalendarList } from "./component";
 
-export { component };
+export { component, CalendarNameInput, CalendarList };
