@@ -4,7 +4,7 @@ import { graphql } from "react-apollo";
 import { Switch, Route, Link, Redirect, useRouteMatch } from "react-router-dom";
 
 import { APP_NAME } from "../../config";
-import { component as CreateCalendarComponent } from "../CreateCalendar";
+import { component as CreateCalendarComponent } from "../SelectCalendar";
 
 function FirstSetupComponent() {
   const [calendar, setCalendar] = useState(null);
@@ -41,7 +41,10 @@ function FirstSetupComponent() {
             <Link to={`${match.path}/create-calendar`}>Okay!</Link>
           </Route>
           <Route path={`${match.path}/create-calendar`}>
-            <CreateCalendarComponent handleSetCalendar={handleSetCalendar} />
+            <CreateCalendarComponent
+              handleSetCalendar={handleSetCalendar}
+              nextPath={`${match.path}/create-task`}
+            />
           </Route>
           <Route path={`${match.path}/create-task`}>Task</Route>
           <Route path={`${match.path}/confirm`}>Confirm</Route>
