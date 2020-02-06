@@ -1,5 +1,6 @@
 import React from "react";
 import { graphql } from "react-apollo";
+import { Redirect } from "react-router-dom";
 
 import { me } from "./queries";
 import GoogleSignInButton from "../GoogleSignInButton";
@@ -28,13 +29,24 @@ class LoginComponent extends React.Component {
         </div>
       );
     } else {
-      console.log(this.props);
-      // TODO: if we get here, the user is logged in, redirect to homepage
-      return <div>My Info: Username: {this.props.data.me.username} </div>;
+      const { me } = this.props.data;
+
+      // if first setup is completed
+      if (me.isFirstSetupCompleted) {
+        // send them home!
+        return <Redirect to="/home" />;
+      }
+      // otherwise, walk through first-setup
+      else {
+        return <Redirect to="/first-setup/calendar" />;
+      }
     }
   }
 }
 
-// TODO: this query, at least in this context, must always be pulled freshly
-// (not from the apollo cache)!
-export default graphql(me)(LoginComponent);
+export default graphql(me, {
+  options: {
+    // pull from network only (not apollo cache)
+    fetchPolicy: "network-only"
+  }
+})(LoginComponent);
