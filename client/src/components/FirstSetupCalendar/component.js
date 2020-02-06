@@ -44,7 +44,7 @@ export const CalendarList = ({ calendars, name }) => {
   }
 };
 
-function SelectCalendarComponent(props) {
+function FirstSetupCalendar(props) {
   const { loading, error, data } = useQuery(getMyCalendars, {
     fetchPolicy: "cache-and-network"
   });
@@ -148,7 +148,7 @@ function SelectCalendarComponent(props) {
   }
 }
 
-SelectCalendarComponent.propTypes = {
+FirstSetupCalendar.propTypes = {
   data: PropTypes.shape({
     loading: PropTypes.bool,
     getMyCalendars: PropTypes.arrayOf(
@@ -162,4 +162,4 @@ SelectCalendarComponent.propTypes = {
   })
 };
 
-export default SelectCalendarComponent;
+export default FirstSetupCalendar;

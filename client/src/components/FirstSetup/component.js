@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Switch, Route, Link, Redirect, useRouteMatch } from "react-router-dom";
 
 import { APP_NAME } from "../../config";
-import { component as SelectCalendar } from "../SelectCalendar";
+import { component as SelectCalendar } from "../FirstSetupCalendar";
 import { component as AddTaskForm } from "../FirstSetupTasks";
 
 function FirstSetupComponent() {

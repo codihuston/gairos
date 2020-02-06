@@ -14,7 +14,7 @@ export const TaskList = ({ tasks }) => {
   );
 };
 
-function AddTaskForm({ tasks, handleAddTask, nextPath }) {
+function FirstSetupTasks({ tasks, handleAddTask, nextPath }) {
   const [isAddDisabled, setIsAddDisabled] = useState(true);
   const [isNextDisabled, setIsNextDisabled] = useState(true);
   const [newTask, setNewTask] = useState({
@@ -101,7 +101,7 @@ function AddTaskForm({ tasks, handleAddTask, nextPath }) {
   );
 }
 
-AddTaskForm.propTypes = {
+FirstSetupTasks.propTypes = {
   isAddDisabled: PropTypes.bool,
   isNextDisabled: PropTypes.bool,
   tasks: PropTypes.arrayOf(
@@ -116,4 +116,4 @@ AddTaskForm.propTypes = {
   })
 };
 
-export default AddTaskForm;
+export default FirstSetupTasks;
