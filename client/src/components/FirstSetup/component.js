@@ -1,20 +1,29 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { graphql } from "react-apollo";
 import { Switch, Route, Link, Redirect, useRouteMatch } from "react-router-dom";
 
 import { APP_NAME } from "../../config";
-import { component as CreateCalendarComponent } from "../SelectCalendar";
+import { component as SelectCalendar } from "../SelectCalendar";
+import { component as AddTaskForm } from "../FirstSetupTasks";
 
 function FirstSetupComponent() {
   const [calendar, setCalendar] = useState(null);
+  const [tasks, setTasks] = useState([]);
+
   let match = useRouteMatch();
 
   const handleSetCalendar = name => {
     setCalendar(name);
   };
 
-  console.log("Calendar is set", calendar);
+  const handleAddTask = newTask => {
+    // append the new task to existing tasks
+    const temp = tasks.concat(newTask);
+
+    // set the new list of tasks
+    setTasks(temp);
+  };
+
   return (
     <div>
       <div>Calendar is: {calendar}</div>
@@ -41,12 +50,20 @@ function FirstSetupComponent() {
             <Link to={`${match.path}/create-calendar`}>Okay!</Link>
           </Route>
           <Route path={`${match.path}/create-calendar`}>
-            <CreateCalendarComponent
+            <SelectCalendar
               handleSetCalendar={handleSetCalendar}
               nextPath={`${match.path}/create-task`}
             />
           </Route>
-          <Route path={`${match.path}/create-task`}>Task</Route>
+          <Route path={`${match.path}/create-task`}>
+            <div>
+              <AddTaskForm
+                tasks={tasks}
+                handleAddTask={handleAddTask}
+                nextPath={`${match.path}/confirm`}
+              />
+            </div>
+          </Route>
           <Route path={`${match.path}/confirm`}>Confirm</Route>
           <Route path={`${match.path}`}>
             <Redirect to={`${match.path}/start`} />
@@ -57,18 +74,19 @@ function FirstSetupComponent() {
   );
 }
 
-// FirstSetupComponent.propTypes = {
-//   data: PropTypes.shape({
-//     loading: PropTypes.bool,
-//     getMyCalendars: PropTypes.arrayOf(
-//       PropTypes.shape({
-//         id: PropTypes.string,
-//         summary: PropTypes.string,
-//         description: PropTypes.string
-//       })
-//     ),
-//     error: PropTypes.object
-//   })
-// };
+FirstSetupComponent.propTypes = {
+  calendar: PropTypes.string,
+  data: PropTypes.shape({
+    loading: PropTypes.bool,
+    getMyCalendars: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string,
+        summary: PropTypes.string,
+        description: PropTypes.string
+      })
+    ),
+    error: PropTypes.object
+  })
+};
 
 export default FirstSetupComponent;
