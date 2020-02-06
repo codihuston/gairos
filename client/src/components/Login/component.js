@@ -39,7 +39,7 @@ class LoginComponent extends React.Component {
       }
       // otherwise, walk through first-setup
       else {
-        return <Redirect to="/first-setup/calendar" />;
+        return <Redirect to="/first-setup" />;
       }
     }
   }

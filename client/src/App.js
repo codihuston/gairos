@@ -11,7 +11,7 @@ import { component as ApiVersionComponent } from "./components/Examples/ApiVersi
 import { component as APIVersionQueryHookComponent } from "./components/Examples/ApiVersionQueryHook";
 import { component as APIVersionQueryHOC } from "./components/Examples/ApiVersionQueryHOC";
 import { component as LoginComponent } from "./components/Login";
-import { component as CreateCalendarComponent } from "./components/CreateCalendar";
+import { component as FirstSetupComponent } from "./components/FirstSetup";
 
 function App({ apolloClient, isLoading }) {
   if (isLoading) {
@@ -38,11 +38,9 @@ function App({ apolloClient, isLoading }) {
           <Route path="/login">
             Now that my session cookie should be set, I should see if I can
             query myself...
-            <LoginComponent></LoginComponent>
+            <LoginComponent />
           </Route>
-          <Route path="/first-setup/calendar">
-            <CreateCalendarComponent></CreateCalendarComponent>
-          </Route>
+          <Route path="/first-setup" component={FirstSetupComponent}></Route>
           <Route path="/">
             <div className="App">
               <header className="App-header">

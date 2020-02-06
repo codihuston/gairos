@@ -7,6 +7,8 @@ const API_PORT = "8000";
 const API_AUTH_URL = "auth/google";
 const API_GRAPHQL_URL = "graphql";
 
+export const APP_NAME = "Gairos";
+
 export const getApiRootUrl = () => {
   let url = "";
 
