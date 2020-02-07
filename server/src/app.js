@@ -95,6 +95,7 @@ export default resolveGraphqlDefinitions()
       dataSources,
       context: async ({ req, res }) => {
         let user = null;
+        const { session } = req;
 
         /**
          * If in development mode, and the user has not logged in
@@ -119,12 +120,16 @@ export default resolveGraphqlDefinitions()
         }
         // otherwise, confirm that the user in session exists
         else {
-          user = await models.user.findOne({
-            where: {
-              id: req.session.user.id
-            },
-            raw: true
-          });
+          if (session && session.user && session.user.id) {
+            user = await models.user.findOne({
+              where: {
+                id: req.session.user.id
+              },
+              raw: true
+            });
+          } else {
+            debug("No user stored in session... this is a new session!");
+          }
         }
 
         // update the user

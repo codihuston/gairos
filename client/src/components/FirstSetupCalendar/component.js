@@ -4,7 +4,7 @@ import { useQuery } from "react-apollo";
 import { Link } from "react-router-dom";
 
 import { GET_MY_CALENDARS } from "./queries";
-import GoogleSignInButton from "../GoogleSignInButton";
+import GoogleSignInButton from "../google-login-button";
 import { component as Loading } from "../LoadingComponent";
 
 export const CalendarNameInput = ({ onChange, value }) => {
