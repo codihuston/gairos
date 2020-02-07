@@ -10,7 +10,6 @@ import { GET_ME } from "./queries";
 function IsLoggedIn() {
   const { data } = useQuery(GET_ME);
 
-  // return data.isLoggedIn ? <Pages /> : <Login />;
   return data && data.me ? <Pages /> : <Login />;
 }
 

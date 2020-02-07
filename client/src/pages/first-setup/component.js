@@ -4,11 +4,12 @@ import { Switch, Route, Link, Redirect, useRouteMatch } from "react-router-dom";
 import { useMutation } from "react-apollo";
 
 import { APP_NAME } from "../../config";
-import { component as SelectCalendar } from "../FirstSetupCalendar";
-import { component as AddTaskForm } from "../FirstSetupTasks";
-import { TaskList } from "../FirstSetupTasks";
-import { CREATE_MY_CALENDAR } from "../FirstSetupCalendar/queries";
-import { CREATE_MY_TASK } from "../FirstSetupTasks/queries";
+import { GetCachedUser } from "../../components/is-first-setup-completed";
+import { component as SelectCalendar } from "../../components/FirstSetupCalendar";
+import { component as AddTaskForm } from "../../components/FirstSetupTasks";
+import { TaskList } from "../../components/FirstSetupTasks";
+import { CREATE_MY_CALENDAR } from "../../components/FirstSetupCalendar/queries";
+import { CREATE_MY_TASK } from "../../components/FirstSetupTasks/queries";
 import { UPDATE_MY_PROFILE } from "./queries";
 
 function FirstSetupComponent() {
@@ -132,37 +133,16 @@ function FirstSetupComponent() {
     setDisplayError(hasErrorOccured);
   };
 
+  // if first setup is already complete, then redirect to home
+  const user = GetCachedUser();
+  if (user && user.isFirstSetupCompleted === true) {
+    return <Redirect to="/home" />;
+  }
+
   return (
     <div>
       <div>
-        {!calendar.summary ? (
-          <Redirect to={`${match.path}/create-calendar`} />
-        ) : calendar.summary && !tasks.length ? (
-          <Redirect to={`${match.path}/create-tasks`} />
-        ) : calendar.summary && tasks.length ? (
-          <Redirect to={`${match.path}/confirm`} />
-        ) : null}
         <Switch>
-          <Route path={`${match.path}/start`}>
-            <h2>Welcome to {APP_NAME}!</h2>
-            <p>
-              It is time to set up your profile! This setup will walk you
-              through the following:
-            </p>
-            <ol>
-              <li>
-                Configuring your Google Calendar: when you track your tasks,
-                they will appear in your calendar!
-              </li>
-              <li>
-                Creating your first task: we will record your task history so
-                that we can show you how you manage your time! All of your tasks
-                will be recorded to your Google Calendar
-              </li>
-            </ol>
-            <p>So, what are you waiting for? Let's get started!</p>
-            <Link to={`${match.path}/create-calendar`}>Okay!</Link>
-          </Route>
           <Route path={`${match.path}/create-calendar`}>
             <SelectCalendar
               handleSetCalendar={handleSetCalendar}
@@ -207,7 +187,24 @@ function FirstSetupComponent() {
             {isNextDisabled ? null : <Link to="/home">Take me home!</Link>}
           </Route>
           <Route path={`${match.path}`}>
-            <Redirect to={`${match.path}/start`} />
+            <h2>Welcome to {APP_NAME}!</h2>
+            <p>
+              It is time to set up your profile! This setup will walk you
+              through the following:
+            </p>
+            <ol>
+              <li>
+                Configuring your Google Calendar: when you track your tasks,
+                they will appear in your calendar!
+              </li>
+              <li>
+                Creating your first task: we will record your task history so
+                that we can show you how you manage your time! All of your tasks
+                will be recorded to your Google Calendar
+              </li>
+            </ol>
+            <p>So, what are you waiting for? Let's get started!</p>
+            <Link to={`${match.path}/create-calendar`}>Okay!</Link>
           </Route>
         </Switch>
       </div>

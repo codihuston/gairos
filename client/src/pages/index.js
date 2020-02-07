@@ -1,12 +1,19 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect
+} from "react-router-dom";
 
 import logo from "../logo.svg";
+
+import { component as IsFirstSetupCompleted } from "../components/is-first-setup-completed";
+import { component as FirstSetup } from "./first-setup";
 import { component as ExampleComponent } from "../components/Examples/ExampleComponent";
 import { component as ApiVersionComponent } from "../components/Examples/ApiVersionQueryComponent";
 import { component as APIVersionQueryHookComponent } from "../components/Examples/ApiVersionQueryHook";
 import { component as APIVersionQueryHOC } from "../components/Examples/ApiVersionQueryHOC";
-import { component as FirstSetupComponent } from "../components/FirstSetup";
 
 export default function Pages() {
   return (
@@ -25,12 +32,10 @@ export default function Pages() {
         <Route path="/examples">
           <ExampleComponent />
         </Route>
-        {/* <Route path="/login">
-          Now that my session cookie should be set, I should see if I can query
-          myself...
-          <LoginComponent />
-        </Route> */}
-        <Route path="/first-setup" component={FirstSetupComponent}></Route>
+        <Route path="/login">
+          <IsFirstSetupCompleted />
+        </Route>
+        <Route path="/first-setup" component={FirstSetup}></Route>
         <Route path="/">
           <div className="App">
             <header className="App-header">
