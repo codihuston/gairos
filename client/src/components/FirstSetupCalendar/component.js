@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { useQuery } from "react-apollo";
 import { Link } from "react-router-dom";
 
-import { GET_MY_CALENDARS } from "./queries";
+import { GET_MY_CALENDARS } from "../../graphql/queries";
 import GoogleSignInButton from "../google-login-button";
 import { component as Loading } from "../LoadingComponent";
 

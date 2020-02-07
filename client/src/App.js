@@ -5,7 +5,7 @@ import { ApolloProvider, useQuery } from "react-apollo";
 import "./scss/main.scss";
 import { component as Login } from "./pages/login";
 import Pages from "./pages";
-import { GET_ME } from "./queries";
+import { GET_ME } from "./graphql/queries";
 
 function IsLoggedIn() {
   const { data } = useQuery(GET_ME);

@@ -13,3 +13,13 @@ export const GET_ME = gql`
     }
   }
 `;
+
+export const GET_MY_CALENDARS = gql`
+  query {
+    getMyCalendars {
+      id
+      summary
+      description
+    }
+  }
+`;

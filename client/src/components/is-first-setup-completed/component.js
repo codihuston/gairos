@@ -2,7 +2,7 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 import { useQuery } from "react-apollo";
 
-import { GET_ME } from "../../queries";
+import { GET_ME } from "../../graphql/queries";
 
 export const GetCachedUser = () => {
   const { data } = useQuery(GET_ME, {

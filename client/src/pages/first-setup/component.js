@@ -8,9 +8,9 @@ import { GetCachedUser } from "../../components/is-first-setup-completed";
 import { component as SelectCalendar } from "../../components/FirstSetupCalendar";
 import { component as AddTaskForm } from "../../components/FirstSetupTasks";
 import { TaskList } from "../../components/FirstSetupTasks";
-import { CREATE_MY_CALENDAR } from "../../components/FirstSetupCalendar/queries";
-import { CREATE_MY_TASK } from "../../components/FirstSetupTasks/queries";
-import { UPDATE_MY_PROFILE } from "./queries";
+import { CREATE_MY_CALENDAR } from "../../graphql/mutations";
+import { CREATE_MY_TASK } from "../../graphql/mutations";
+import { UPDATE_MY_PROFILE } from "../../graphql/mutations";
 
 function FirstSetupComponent() {
   const [calendar, setCalendar] = useState({
@@ -136,7 +136,12 @@ function FirstSetupComponent() {
   // if first setup is already complete, then redirect to home
   const user = GetCachedUser();
   if (user && user.isFirstSetupCompleted === true) {
-    return <Redirect to="/home" />;
+    return (
+      <div>
+        You have already completed this!
+        <Link to={`/home`}>Return home</Link>
+      </div>
+    );
   }
 
   return (
