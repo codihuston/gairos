@@ -67,6 +67,8 @@ export default {
      * @param {*} opts
      */
     async createCalendar(userId, opts) {
+      let res = null;
+
       // get the current user
       const user = await this.models.user.findOne({
         where: {
@@ -80,14 +82,35 @@ export default {
         );
       }
 
-      // create the google calendar
-      const res = await GoogleCalendar.calendars.insert({
-        resource: opts
-      });
+      // get the existing calendars
+      const calendars = await this.list();
+      for (const calendar of calendars) {
+        // if the calendar with the given name already exists
+        if (
+          calendar.summary &&
+          calendar.summary.toLowerCase() === opts.summary.toLowerCase()
+        ) {
+          // use it
+          debug(
+            "end-user tried to create a calendar that already exists with the",
+            "same name, will use it instead",
+            calendar
+          );
+          res = calendar;
+        }
+      }
+
+      // otherwise...
+      if (!res) {
+        // create the new google calendar
+        res = await GoogleCalendar.calendars.insert({
+          resource: opts
+        }).data;
+      }
 
       // associate the google calendar with our database
-      if (res.data && res.data.id) {
-        user.calendarId = res.data.id;
+      if (res && res.id) {
+        user.calendarId = res.id;
         await user.save();
       } else {
         // TODO: handle google response errors more gracefully?
