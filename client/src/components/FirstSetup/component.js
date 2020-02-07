@@ -11,14 +11,20 @@ import { createMyCalendar as CREATE_MY_CALENDAR } from "../FirstSetupCalendar/qu
 import { createMyTask as CREATE_MY_TASK } from "../FirstSetupTasks/queries";
 
 function FirstSetupComponent() {
-  const [calendar, setCalendar] = useState(null);
+  const [calendar, setCalendar] = useState({
+    summary: "",
+    isCreated: false
+  });
   const [tasks, setTasks] = useState([]);
   let match = useRouteMatch();
   const [createMyCalendar] = useMutation(CREATE_MY_CALENDAR);
   const [createMyTask] = useMutation(CREATE_MY_TASK);
 
-  const handleSetCalendar = name => {
-    setCalendar(name);
+  const handleSetCalendar = summary => {
+    setCalendar({
+      summary,
+      isCreated: false
+    });
   };
 
   const handleAddTask = newTask => {
@@ -32,40 +38,62 @@ function FirstSetupComponent() {
   const handleSubmit = async e => {
     e.preventDefault();
 
-    // TODO: handle graphql errors?
-    // TODO: show "complete" status?
+    // variables that will replace repsective states
+    const newTasks = [];
+    const newCalendar = Object.assign({}, calendar);
 
     // create calendar
+    // TODO: how to handle calendar creation failure?
     const res = await createMyCalendar({
       variables: {
-        summary: calendar,
+        summary: calendar.summary,
         description: "FAKE DESCR"
       }
     });
 
-    // create each task
-    (async function() {
-      for await (const task of tasks) {
-        try {
-          let taskRes = await createMyTask({
-            variables: {
-              name: task.name,
-              description: task.description
+    // update calendar in state
+    newCalendar.isCreated = true;
+    setCalendar(newCalendar);
+
+    // execute the creation of these tasks (async) in order
+    await tasks.reduce(
+      (p, task) =>
+        // whe a promise resolves, chain onto it
+        p.then(async () => {
+          try {
+            // create the task
+            await createMyTask({
+              variables: {
+                name: task.name,
+                description: task.description
+              }
+            });
+
+            // update prop on this task
+            task.isCreated = true;
+          } catch (e) {
+            const doesTaskAlreadyExist =
+              e.message &&
+              e.message.toLowerCase().includes("already created this task");
+            if (doesTaskAlreadyExist) {
+              // set the task as created anyways
+              task.isCreated = true;
+            } else {
+              // TODO: handle error?
             }
-          });
-          console.log(task.name, taskRes);
-        } catch (e) {
-          if (
-            e.message &&
-            e.message.toLowerCase().includes("already created this task")
-          ) {
-            // ignore it
-            console.log("ignore this error", e);
           }
-        }
-      }
-    })();
-    // TODO: update user profile (isFirstSetupCompleted)
+          // push this newly created task onto our array
+          newTasks.push(task);
+        }),
+      // the initial promise to kick off this loop
+      Promise.resolve(null)
+    );
+
+    // update the tasks in state, so they re-render
+    setTasks(newTasks);
+
+    // TODO: update user profile, since calendarId and isFirstSetupCompleted
+    // should be updated!
 
     console.log("RES", res);
   };
@@ -73,11 +101,11 @@ function FirstSetupComponent() {
   return (
     <div>
       <div>
-        {!calendar ? (
+        {!calendar.summary ? (
           <Redirect to={`${match.path}/create-calendar`} />
-        ) : calendar && !tasks.length ? (
+        ) : calendar.summary && !tasks.length ? (
           <Redirect to={`${match.path}/create-tasks`} />
-        ) : calendar && tasks.length ? (
+        ) : calendar.summary && tasks.length ? (
           <Redirect to={`${match.path}/confirm`} />
         ) : null}
         <Switch>
@@ -122,7 +150,8 @@ function FirstSetupComponent() {
                 If this calendar exists in your Google Calendar, we will use it,
                 otherwise we will create it.
               </p>
-              {calendar}
+              {calendar.summary}
+              {calendar.isCreated ? "Created!" : null}
             </div>
             <div>
               <h3>Your Tasks</h3>

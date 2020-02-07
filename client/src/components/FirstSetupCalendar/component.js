@@ -12,7 +12,7 @@ export const CalendarNameInput = ({ onChange, value }) => {
     <div>
       <label htmlFor="name">Calendar Name:</label>
       <input
-        id="name"
+        id="summary"
         type="text"
         onChange={onChange}
         placeholder="Enter a calendar name"

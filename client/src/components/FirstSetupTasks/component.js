@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
@@ -8,7 +8,9 @@ export const TaskList = ({ tasks }) => {
     <div>
       <h3>Your Tasks</h3>
       {tasks.map((task, i) => (
-        <li key={i}>{task.name}</li>
+        <li key={i}>
+          {task.name} {task.isCreated ? "Created!" : null}
+        </li>
       ))}
     </div>
   );
@@ -19,7 +21,8 @@ function FirstSetupTasks({ tasks, handleAddTask, nextPath }) {
   const [isNextDisabled, setIsNextDisabled] = useState(true);
   const [newTask, setNewTask] = useState({
     name: "",
-    description: ""
+    description: "",
+    isCreated: false
   });
 
   const addTask = e => {
@@ -43,7 +46,8 @@ function FirstSetupTasks({ tasks, handleAddTask, nextPath }) {
   const clearForm = () => {
     setNewTask({
       name: "",
-      description: ""
+      description: "",
+      isCreated: false
     });
     setIsAddDisabled(true);
   };
@@ -55,7 +59,8 @@ function FirstSetupTasks({ tasks, handleAddTask, nextPath }) {
 
     setNewTask(prev => ({
       name: value,
-      description: prev.description
+      description: prev.description,
+      isCreated: prev.isCreated
     }));
   };
 
@@ -63,7 +68,8 @@ function FirstSetupTasks({ tasks, handleAddTask, nextPath }) {
     const { value } = e.target;
     setNewTask(prev => ({
       name: prev.name,
-      description: value
+      description: value,
+      isCreated: prev.isCreated
     }));
   };
 
