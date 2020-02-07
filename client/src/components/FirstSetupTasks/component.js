@@ -45,12 +45,12 @@ function FirstSetupTasks({ tasks, handleAddTask, nextPath }) {
       name: "",
       description: ""
     });
+    setIsAddDisabled(true);
   };
 
   const setNewTaskName = e => {
     const { value } = e.target;
 
-    // value ? setIsNextDisabled(false) : setIsNextDisabled(true);
     value ? setIsAddDisabled(false) : setIsAddDisabled(true);
 
     setNewTask(prev => ({
