@@ -27,11 +27,8 @@ function FirstSetupComponent() {
   const [createMyTask] = useMutation(CREATE_MY_TASK);
   const [updateMyProfile] = useMutation(UPDATE_MY_PROFILE);
 
-  const handleSetCalendar = e => {
-    setCalendar({
-      summary: e.target.innerText,
-      isCreated: false
-    });
+  const handleSetCalendar = calendar => {
+    setCalendar(calendar);
   };
 
   const handleAddTask = newTask => {

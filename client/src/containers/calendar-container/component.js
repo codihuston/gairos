@@ -32,18 +32,36 @@ export default function CalendarContainer(props) {
   const { getMyCalendars } = data;
 
   const onChange = e => {
+    // update state
     setSummary(e.target.value);
+
+    // look for exact match (case insensitive)
+    const filter = getMyCalendars.filter(
+      item => item.summary.toLowerCase() === summary.toLowerCase()
+    );
+
+    // return it, if found
+    if (filter && filter[0]) {
+      props.onClick(filter[0]);
+    }
+    // return a minimal calenendar obj (for first-setup)
+    else {
+      props.onClick({
+        summary: e.target.value
+      });
+    }
   };
 
-  const onClick = e => {
+  const onClick = (e, data) => {
     setSummary(e.target.innerText);
-    props.onClick(e);
+    props.onClick(data);
   };
 
   const filteredList = getMyCalendars.filter(item =>
     item.summary.match(new RegExp(escapeStringRegexp(summary), "ig"))
   );
 
+  // TODO: make this a HOC; able to pass in custom children
   return (
     <div>
       <CalendarNameInput value={summary} onChange={onChange} />
