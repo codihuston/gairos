@@ -70,6 +70,12 @@ function FirstSetupTasks({ tasks, handleAddTask, nextPath }) {
   return (
     <div>
       <h3>Create Your First Tasks</h3>
+      <p>
+        These are the tasks that you can choose to track. After you are finished
+        tracking, this activity will be saved to your Google Calendar for
+        viewing. You will also be able to report on your activity in your home
+        and reports page!
+      </p>
       <form>
         <div>
           <label htmlFor="name">Name * </label>

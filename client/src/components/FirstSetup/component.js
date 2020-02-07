@@ -8,12 +8,14 @@ import { component as SelectCalendar } from "../FirstSetupCalendar";
 import { component as AddTaskForm } from "../FirstSetupTasks";
 import { TaskList } from "../FirstSetupTasks";
 import { createMyCalendar as CREATE_MY_CALENDAR } from "../FirstSetupCalendar/queries";
+import { createMyTask as CREATE_MY_TASK } from "../FirstSetupTasks/queries";
 
 function FirstSetupComponent() {
   const [calendar, setCalendar] = useState(null);
   const [tasks, setTasks] = useState([]);
   let match = useRouteMatch();
   const [createMyCalendar] = useMutation(CREATE_MY_CALENDAR);
+  const [createMyTask] = useMutation(CREATE_MY_TASK);
 
   const handleSetCalendar = name => {
     setCalendar(name);
@@ -35,13 +37,32 @@ function FirstSetupComponent() {
     // create calendar
     const res = await createMyCalendar({
       variables: {
-        summary: "FAKE CAL",
+        summary: calendar,
         description: "FAKE DESCR"
       }
     });
 
     // TODO: create each task
-
+    (async function() {
+      for await (const task of tasks) {
+        try {
+          let taskRes = await createMyTask({
+            variables: {
+              name: task.name,
+              description: task.description
+            }
+          });
+          console.log(task.name, taskRes);
+        } catch (e) {
+          if (
+            e.message &&
+            e.message.toLowerCase().includes("already created this task")
+          ) {
+            // ignore it
+          }
+        }
+      }
+    })();
     // TODO: update user profile (isFirstSetupCompleted)
 
     console.log("RES", res);
@@ -50,6 +71,13 @@ function FirstSetupComponent() {
   return (
     <div>
       <div>
+        {!calendar ? (
+          <Redirect to={`${match.path}/create-calendar`} />
+        ) : calendar && !tasks.length ? (
+          <Redirect to={`${match.path}/create-tasks`} />
+        ) : calendar && tasks.length ? (
+          <Redirect to={`${match.path}/confirm`} />
+        ) : null}
         <Switch>
           <Route path={`${match.path}/start`}>
             <h2>Welcome to {APP_NAME}!</h2>
@@ -74,10 +102,10 @@ function FirstSetupComponent() {
           <Route path={`${match.path}/create-calendar`}>
             <SelectCalendar
               handleSetCalendar={handleSetCalendar}
-              nextPath={`${match.path}/create-task`}
+              nextPath={`${match.path}/create-tasks`}
             />
           </Route>
-          <Route path={`${match.path}/create-task`}>
+          <Route path={`${match.path}/create-tasks`}>
             <AddTaskForm
               tasks={tasks}
               handleAddTask={handleAddTask}
@@ -88,9 +116,20 @@ function FirstSetupComponent() {
             <h1>Confirm Your Setup</h1>
             <div>
               <h3>Your Calendar</h3>
+              <p>
+                If this calendar exists in your Google Calendar, we will use it,
+                otherwise we will create it.
+              </p>
               {calendar}
             </div>
-            <TaskList tasks={tasks} />
+            <div>
+              <h3>Your Tasks</h3>
+              <p>
+                These are your first tasks that we will create for you! You can
+                always edit them or add more later.
+              </p>
+              <TaskList tasks={tasks} />
+            </div>
             <button onClick={handleSubmit}>Submit</button>
           </Route>
           <Route path={`${match.path}`}>
