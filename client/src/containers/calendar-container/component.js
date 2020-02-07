@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useQuery } from "react-apollo";
+import escapeStringRegexp from "escape-string-regexp";
 
 import { GET_MY_CALENDARS } from "../../graphql/queries";
 import { component as CalendarList } from "../../components/calendar-list";
@@ -40,7 +41,7 @@ export default function CalendarContainer(props) {
   };
 
   const filteredList = getMyCalendars.filter(item =>
-    item.summary.match(new RegExp(summary, "ig"))
+    item.summary.match(new RegExp(escapeStringRegexp(summary), "ig"))
   );
 
   return (
