@@ -33,6 +33,7 @@ function FirstSetupComponent() {
     e.preventDefault();
 
     // TODO: handle graphql errors?
+    // TODO: show "complete" status?
 
     // create calendar
     const res = await createMyCalendar({
@@ -42,7 +43,7 @@ function FirstSetupComponent() {
       }
     });
 
-    // TODO: create each task
+    // create each task
     (async function() {
       for await (const task of tasks) {
         try {
@@ -59,6 +60,7 @@ function FirstSetupComponent() {
             e.message.toLowerCase().includes("already created this task")
           ) {
             // ignore it
+            console.log("ignore this error", e);
           }
         }
       }
