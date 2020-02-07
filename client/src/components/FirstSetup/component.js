@@ -9,6 +9,7 @@ import { component as AddTaskForm } from "../FirstSetupTasks";
 import { TaskList } from "../FirstSetupTasks";
 import { createMyCalendar as CREATE_MY_CALENDAR } from "../FirstSetupCalendar/queries";
 import { createMyTask as CREATE_MY_TASK } from "../FirstSetupTasks/queries";
+import { UPDATE_MY_PROFILE } from "./queries";
 
 function FirstSetupComponent() {
   const [calendar, setCalendar] = useState({
@@ -22,6 +23,7 @@ function FirstSetupComponent() {
   let match = useRouteMatch();
   const [createMyCalendar] = useMutation(CREATE_MY_CALENDAR);
   const [createMyTask] = useMutation(CREATE_MY_TASK);
+  const [updateMyProfile] = useMutation(UPDATE_MY_PROFILE);
 
   const handleSetCalendar = summary => {
     setCalendar({
@@ -44,6 +46,7 @@ function FirstSetupComponent() {
     // variables that will replace repsective states
     const newTasks = [];
     const newCalendar = Object.assign({}, calendar);
+    // this flag will notify a user that something has gone wrong
     let hasErrorOccured = false;
 
     // disable the submit button
@@ -61,11 +64,7 @@ function FirstSetupComponent() {
       // update calendar in state
       newCalendar.isCreated = true;
       setCalendar(newCalendar);
-
-      console.log("RES", res);
     } catch (e) {
-      // TODO: how to handle calendar creation failure?
-      console.error(e);
       hasErrorOccured = true;
     }
 
@@ -108,6 +107,17 @@ function FirstSetupComponent() {
 
     // TODO: update user profile, since calendarId and isFirstSetupCompleted
     // should be updated!
+    try {
+      const updateRes = await updateMyProfile({
+        variables: {
+          isFirstSetupCompleted: true
+        }
+      });
+
+      console.log("Update Res", updateRes);
+    } catch (e) {
+      hasErrorOccured = true;
+    }
 
     if (hasErrorOccured) {
       // re-enable the confirm button
