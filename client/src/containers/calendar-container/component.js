@@ -23,7 +23,7 @@ export const CalendarNameInput = ({ onChange, value }) => {
 
 const filterByName = calendars => {};
 
-export default function CalendarContainer(props) {
+export default function CalendarContainer({ onClick = () => {} }) {
   const { error, loading, data } = useQuery(GET_MY_CALENDARS);
   const [summary, setSummary] = useState("");
 
@@ -31,30 +31,28 @@ export default function CalendarContainer(props) {
   if (loading) return <Loading />;
   const { getMyCalendars } = data;
 
-  const onChange = e => {
+  const handleChange = e => {
     // update state
     setSummary(e.target.value);
 
     // look for exact match (case insensitive)
-    const filter = getMyCalendars.filter(
-      item => item.summary.toLowerCase() === summary.toLowerCase()
-    );
+    const filter = getMyCalendars.filter(item => item.summary === summary);
 
     // return it, if found
     if (filter && filter[0]) {
-      props.onClick(filter[0]);
+      onClick(filter[0]);
     }
     // return a minimal calenendar obj (for first-setup)
     else {
-      props.onClick({
+      onClick({
         summary: e.target.value
       });
     }
   };
 
-  const onClick = (e, data) => {
+  const handleClick = (e, data) => {
     setSummary(e.target.innerText);
-    props.onClick(data);
+    onClick(data);
   };
 
   const filteredList = getMyCalendars.filter(item =>
@@ -64,8 +62,8 @@ export default function CalendarContainer(props) {
   // TODO: make this a HOC; able to pass in custom children
   return (
     <div>
-      <CalendarNameInput value={summary} onChange={onChange} />
-      <CalendarList calendars={filteredList} onClick={onClick} />
+      <CalendarNameInput value={summary} onChange={handleChange} />
+      <CalendarList calendars={filteredList} onClick={handleClick} />
     </div>
   );
 }
