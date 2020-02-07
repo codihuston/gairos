@@ -11,6 +11,7 @@ import { TaskList } from "../../components/FirstSetupTasks";
 import { CREATE_MY_CALENDAR } from "../../graphql/mutations";
 import { CREATE_MY_TASK } from "../../graphql/mutations";
 import { UPDATE_MY_PROFILE } from "../../graphql/mutations";
+import { component as CalendarContainer } from "../../containers/calendar-container";
 
 function FirstSetupComponent() {
   const [calendar, setCalendar] = useState({
@@ -26,9 +27,9 @@ function FirstSetupComponent() {
   const [createMyTask] = useMutation(CREATE_MY_TASK);
   const [updateMyProfile] = useMutation(UPDATE_MY_PROFILE);
 
-  const handleSetCalendar = summary => {
+  const handleSetCalendar = e => {
     setCalendar({
-      summary,
+      summary: e.target.innerText,
       isCreated: false
     });
   };
@@ -149,10 +150,9 @@ function FirstSetupComponent() {
       <div>
         <Switch>
           <Route path={`${match.path}/create-calendar`}>
-            <SelectCalendar
-              handleSetCalendar={handleSetCalendar}
-              nextPath={`${match.path}/create-tasks`}
-            />
+            <CalendarContainer onClick={handleSetCalendar} />
+            // TODO: Conditionally hide nav -->
+            <Link to={`${match.path}/create-tasks`}>Next</Link>
           </Route>
           <Route path={`${match.path}/create-tasks`}>
             <AddTaskForm
