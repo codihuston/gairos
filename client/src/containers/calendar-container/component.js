@@ -35,7 +35,7 @@ export default function CalendarContainer({ onClick = () => {} }) {
     // update state
     setSummary(e.target.value);
 
-    // look for exact match (case insensitive)
+    // look for exact match
     const filter = getMyCalendars.filter(item => item.summary === summary);
 
     // return it, if found
