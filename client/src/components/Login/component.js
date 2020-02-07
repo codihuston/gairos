@@ -48,17 +48,15 @@ class LoginComponent extends React.Component {
 LoginComponent.propTypes = {
   data: PropTypes.shape({
     loading: PropTypes.bool,
-    me: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.string,
-        username: PropTypes.string,
-        email: PropTypes.string,
-        isFirstSetupCompleted: PropTypes.bool,
-        calendarId: PropTypes.string,
-        createdAt: PropTypes.string,
-        updatedAt: PropTypes.string
-      })
-    ),
+    me: PropTypes.shape({
+      id: PropTypes.string,
+      username: PropTypes.string,
+      email: PropTypes.string,
+      isFirstSetupCompleted: PropTypes.bool,
+      calendarId: PropTypes.string,
+      createdAt: PropTypes.string,
+      updatedAt: PropTypes.string
+    }),
     error: PropTypes.object
   })
 };
