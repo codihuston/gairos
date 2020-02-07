@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 
-export const createMyTask = gql`
+export const CREATE_MY_TASK = gql`
   mutation createMyTask(
     $name: String!
     $description: String

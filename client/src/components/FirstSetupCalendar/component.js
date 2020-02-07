@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { useQuery } from "react-apollo";
 import { Link } from "react-router-dom";
 
-import { getMyCalendars } from "./queries";
+import { GET_MY_CALENDARS } from "./queries";
 import GoogleSignInButton from "../GoogleSignInButton";
 import { component as Loading } from "../LoadingComponent";
 
@@ -45,7 +45,7 @@ export const CalendarList = ({ calendars, name }) => {
 };
 
 function FirstSetupCalendar(props) {
-  const { loading, error, data } = useQuery(getMyCalendars, {
+  const { loading, error, data } = useQuery(GET_MY_CALENDARS, {
     fetchPolicy: "cache-and-network"
   });
 

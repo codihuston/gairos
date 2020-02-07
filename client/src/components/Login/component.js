@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { graphql } from "react-apollo";
 import { Redirect } from "react-router-dom";
 
-import { me } from "./queries";
+import { GET_ME } from "./queries";
 import GoogleSignInButton from "../GoogleSignInButton";
 import { component as Loading } from "../LoadingComponent";
 
@@ -61,7 +61,7 @@ LoginComponent.propTypes = {
   })
 };
 
-export default graphql(me, {
+export default graphql(GET_ME, {
   options: {
     // pull from network only (not apollo cache)
     fetchPolicy: "network-only"

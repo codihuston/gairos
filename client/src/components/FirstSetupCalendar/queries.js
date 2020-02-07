@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 
-export const getMyCalendars = gql`
+export const GET_MY_CALENDARS = gql`
   query {
     getMyCalendars {
       id
@@ -10,7 +10,7 @@ export const getMyCalendars = gql`
   }
 `;
 
-export const createMyCalendar = gql`
+export const CREATE_MY_CALENDAR = gql`
   mutation($summary: String!, $description: String) {
     createMyCalendar(summary: $summary, description: $description) {
       id

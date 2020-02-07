@@ -7,8 +7,8 @@ import { APP_NAME } from "../../config";
 import { component as SelectCalendar } from "../FirstSetupCalendar";
 import { component as AddTaskForm } from "../FirstSetupTasks";
 import { TaskList } from "../FirstSetupTasks";
-import { createMyCalendar as CREATE_MY_CALENDAR } from "../FirstSetupCalendar/queries";
-import { createMyTask as CREATE_MY_TASK } from "../FirstSetupTasks/queries";
+import { CREATE_MY_CALENDAR } from "../FirstSetupCalendar/queries";
+import { CREATE_MY_TASK } from "../FirstSetupTasks/queries";
 import { UPDATE_MY_PROFILE } from "./queries";
 
 function FirstSetupComponent() {
