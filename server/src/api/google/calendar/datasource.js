@@ -103,9 +103,12 @@ export default {
       // otherwise...
       if (!res) {
         // create the new google calendar
-        res = await GoogleCalendar.calendars.insert({
+        let temp = await GoogleCalendar.calendars.insert({
           resource: opts
-        }).data;
+        });
+
+        // normalize this res for the next block of logic
+        res = temp.data;
       }
 
       // associate the google calendar with our database
