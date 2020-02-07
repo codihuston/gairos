@@ -16,6 +16,9 @@ function FirstSetupComponent() {
     isCreated: false
   });
   const [tasks, setTasks] = useState([]);
+  const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
+  const [isNextDisabled, setIsNextDisabled] = useState(true);
+  const [displayError, setDisplayError] = useState(false);
   let match = useRouteMatch();
   const [createMyCalendar] = useMutation(CREATE_MY_CALENDAR);
   const [createMyTask] = useMutation(CREATE_MY_TASK);
@@ -41,21 +44,32 @@ function FirstSetupComponent() {
     // variables that will replace repsective states
     const newTasks = [];
     const newCalendar = Object.assign({}, calendar);
+    let hasErrorOccured = false;
+
+    // disable the submit button
+    setIsSubmitDisabled(true);
 
     // create calendar
-    // TODO: how to handle calendar creation failure?
-    const res = await createMyCalendar({
-      variables: {
-        summary: calendar.summary,
-        description: "FAKE DESCR"
-      }
-    });
+    try {
+      const res = await createMyCalendar({
+        variables: {
+          summary: calendar.summary,
+          description: `Created by ${APP_NAME}`
+        }
+      });
 
-    // update calendar in state
-    newCalendar.isCreated = true;
-    setCalendar(newCalendar);
+      // update calendar in state
+      newCalendar.isCreated = true;
+      setCalendar(newCalendar);
 
-    // execute the creation of these tasks (async) in order
+      console.log("RES", res);
+    } catch (e) {
+      // TODO: how to handle calendar creation failure?
+      console.error(e);
+      hasErrorOccured = true;
+    }
+
+    // create tasks: execute creation (async) in order
     await tasks.reduce(
       (p, task) =>
         // whe a promise resolves, chain onto it
@@ -79,7 +93,7 @@ function FirstSetupComponent() {
               // set the task as created anyways
               task.isCreated = true;
             } else {
-              // TODO: handle error?
+              hasErrorOccured = true;
             }
           }
           // push this newly created task onto our array
@@ -95,7 +109,17 @@ function FirstSetupComponent() {
     // TODO: update user profile, since calendarId and isFirstSetupCompleted
     // should be updated!
 
-    console.log("RES", res);
+    if (hasErrorOccured) {
+      // re-enable the confirm button
+      setIsSubmitDisabled(false);
+      setIsNextDisabled(true);
+    }
+    // if submit succeeded, leave submit disabled, show next button
+    else {
+      setIsNextDisabled(false);
+    }
+
+    setDisplayError(hasErrorOccured);
   };
 
   return (
@@ -161,7 +185,16 @@ function FirstSetupComponent() {
               </p>
               <TaskList tasks={tasks} />
             </div>
-            <button onClick={handleSubmit}>Submit</button>
+            {displayError ? (
+              <p>
+                An error has occured. Please try again. If this error continues,
+                please notify a developer!
+              </p>
+            ) : null}
+            {isSubmitDisabled ? null : (
+              <button onClick={handleSubmit}>Submit</button>
+            )}
+            {isNextDisabled ? null : <Link to="/home">Take me home!</Link>}
           </Route>
           <Route path={`${match.path}`}>
             <Redirect to={`${match.path}/start`} />
