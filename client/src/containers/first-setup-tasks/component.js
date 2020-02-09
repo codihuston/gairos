@@ -19,7 +19,9 @@ export const TaskList = ({ children, tasks }) => {
 
 function FirstSetupTasks({ tasks, handleAddTask, nextPath }) {
   const [isAddDisabled, setIsAddDisabled] = useState(true);
-  const [isNextDisabled, setIsNextDisabled] = useState(true);
+  const [isNextDisabled, setIsNextDisabled] = useState(
+    tasks.length ? false : true
+  );
   const [newTask, setNewTask] = useState({
     name: "",
     description: "",
