@@ -5,13 +5,14 @@ import { useMutation } from "react-apollo";
 
 import { APP_NAME } from "../../config";
 import { GetCachedUser } from "../../components/is-first-setup-completed";
-import { component as SelectCalendar } from "../../components/FirstSetupCalendar";
-import { component as AddTaskForm } from "../../containers/first-setup-tasks";
-import { TaskList } from "../../containers/first-setup-tasks";
+import { component as CalendarContainer } from "../../containers/first-setup-calendar";
+import {
+  component as AddTaskForm,
+  TaskList
+} from "../../containers/first-setup-tasks";
 import { CREATE_MY_CALENDAR } from "../../graphql/mutations";
 import { CREATE_MY_TASK } from "../../graphql/mutations";
 import { UPDATE_MY_PROFILE } from "../../graphql/mutations";
-import { component as CalendarContainer } from "../../containers/calendar-container";
 
 function FirstSetupComponent(props) {
   const [calendar, setCalendar] = useState({
