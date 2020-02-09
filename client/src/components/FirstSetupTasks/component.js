@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
-export const TaskList = ({ tasks }) => {
+export const TaskList = ({ children, tasks }) => {
   if (!tasks.length) return <div>Add a task above!</div>;
   return (
     <div>
       <h3>Your Tasks</h3>
+      {children}
       {tasks.map((task, i) => (
         <li key={i}>
           {task.name} {task.isCreated ? "Created!" : null}

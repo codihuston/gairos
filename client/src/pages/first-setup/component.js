@@ -170,12 +170,12 @@ function FirstSetupComponent() {
               {calendar.isCreated ? "Created!" : null}
             </div>
             <div>
-              <h3>Your Tasks</h3>
-              <p>
-                These are your first tasks that we will create for you! You can
-                always edit them or add more later.
-              </p>
-              <TaskList tasks={tasks} />
+              <TaskList tasks={tasks}>
+                <p>
+                  These are your first tasks that we will create for you! You
+                  can always edit them or add more later.
+                </p>
+              </TaskList>
             </div>
             {displayError ? (
               <p>
