@@ -36,7 +36,9 @@ export default function CalendarContainer({ onClick = () => {} }) {
     setSummary(e.target.value);
 
     // look for exact match
-    const filter = getMyCalendars.filter(item => item.summary === summary);
+    const filter = getMyCalendars.filter(
+      item => item.summary === e.target.value
+    );
 
     // return it, if found
     if (filter && filter[0]) {

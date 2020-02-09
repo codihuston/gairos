@@ -13,7 +13,7 @@ import { CREATE_MY_TASK } from "../../graphql/mutations";
 import { UPDATE_MY_PROFILE } from "../../graphql/mutations";
 import { component as CalendarContainer } from "../../containers/calendar-container";
 
-function FirstSetupComponent() {
+function FirstSetupComponent(props) {
   const [calendar, setCalendar] = useState({
     summary: "",
     isCreated: false
@@ -142,6 +142,14 @@ function FirstSetupComponent() {
     );
   }
 
+  // force redirect to first-setup/create-calendar if one is not set
+  if (
+    (!calendar || !calendar.summary) &&
+    props.location.pathname !== `${match.path}/create-calendar`
+  ) {
+    return <Redirect to={`${match.path}/create-calendar`} />;
+  }
+
   return (
     <div>
       <div>
@@ -149,7 +157,9 @@ function FirstSetupComponent() {
           <Route path={`${match.path}/create-calendar`}>
             <CalendarContainer onClick={handleSetCalendar} />
             // TODO: Conditionally hide nav -->
-            <Link to={`${match.path}/create-tasks`}>Next</Link>
+            {calendar && calendar.summary ? (
+              <Link to={`${match.path}/create-tasks`}>Next</Link>
+            ) : null}
           </Route>
           <Route path={`${match.path}/create-tasks`}>
             <AddTaskForm
