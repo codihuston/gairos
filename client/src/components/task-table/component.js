@@ -1,9 +1,19 @@
 import React, { useState } from "react";
-import { Container, Row, Table, Modal, Form, Button } from "react-bootstrap";
-
+import {
+  Container,
+  Row,
+  Table,
+  Modal,
+  Form,
+  Button,
+  Alert
+} from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/pro-duotone-svg-icons";
 import { faPlus } from "@fortawesome/pro-light-svg-icons";
+
+import { component as Loading } from "../loading";
+import CreateMyTask from "../../graphql/mutations/hooks/create-my-task";
 
 export const TaskTableRow = ({ task }) => {
   return (
@@ -22,7 +32,38 @@ export const TaskTableRow = ({ task }) => {
   );
 };
 
-export const CreateTaskModal = ({ show, handleClose, handleShow }) => {
+export const CreateTaskModal = ({ show, handleClose }) => {
+  const [mutate, { data, loading }] = CreateMyTask();
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [error, setError] = useState("");
+
+  const handleSubmit = async () => {
+    setError("");
+
+    try {
+      await mutate({
+        variables: {
+          name,
+          description
+        }
+      });
+
+      setName("");
+      setDescription("");
+    } catch (e) {
+      setError(e.message);
+    }
+  };
+
+  const handleChangeName = e => {
+    setName(e.target.value);
+  };
+
+  const handleChangeDescription = e => {
+    setDescription(e.target.value);
+  };
+
   return (
     <Modal show={show} onHide={handleClose} animation={false}>
       <Modal.Header closeButton>
@@ -32,19 +73,52 @@ export const CreateTaskModal = ({ show, handleClose, handleShow }) => {
         <Form>
           <Form.Group controlId="formTaskName">
             <Form.Label>Name</Form.Label>
-            <Form.Control type="text" placeholder="Name your task" />
+            <Form.Control
+              type="text"
+              placeholder="Name your task"
+              value={name}
+              onChange={handleChangeName}
+            />
           </Form.Group>
 
           <Form.Group controlId="formTaskDescription">
             <Form.Label>Description</Form.Label>
-            <Form.Control type="text" placeholder="Describe your task" />
+            <Form.Control
+              type="text"
+              placeholder="Describe your task"
+              value={description}
+              onChange={handleChangeDescription}
+            />
+            {error ? (
+              <Alert variant="danger" className="mt-1">
+                {error}
+              </Alert>
+            ) : null}
+            {data ? (
+              <Alert variant="success" className="mt-1">
+                Task created!
+              </Alert>
+            ) : null}
           </Form.Group>
-          <Container fluid>
+          <Container fluid className="mt-1">
             <Row className="justify-content-end">
-              <Button variant="primary mr-1" onClick={handleClose}>
+              {loading ? <Loading /> : null}
+              <Button
+                variant="primary"
+                onClick={handleSubmit}
+                style={{
+                  visibility: loading ? "hidden" : "visible"
+                }}
+              >
                 Create
               </Button>
-              <Button variant="secondary" onClick={handleClose}>
+              <Button
+                variant="secondary"
+                onClick={handleClose}
+                style={{
+                  visibility: loading ? "hidden" : "visible"
+                }}
+              >
                 Cancel
               </Button>
             </Row>
@@ -62,6 +136,7 @@ export default function TaskTable({ tasks }) {
   const handleShow = () => setShow(true);
 
   if (!tasks.length) return <div>No Tasks Provided!</div>;
+
   return (
     <div>
       <h2>Your Tasks</h2>
