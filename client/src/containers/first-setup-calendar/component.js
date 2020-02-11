@@ -4,7 +4,7 @@ import escapeStringRegexp from "escape-string-regexp";
 
 import { GET_MY_CALENDARS } from "../../graphql/queries";
 import { component as CalendarList } from "../../components/calendar-list";
-import { component as Loading } from "../../components/LoadingComponent";
+import { component as Loading } from "../../components/loading";
 
 export const CalendarNameInput = ({ onChange, value }) => {
   return (

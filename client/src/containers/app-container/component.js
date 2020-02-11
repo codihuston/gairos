@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import getApolloClient from "../../services/apolloClient";
+import getApolloClient from "../../services/apollo-client";
 import AppComponent from "../../App";
 
 export default function App() {

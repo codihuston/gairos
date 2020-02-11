@@ -5,10 +5,10 @@ import logo from "../logo.svg";
 
 import { component as IsFirstSetupCompleted } from "../components/is-first-setup-completed";
 import { component as FirstSetup } from "./first-setup";
-import { component as ExampleComponent } from "../components/Examples/ExampleComponent";
-import { component as ApiVersionComponent } from "../components/Examples/ApiVersionQueryComponent";
-import { component as APIVersionQueryHookComponent } from "../components/Examples/ApiVersionQueryHook";
-import { component as APIVersionQueryHOC } from "../components/Examples/ApiVersionQueryHOC";
+import { component as ExampleComponent } from "../components/examples/example-component";
+import { component as ApiVersionComponent } from "../components/examples/api-version-query-component";
+import { component as APIVersionQueryHookComponent } from "../components/examples/api-version-query-hook";
+import { component as APIVersionQueryHOC } from "../components/examples/api-version-query-higher-order-component";
 
 export default function Pages() {
   return (

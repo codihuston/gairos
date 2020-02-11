@@ -7,7 +7,7 @@ import React from "react";
 import { useQuery } from "react-apollo";
 
 import { getVersion } from "./queries";
-import { component as Loading } from "../../LoadingComponent";
+import { component as Loading } from "../../loading";
 
 function ApiVersion() {
   const { loading, error, data } = useQuery(getVersion);

@@ -7,7 +7,7 @@ import * as serviceWorker from "./serviceWorker";
 import "./config";
 
 // import custom app container
-import AppContainer from "./components/AppContainer/component";
+import AppContainer from "./containers/app-container/component";
 
 ReactDOM.render(<AppContainer />, document.getElementById("root"));
 

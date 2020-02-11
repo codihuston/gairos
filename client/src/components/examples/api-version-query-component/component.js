@@ -8,7 +8,7 @@ import React from "react";
 import { Query } from "react-apollo";
 
 import { getVersion } from "./queries";
-import { component as Loading } from "../../LoadingComponent";
+import { component as Loading } from "../../loading";
 
 class ApiVersion extends React.Component {
   render() {
