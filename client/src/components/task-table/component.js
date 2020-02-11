@@ -18,21 +18,39 @@ import DeleteMyTask from "../../graphql/mutations/hooks/delete-my-task";
 
 import { GET_MY_TASKS as query } from "../../graphql/queries";
 
+export const Confirm = ({ handleYes, handleNo }) => {
+  return (
+    <Modal animation={false}>
+      <Modal.Header closeButton>
+        <Modal.Title>Confirm</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>Are you sure?</Modal.Body>
+      <Modal.Footer></Modal.Footer>
+    </Modal>
+  );
+};
+
 export const TaskTableRow = ({ task }) => {
   const [mutate] = DeleteMyTask();
 
   const handleDelete = async (e, data) => {
     try {
-      await mutate({
-        variables: {
-          userTaskId: data.userTaskInfo.id
-        },
-        refetchQueries: [
-          {
-            query
-          }
-        ]
-      });
+      if (
+        window.confirm(
+          `Are that you sure that you want to delete '${data.name}'?`
+        )
+      ) {
+        await mutate({
+          variables: {
+            userTaskId: data.userTaskInfo.id
+          },
+          refetchQueries: [
+            {
+              query
+            }
+          ]
+        });
+      }
     } catch (e) {
       alert(
         `${e.message}. Please try again later, or contact a developer if the error persists.`
