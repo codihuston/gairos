@@ -7,22 +7,6 @@
 }
 
 html {
-  // this defines what 1rem is
-  font-size: 62.5%; // 1 rem = 10px; 10px / 16px = 62.5%
-
-  @include respond(tab-land) {
-    font-size: 56.25%; // 1rem = 9px, 9/16 = 50%
-  }
-
-  @include respond(tab-land) {
-    font-size: 56.25%; // 1rem == 9px, 9/16 = 50%
-  }
-
-  @include respond(tab-port) {
-    font-size: 50%; // 1 rem = 8px, 8/16 = 50%
-  }
-  
-  @include respond(tab-land) {
-    font-size: 75%; // 1 rem = 12, 12/16 = 65%
-  }
+  // this defines what 1 rem is 10px / 100px = 10px
+  font-size: 100%;
 }
