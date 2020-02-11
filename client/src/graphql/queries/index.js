@@ -1,5 +1,11 @@
 import gql from "graphql-tag";
 
+export const getVersion = gql`
+  query {
+    version
+  }
+`;
+
 export const GET_ME = gql`
   query {
     me {

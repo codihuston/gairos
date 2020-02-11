@@ -10,7 +10,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { graphql } from "react-apollo";
 
-import { getVersion } from "./queries";
+import { getVersion } from "../../../graphql/queries";
 
 class ApiVersion extends React.Component {
   render() {

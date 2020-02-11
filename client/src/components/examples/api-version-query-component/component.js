@@ -7,7 +7,7 @@
 import React from "react";
 import { Query } from "react-apollo";
 
-import { getVersion } from "./queries";
+import { getVersion } from "../../../graphql/queries";
 import { component as Loading } from "../../loading";
 
 class ApiVersion extends React.Component {
