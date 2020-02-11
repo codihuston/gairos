@@ -14,19 +14,47 @@ import { faPlus } from "@fortawesome/pro-light-svg-icons";
 
 import { component as Loading } from "../loading";
 import CreateMyTask from "../../graphql/mutations/hooks/create-my-task";
+import DeleteMyTask from "../../graphql/mutations/hooks/delete-my-task";
 
 import { GET_MY_TASKS as query } from "../../graphql/queries";
 
 export const TaskTableRow = ({ task }) => {
+  const [mutate] = DeleteMyTask();
+
+  const handleDelete = async (e, data) => {
+    try {
+      await mutate({
+        variables: {
+          userTaskId: data.userTaskInfo.id
+        },
+        refetchQueries: [
+          {
+            query
+          }
+        ]
+      });
+    } catch (e) {
+      alert(
+        `${e.message}. Please try again later, or contact a developer if the error persists.`
+      );
+    }
+  };
+
   return (
     <tr>
       <td>{task.name}</td>
-      <td>{task.description ? task.description : <i>None</i>}</td>
+      <td>
+        {task.userTaskInfo && task.userTaskInfo.description ? (
+          task.userTaskInfo.description
+        ) : (
+          <i>None</i>
+        )}
+      </td>
       <td>
         <button alt="edit button">
           <FontAwesomeIcon icon={faEdit} />
         </button>
-        <button alt="delete button">
+        <button alt="delete button" onClick={e => handleDelete(e, task)}>
           <FontAwesomeIcon icon={faTrash} />
         </button>
       </td>
