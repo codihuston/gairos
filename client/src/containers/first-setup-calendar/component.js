@@ -27,6 +27,10 @@ export default function CalendarContainer({ onClick = () => {} }) {
 
   // TODO: handle error
   if (loading) return <Loading />;
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
   const { getMyCalendars } = data;
 
   const handleChange = e => {
