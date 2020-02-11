@@ -36,6 +36,7 @@ export const GET_MY_TASKS = gql`
       id
       name
       userTaskInfo {
+        id
         description
         isPublic
       }

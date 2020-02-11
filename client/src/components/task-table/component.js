@@ -15,6 +15,8 @@ import { faPlus } from "@fortawesome/pro-light-svg-icons";
 import { component as Loading } from "../loading";
 import CreateMyTask from "../../graphql/mutations/hooks/create-my-task";
 
+import { GET_MY_TASKS as query } from "../../graphql/queries";
+
 export const TaskTableRow = ({ task }) => {
   return (
     <tr>
@@ -46,7 +48,12 @@ export const CreateTaskModal = ({ show, handleClose }) => {
         variables: {
           name,
           description
-        }
+        },
+        refetchQueries: [
+          {
+            query
+          }
+        ]
       });
 
       setName("");
