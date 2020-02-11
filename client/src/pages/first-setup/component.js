@@ -15,6 +15,7 @@ import { CREATE_MY_TASK } from "../../graphql/mutations";
 import { UPDATE_MY_PROFILE } from "../../graphql/mutations";
 
 function FirstSetupComponent(props) {
+  const match = useRouteMatch();
   const [calendar, setCalendar] = useState({
     summary: "",
     isCreated: false
@@ -23,7 +24,6 @@ function FirstSetupComponent(props) {
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
   const [isNextDisabled, setIsNextDisabled] = useState(true);
   const [displayError, setDisplayError] = useState(false);
-  let match = useRouteMatch();
   const [createMyCalendar] = useMutation(CREATE_MY_CALENDAR);
   const [createMyTask] = useMutation(CREATE_MY_TASK);
   const [updateMyProfile] = useMutation(UPDATE_MY_PROFILE);
@@ -54,7 +54,7 @@ function FirstSetupComponent(props) {
 
     // create calendar
     try {
-      const res = await createMyCalendar({
+      await createMyCalendar({
         variables: {
           summary: calendar.summary,
           description: `Created by ${APP_NAME}`
@@ -157,7 +157,7 @@ function FirstSetupComponent(props) {
         <Switch>
           <Route path={`${match.path}/create-calendar`}>
             <CalendarContainer onClick={handleSetCalendar} />
-            // TODO: Conditionally hide nav -->
+            TODO: Conditionally hide nav -->
             {calendar && calendar.summary ? (
               <Link to={`${match.path}/create-tasks`}>Next</Link>
             ) : null}

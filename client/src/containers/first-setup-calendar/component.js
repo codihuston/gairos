@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useQuery } from "react-apollo";
 import escapeStringRegexp from "escape-string-regexp";
 
@@ -20,8 +20,6 @@ export const CalendarNameInput = ({ onChange, value }) => {
     </div>
   );
 };
-
-const filterByName = calendars => {};
 
 export default function CalendarContainer({ onClick = () => {} }) {
   const { error, loading, data } = useQuery(GET_MY_CALENDARS);

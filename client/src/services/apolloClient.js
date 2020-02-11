@@ -20,7 +20,7 @@ const httpLink = new HttpLink({
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
-    graphQLErrors.map(({ message, locations, path }) => {
+    graphQLErrors.forEach(({ message, locations, path }) => {
       console.error(`[GraphQL error]: Message: ${message}`);
 
       // do not display this in production
