@@ -58,6 +58,11 @@ const model = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         defaultValue: "2",
         allowNull: true
+      },
+      refreshToken: {
+        type: DataTypes.STRING,
+        defaultValue: null,
+        allowNull: true
       }
     },
     {

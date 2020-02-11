@@ -32,6 +32,9 @@ router.get("/google/cb", async function(req, response, next) {
     const ip = req.header("x-forwarded-for") || req.connection.remoteAddress;
     const { tokens, res } = await oauth2Client.getToken(code);
 
+    debug("Got back tokens", tokens);
+
+    // set tokens on this google oauth2Client
     oauth2Client.setCredentials(tokens);
 
     debug("got state back (decoded)", sessionId);
@@ -51,6 +54,11 @@ router.get("/google/cb", async function(req, response, next) {
 
     // create the user if they do not exist
     const user = await models.user.createFromGoogleProfile(people.data);
+
+    // store this refresh token in the user's table
+    user.refreshToken = tokens.refresh_token;
+
+    await user.save();
 
     // if no errors, init a session
     debug("store user in session", user);

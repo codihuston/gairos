@@ -14,6 +14,7 @@ import path from "path";
 import uuid from "uuid/v4";
 import debugLib from "debug";
 
+import { oauth2Client } from "./services/auth/google";
 import { defaultUsers as users } from "./test/utils";
 import { router as indexRouter } from "./routes/index";
 import { router as authRouter } from "./routes/auth";
@@ -121,11 +122,17 @@ export default resolveGraphqlDefinitions()
         // otherwise, confirm that the user in session exists
         else {
           if (session && session.user && session.user.id) {
+            // load the user for this session
             user = await models.user.findOne({
               where: {
                 id: req.session.user.id
               },
               raw: true
+            });
+
+            // set the google refresh token (in case of expiry)
+            oauth2Client.setCredentials({
+              refresh_token: user.refreshToken
             });
           } else {
             debug("No user stored in session... this is a new session!");
