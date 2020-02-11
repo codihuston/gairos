@@ -17,6 +17,11 @@ import { component as Navigation } from "../components/navigation";
 // pages
 import { component as FirstSetup } from "./first-setup";
 import { component as Home } from "./home";
+import { component as Track } from "./track";
+import { component as Tags } from "./tags";
+import { component as Tasks } from "./tasks";
+import { component as Reports } from "./reports";
+import { component as History } from "./history";
 
 export default function Pages() {
   return (
@@ -40,6 +45,11 @@ export default function Pages() {
         </Route>
         <Route path="/first-setup" component={FirstSetup}></Route>
         <Route path="/home" component={Home}></Route>
+        <Route path="/track" component={Track}></Route>
+        <Route path="/tags" component={Tags}></Route>
+        <Route path="/tasks" component={Tasks}></Route>
+        <Route path="/reports" component={Reports}></Route>
+        <Route path="/history" component={History}></Route>
         <Route path="/">
           <Redirect to="/home" />
         </Route>
