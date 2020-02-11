@@ -7,7 +7,9 @@ import {
   faTags,
   faTasks,
   faFileChartLine,
-  faHistory
+  faHistory,
+  faInfoSquare,
+  faInfo
 } from "@fortawesome/pro-duotone-svg-icons";
 
 export default function Navigation() {
@@ -46,6 +48,10 @@ export default function Navigation() {
           <Nav.Link href="/history">
             <FontAwesomeIcon className="icon-fixed-width" icon={faHistory} />
             History
+          </Nav.Link>
+          <Nav.Link href="/about">
+            <FontAwesomeIcon className="icon-fixed-width" icon={faInfoSquare} />
+            About
           </Nav.Link>
         </Nav>
       </Navbar.Collapse>

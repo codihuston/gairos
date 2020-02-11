@@ -22,6 +22,7 @@ import { component as Tags } from "./tags";
 import { component as Tasks } from "./tasks";
 import { component as Reports } from "./reports";
 import { component as History } from "./history";
+import { component as About } from "./about";
 
 export default function Pages() {
   return (
@@ -50,6 +51,7 @@ export default function Pages() {
         <Route path="/tasks" component={Tasks}></Route>
         <Route path="/reports" component={Reports}></Route>
         <Route path="/history" component={History}></Route>
+        <Route path="/about" component={About}></Route>
         <Route path="/">
           <Redirect to="/home" />
         </Route>
