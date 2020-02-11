@@ -4,7 +4,7 @@ import { Switch, Route, Link, Redirect, useRouteMatch } from "react-router-dom";
 import { useMutation } from "react-apollo";
 
 import { APP_NAME } from "../../config";
-import { component as GetCachedUser } from "../../graphql/queries/hooks/get-cached-user";
+import { component as GetUser } from "../../graphql/queries/hooks/get-user";
 import { component as CalendarContainer } from "../../containers/first-setup-calendar";
 import { component as AddTaskForm } from "../../containers/first-setup-tasks";
 import { component as TaskList } from "../../components/task-list";
@@ -131,7 +131,7 @@ function FirstSetupComponent(props) {
   };
 
   // if first setup is already complete, then redirect to home
-  const user = GetCachedUser();
+  const user = GetUser();
   if (user && user.isFirstSetupCompleted === true) {
     return (
       <div>
