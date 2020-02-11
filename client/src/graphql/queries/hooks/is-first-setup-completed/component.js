@@ -1,18 +1,7 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
-import { useQuery } from "react-apollo";
 
-import { GET_ME } from "../../graphql/queries";
-
-export const GetCachedUser = () => {
-  const { data } = useQuery(GET_ME, {
-    options: {
-      fetchPolicy: "cache"
-    }
-  });
-
-  return data && data.me ? data.me : null;
-};
+import { component as GetCachedUser } from "../get-cached-user";
 
 export default function IsFirstSetupCompleted() {
   const user = GetCachedUser();

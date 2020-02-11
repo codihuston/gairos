@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import logo from "../logo.svg";
 
-import { component as IsFirstSetupCompleted } from "../components/is-first-setup-completed";
+import { component as IsFirstSetupCompleted } from "../graphql/queries/hooks/is-first-setup-completed";
 import { component as FirstSetup } from "./first-setup";
 import { component as ExampleComponent } from "../components/examples/example-component";
 import { component as ApiVersionComponent } from "../components/examples/api-version-query-component";
