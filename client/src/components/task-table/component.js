@@ -18,46 +18,22 @@ import DeleteMyTask from "../../graphql/mutations/hooks/delete-my-task";
 
 import { GET_MY_TASKS as query } from "../../graphql/queries";
 
-export const Confirm = ({ handleYes, handleNo }) => {
+export const DeleteTaskModal = ({ show, handleClose, handleConfirm }) => {
   return (
-    <Modal animation={false}>
+    <Modal show={show} onHide={handleClose} animation={false}>
       <Modal.Header closeButton>
-        <Modal.Title>Confirm</Modal.Title>
+        <Modal.Title>Delete A Task</Modal.Title>
       </Modal.Header>
-      <Modal.Body>Are you sure?</Modal.Body>
-      <Modal.Footer></Modal.Footer>
+      <Modal.Body>Are you sure you want to delete this task?</Modal.Body>
+      <Modal.Footer>
+        <Button onClick={handleConfirm}>Yes</Button>
+        <Button onClick={handleClose}>Cancel</Button>
+      </Modal.Footer>
     </Modal>
   );
 };
 
-export const TaskTableRow = ({ task }) => {
-  const [mutate] = DeleteMyTask();
-
-  const handleDelete = async (e, data) => {
-    try {
-      if (
-        window.confirm(
-          `Are that you sure that you want to delete '${data.name}'?`
-        )
-      ) {
-        await mutate({
-          variables: {
-            userTaskId: data.userTaskInfo.id
-          },
-          refetchQueries: [
-            {
-              query
-            }
-          ]
-        });
-      }
-    } catch (e) {
-      alert(
-        `${e.message}. Please try again later, or contact a developer if the error persists.`
-      );
-    }
-  };
-
+export const TaskTableRow = ({ task, onDelete }) => {
   return (
     <tr>
       <td>{task.name}</td>
@@ -72,7 +48,7 @@ export const TaskTableRow = ({ task }) => {
         <button alt="edit button">
           <FontAwesomeIcon icon={faEdit} />
         </button>
-        <button alt="delete button" onClick={e => handleDelete(e, task)}>
+        <button alt="delete button" onClick={e => onDelete(e, task)}>
           <FontAwesomeIcon icon={faTrash} />
         </button>
       </td>
@@ -183,21 +159,57 @@ export const CreateTaskModal = ({ show, handleClose }) => {
 };
 
 export default function TaskTable({ tasks }) {
-  const [show, setShow] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const handleCloseCreateModal = () => setShowCreateModal(false);
+  const handleShowCreateModal = () => setShowCreateModal(true);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [taskToDelete, setSetTaskToDelete] = useState(null);
+  const handleCloseDeleteModal = () => setShowDeleteModal(false);
+  const handleShowDeleteModal = (e, data) => {
+    setShowDeleteModal(true);
+    setSetTaskToDelete(data);
+    console.log("DELETE", data);
+  };
+  const [mutate] = DeleteMyTask();
+
+  const handleDelete = async cb => {
+    try {
+      await mutate({
+        variables: {
+          userTaskId: taskToDelete.userTaskInfo.id
+        },
+        refetchQueries: [
+          {
+            query
+          }
+        ]
+      });
+    } catch (e) {
+      alert(
+        `${e.message}. Please try again later, or contact a developer if the error persists.`
+      );
+    }
+  };
 
   if (!tasks.length) return <div>No Tasks Provided!</div>;
 
   return (
     <div>
       <h2>Your Tasks</h2>
-      <Button variant="primary" onClick={handleShow}>
+      <Button variant="primary" onClick={handleShowCreateModal}>
         <FontAwesomeIcon icon={faPlus} />
         &nbsp;Create
       </Button>
-      <CreateTaskModal show={show} handleClose={handleClose} />
+      <CreateTaskModal
+        show={showCreateModal}
+        handleClose={handleCloseCreateModal}
+      />
+      <DeleteTaskModal
+        show={showDeleteModal}
+        handleConfirm={handleDelete}
+        handleClose={handleCloseDeleteModal}
+      />
       <Table striped bordered hover size="sm">
         <thead>
           <tr>
@@ -208,7 +220,11 @@ export default function TaskTable({ tasks }) {
         </thead>
         <tbody>
           {tasks.map(task => (
-            <TaskTableRow key={task.id} task={task} />
+            <TaskTableRow
+              key={task.id}
+              task={task}
+              onDelete={handleShowDeleteModal}
+            />
           ))}
         </tbody>
       </Table>
