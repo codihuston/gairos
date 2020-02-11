@@ -1,12 +1,5 @@
 import { useMutation } from "react-apollo";
 
-import gql from "graphql-tag";
+import { DELETE_MY_TASK } from "..";
 
-export default id =>
-  useMutation(
-    gql`
-      mutation($userTaskId: ID!) {
-        deleteMyTask(input: { userTaskId: $userTaskId })
-      }
-    `
-  );
+export default id => useMutation(DELETE_MY_TASK);

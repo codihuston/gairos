@@ -1,5 +1,8 @@
 import gql from "graphql-tag";
 
+/*******************************************************************************
+ * Calendar
+ ******************************************************************************/
 export const CREATE_MY_CALENDAR = gql`
   mutation($summary: String!, $description: String) {
     createMyCalendar(summary: $summary, description: $description) {
@@ -10,6 +13,9 @@ export const CREATE_MY_CALENDAR = gql`
   }
 `;
 
+/*******************************************************************************
+ * Tasks
+ ******************************************************************************/
 export const CREATE_MY_TASK = gql`
   mutation createMyTask(
     $name: String!
@@ -38,6 +44,15 @@ export const CREATE_MY_TASK = gql`
   }
 `;
 
+export const DELETE_MY_TASK = gql`
+  mutation($userTaskId: ID!) {
+    deleteMyTask(input: { userTaskId: $userTaskId })
+  }
+`;
+
+/*******************************************************************************
+ * User Profile
+ ******************************************************************************/
 export const UPDATE_MY_PROFILE = gql`
   mutation(
     $username: String
