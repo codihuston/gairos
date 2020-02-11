@@ -1,4 +1,5 @@
 import React from "react";
+import { Alert } from "react-bootstrap";
 
 import GetTasks from "../../graphql/queries/hooks/get-tasks";
 import { component as Loading } from "../../components/loading";
@@ -13,7 +14,15 @@ export default function Home() {
     return <Loading />;
   }
 
-  console.log(data, error);
+  if (error) {
+    console.error(error);
+    return (
+      <Alert variant="danger">
+        There was a problem loading your tasks :(. Please try again later.
+        Please notify a developer if this persists!
+      </Alert>
+    );
+  }
   return (
     <div>
       <TaskTable tasks={data.getMyTasks} />
