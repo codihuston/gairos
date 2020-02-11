@@ -29,3 +29,16 @@ export const GET_MY_CALENDARS = gql`
     }
   }
 `;
+
+export const GET_MY_TASKS = gql`
+  query {
+    getMyTasks {
+      id
+      name
+      userTaskInfo {
+        description
+        isPublic
+      }
+    }
+  }
+`;

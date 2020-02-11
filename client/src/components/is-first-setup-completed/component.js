@@ -1,7 +1,7 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
 
-import { component as GetUser } from "../../graphql/queries/hooks/get-user";
+import GetUser from "../../graphql/queries/hooks/get-user";
 
 export default function IsFirstSetupCompleted() {
   const user = GetUser();
