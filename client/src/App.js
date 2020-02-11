@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { ApolloProvider, useQuery } from "react-apollo";
 
 import "./scss/main.scss";
+import "bootstrap/dist/css/bootstrap.min.css";
 import { component as Login } from "./pages/login";
 import Pages from "./pages";
 import { GET_ME } from "./graphql/queries";
