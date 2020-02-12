@@ -276,6 +276,19 @@ export default function TaskTable({ tasks }) {
             accessor: "userTaskInfo.description"
           }
         ]
+      },
+      {
+        Header: "Options",
+        Cell: ({ row }) => {
+          if (row && row.original) {
+            return (
+              <div>
+                <button onClick={e => console.log(row.original)}>Edit</button>
+                <button onClick={e => console.log(row.original)}>Delete</button>
+              </div>
+            );
+          }
+        }
       }
     ],
     []
