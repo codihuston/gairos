@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import {
   Container,
   Row,
+  Col,
   Table,
   Modal,
   Form,
   Button,
-  Alert
+  Alert,
+  Input
 } from "react-bootstrap";
 import { useTable, useSortBy, useGlobalFilter } from "react-table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -168,20 +170,24 @@ function GlobalFilter({
   const count = preGlobalFilteredRows.length;
 
   return (
-    <span>
-      Search:{" "}
-      <input
-        value={globalFilter || ""}
-        onChange={e => {
-          setGlobalFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
-        }}
-        placeholder={`${count} record(s)...`}
-        style={{
-          fontSize: "1.1rem",
-          border: "0"
-        }}
-      />
-    </span>
+    <Form className="">
+      <Form.Group as={Row} className="">
+        <Form.Label htmlFor="search" className="col-sm-2 col-form-label">
+          Search
+        </Form.Label>
+        <div className="col-sm-10">
+          <Form.Control
+            id="search"
+            type="text"
+            value={globalFilter || ""}
+            onChange={e => {
+              setGlobalFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
+            }}
+            placeholder={`Search ${count} record(s)...`}
+          />
+        </div>
+      </Form.Group>
+    </Form>
   );
 }
 
@@ -209,6 +215,11 @@ function ReactTable({ columns, data }) {
 
   return (
     <>
+      <GlobalFilter
+        preGlobalFilteredRows={preGlobalFilteredRows}
+        globalFilter={state.globalFilter}
+        setGlobalFilter={setGlobalFilter}
+      />
       <Table striped bordered hover size="sm" {...getTableProps()}>
         <thead>
           {headerGroups.map(headerGroup => (
@@ -227,20 +238,6 @@ function ReactTable({ columns, data }) {
               ))}
             </tr>
           ))}
-          <tr>
-            <th
-              colSpan={flatColumns.length}
-              style={{
-                textAlign: "left"
-              }}
-            >
-              <GlobalFilter
-                preGlobalFilteredRows={preGlobalFilteredRows}
-                globalFilter={state.globalFilter}
-                setGlobalFilter={setGlobalFilter}
-              />
-            </th>
-          </tr>
         </thead>
         <tbody {...getTableBodyProps()}>
           {firstPageRows.map((row, i) => {
