@@ -48,6 +48,7 @@ export const TaskTableRow = ({ task, onDelete }) => {
       <td>
         <button alt="edit button">
           <FontAwesomeIcon icon={faEdit} />
+          <FontAwesomeIcon icon={faTrash} />
         </button>
         <button alt="delete button" onClick={e => onDelete(e, task)}>
           <FontAwesomeIcon icon={faTrash} />
@@ -174,7 +175,7 @@ function GlobalFilter({
         onChange={e => {
           setGlobalFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
         }}
-        placeholder={`${count} records...`}
+        placeholder={`${count} record(s)...`}
         style={{
           fontSize: "1.1rem",
           border: "0"
@@ -208,7 +209,7 @@ function ReactTable({ columns, data }) {
 
   return (
     <>
-      <Table {...getTableProps()}>
+      <Table striped bordered hover size="sm" {...getTableProps()}>
         <thead>
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>
@@ -262,6 +263,10 @@ function ReactTable({ columns, data }) {
 }
 
 export default function TaskTable({ tasks }) {
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const handleCloseCreateModal = () => setShowCreateModal(false);
+  const handleShowCreateModal = () => setShowCreateModal(true);
+
   const columns = React.useMemo(
     () => [
       {
@@ -274,96 +279,52 @@ export default function TaskTable({ tasks }) {
           {
             Header: "Description",
             accessor: "userTaskInfo.description"
+          },
+          {
+            Header: "Options",
+            Cell: ({ row }) => {
+              if (row && row.original) {
+                return (
+                  <div>
+                    <Button
+                      variant="warning"
+                      className="mr-1"
+                      onClick={e => console.log(row.original)}
+                    >
+                      <FontAwesomeIcon alt="edit task" icon={faEdit} />
+                    </Button>
+                    <Button
+                      variant="danger"
+                      onClick={e => console.log(row.original)}
+                    >
+                      <FontAwesomeIcon alt="delete task" icon={faTrash} />
+                    </Button>
+                  </div>
+                );
+              }
+            }
           }
         ]
-      },
-      {
-        Header: "Options",
-        Cell: ({ row }) => {
-          if (row && row.original) {
-            return (
-              <div>
-                <button onClick={e => console.log(row.original)}>Edit</button>
-                <button onClick={e => console.log(row.original)}>Delete</button>
-              </div>
-            );
-          }
-        }
       }
     ],
     []
   );
 
-  return <ReactTable columns={columns} data={tasks}></ReactTable>;
-  // const [showCreateModal, setShowCreateModal] = useState(false);
-  // const handleCloseCreateModal = () => setShowCreateModal(false);
-  // const handleShowCreateModal = () => setShowCreateModal(true);
-
-  // const [showDeleteModal, setShowDeleteModal] = useState(false);
-  // const [taskToDelete, setSetTaskToDelete] = useState(null);
-  // const handleCloseDeleteModal = () => setShowDeleteModal(false);
-  // const handleShowDeleteModal = (e, data) => {
-  //   setShowDeleteModal(true);
-  //   setSetTaskToDelete(data);
-  //   console.log("DELETE", data);
-  // };
-  // const [mutate] = DeleteMyTask();
-
-  // const handleDelete = async cb => {
-  //   try {
-  //     await mutate({
-  //       variables: {
-  //         userTaskId: taskToDelete.userTaskInfo.id
-  //       },
-  //       refetchQueries: [
-  //         {
-  //           query
-  //         }
-  //       ]
-  //     });
-  //   } catch (e) {
-  //     alert(
-  //       `${e.message}. Please try again later, or contact a developer if the error persists.`
-  //     );
-  //   }
-  // };
-
-  // if (!tasks.length) return <div>No Tasks Provided!</div>;
-
-  // return (
-  //   <div>
-  //     <h2>Your Tasks</h2>
-  //     <Button variant="primary" onClick={handleShowCreateModal}>
-  //       <FontAwesomeIcon icon={faPlus} />
-  //       &nbsp;Create
-  //     </Button>
-  //     <CreateTaskModal
-  //       show={showCreateModal}
-  //       handleClose={handleCloseCreateModal}
-  //     />
-  //     <DeleteTaskModal
-  //       show={showDeleteModal}
-  //       handleConfirm={handleDelete}
-  //       handleClose={handleCloseDeleteModal}
-  //     />
-  //     <Table striped bordered hover size="sm">
-  //       <thead>
-  //         <tr>
-  //           <th>Name</th>
-  //           <th>Description</th>
-  //           <th>Info</th>
-  //         </tr>
-  //       </thead>
-  //       <tbody>
-  //         {tasks.map(task => (
-  //           <TaskTableRow
-  //             key={task.id}
-  //             task={task}
-  //             onDelete={handleShowDeleteModal}
-  //           />
-  //         ))}
-  //       </tbody>
-  //     </Table>
-  //   </div>
-  // );
+  return (
+    <div>
+      <Button variant="primary" onClick={handleShowCreateModal}>
+        <FontAwesomeIcon icon={faPlus} />
+        &nbsp;Create
+      </Button>
+      <CreateTaskModal
+        show={showCreateModal}
+        handleClose={handleCloseCreateModal}
+      />
+      {tasks && tasks.length ? (
+        <ReactTable columns={columns} data={tasks}></ReactTable>
+      ) : (
+        <div>You don't have any tasks yet!</div>
+      )}
+    </div>
+  );
 }
