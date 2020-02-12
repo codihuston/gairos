@@ -8,6 +8,7 @@ import {
   Button,
   Alert
 } from "react-bootstrap";
+import { useTable, useSortBy, useGlobalFilter } from "react-table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/pro-duotone-svg-icons";
 import { faPlus } from "@fortawesome/pro-light-svg-icons";
@@ -158,76 +159,198 @@ export const CreateTaskModal = ({ show, handleClose }) => {
   );
 };
 
-export default function TaskTable({ tasks }) {
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const handleCloseCreateModal = () => setShowCreateModal(false);
-  const handleShowCreateModal = () => setShowCreateModal(true);
-
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [taskToDelete, setSetTaskToDelete] = useState(null);
-  const handleCloseDeleteModal = () => setShowDeleteModal(false);
-  const handleShowDeleteModal = (e, data) => {
-    setShowDeleteModal(true);
-    setSetTaskToDelete(data);
-    console.log("DELETE", data);
-  };
-  const [mutate] = DeleteMyTask();
-
-  const handleDelete = async cb => {
-    try {
-      await mutate({
-        variables: {
-          userTaskId: taskToDelete.userTaskInfo.id
-        },
-        refetchQueries: [
-          {
-            query
-          }
-        ]
-      });
-    } catch (e) {
-      alert(
-        `${e.message}. Please try again later, or contact a developer if the error persists.`
-      );
-    }
-  };
-
-  if (!tasks.length) return <div>No Tasks Provided!</div>;
+function GlobalFilter({
+  preGlobalFilteredRows,
+  globalFilter,
+  setGlobalFilter
+}) {
+  const count = preGlobalFilteredRows.length;
 
   return (
-    <div>
-      <h2>Your Tasks</h2>
-      <Button variant="primary" onClick={handleShowCreateModal}>
-        <FontAwesomeIcon icon={faPlus} />
-        &nbsp;Create
-      </Button>
-      <CreateTaskModal
-        show={showCreateModal}
-        handleClose={handleCloseCreateModal}
+    <span>
+      Search:{" "}
+      <input
+        value={globalFilter || ""}
+        onChange={e => {
+          setGlobalFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
+        }}
+        placeholder={`${count} records...`}
+        style={{
+          fontSize: "1.1rem",
+          border: "0"
+        }}
       />
-      <DeleteTaskModal
-        show={showDeleteModal}
-        handleConfirm={handleDelete}
-        handleClose={handleCloseDeleteModal}
-      />
-      <Table striped bordered hover size="sm">
+    </span>
+  );
+}
+
+function ReactTable({ columns, data }) {
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+    state,
+    flatColumns,
+    preGlobalFilteredRows,
+    setGlobalFilter
+  } = useTable(
+    {
+      columns,
+      data
+    },
+    useGlobalFilter,
+    useSortBy
+  );
+
+  const firstPageRows = rows.slice(0, 20);
+
+  return (
+    <>
+      <Table {...getTableProps()}>
         <thead>
+          {headerGroups.map(headerGroup => (
+            <tr {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map(column => (
+                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                  {column.render("Header")}
+                  <span>
+                    {column.isSorted
+                      ? column.isSortedDesc
+                        ? " DOWN"
+                        : " UP"
+                      : ""}
+                  </span>
+                </th>
+              ))}
+            </tr>
+          ))}
           <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Info</th>
+            <th
+              colSpan={flatColumns.length}
+              style={{
+                textAlign: "left"
+              }}
+            >
+              <GlobalFilter
+                preGlobalFilteredRows={preGlobalFilteredRows}
+                globalFilter={state.globalFilter}
+                setGlobalFilter={setGlobalFilter}
+              />
+            </th>
           </tr>
         </thead>
-        <tbody>
-          {tasks.map(task => (
-            <TaskTableRow
-              key={task.id}
-              task={task}
-              onDelete={handleShowDeleteModal}
-            />
-          ))}
+        <tbody {...getTableBodyProps()}>
+          {firstPageRows.map((row, i) => {
+            prepareRow(row);
+            return (
+              <tr {...row.getRowProps()}>
+                {row.cells.map(cell => {
+                  return (
+                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                  );
+                })}
+              </tr>
+            );
+          })}
         </tbody>
       </Table>
-    </div>
+      <div>Showing the first 20 results of {rows.length} rows</div>
+    </>
   );
+}
+
+export default function TaskTable({ tasks }) {
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: "Your Tasks",
+        columns: [
+          {
+            Header: "Name",
+            accessor: "name"
+          },
+          {
+            Header: "Description",
+            accessor: "userTaskInfo.description"
+          }
+        ]
+      }
+    ],
+    []
+  );
+
+  return <ReactTable columns={columns} data={tasks}></ReactTable>;
+  // const [showCreateModal, setShowCreateModal] = useState(false);
+  // const handleCloseCreateModal = () => setShowCreateModal(false);
+  // const handleShowCreateModal = () => setShowCreateModal(true);
+
+  // const [showDeleteModal, setShowDeleteModal] = useState(false);
+  // const [taskToDelete, setSetTaskToDelete] = useState(null);
+  // const handleCloseDeleteModal = () => setShowDeleteModal(false);
+  // const handleShowDeleteModal = (e, data) => {
+  //   setShowDeleteModal(true);
+  //   setSetTaskToDelete(data);
+  //   console.log("DELETE", data);
+  // };
+  // const [mutate] = DeleteMyTask();
+
+  // const handleDelete = async cb => {
+  //   try {
+  //     await mutate({
+  //       variables: {
+  //         userTaskId: taskToDelete.userTaskInfo.id
+  //       },
+  //       refetchQueries: [
+  //         {
+  //           query
+  //         }
+  //       ]
+  //     });
+  //   } catch (e) {
+  //     alert(
+  //       `${e.message}. Please try again later, or contact a developer if the error persists.`
+  //     );
+  //   }
+  // };
+
+  // if (!tasks.length) return <div>No Tasks Provided!</div>;
+
+  // return (
+  //   <div>
+  //     <h2>Your Tasks</h2>
+  //     <Button variant="primary" onClick={handleShowCreateModal}>
+  //       <FontAwesomeIcon icon={faPlus} />
+  //       &nbsp;Create
+  //     </Button>
+  //     <CreateTaskModal
+  //       show={showCreateModal}
+  //       handleClose={handleCloseCreateModal}
+  //     />
+  //     <DeleteTaskModal
+  //       show={showDeleteModal}
+  //       handleConfirm={handleDelete}
+  //       handleClose={handleCloseDeleteModal}
+  //     />
+  //     <Table striped bordered hover size="sm">
+  //       <thead>
+  //         <tr>
+  //           <th>Name</th>
+  //           <th>Description</th>
+  //           <th>Info</th>
+  //         </tr>
+  //       </thead>
+  //       <tbody>
+  //         {tasks.map(task => (
+  //           <TaskTableRow
+  //             key={task.id}
+  //             task={task}
+  //             onDelete={handleShowDeleteModal}
+  //           />
+  //         ))}
+  //       </tbody>
+  //     </Table>
+  //   </div>
+  // );
 }
