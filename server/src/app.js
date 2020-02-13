@@ -130,10 +130,17 @@ export default resolveGraphqlDefinitions()
               raw: true
             });
 
-            // set the google refresh token (in case of expiry)
-            oauth2Client.setCredentials({
-              refresh_token: user.refreshToken
-            });
+            if (user) {
+              // set the google refresh token (in case of expiry)
+              oauth2Client.setCredentials({
+                refresh_token: user.refreshToken,
+                access_token: req.session.tokens.access_token
+              });
+            } else {
+              debug(
+                "No user stored in session... this is not a new session (post deletion?)!"
+              );
+            }
           } else {
             debug("No user stored in session... this is a new session!");
           }
