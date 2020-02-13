@@ -19,25 +19,10 @@ import { component as Loading } from "../loading";
 import CreateMyTask from "../../graphql/mutations/hooks/create-my-task";
 import UpdateMyTask from "../../graphql/mutations/hooks/update-my-task";
 import RenameMyTask from "../../graphql/mutations/hooks/rename-my-task";
-// import DeleteMyTask from "../../graphql/mutations/hooks/delete-my-task";
+import DeleteMyTask from "../../graphql/mutations/hooks/delete-my-task";
 
 import { GET_MY_TASKS as query } from "../../graphql/queries";
 import TaskList from "../task-list/component";
-
-export const DeleteTaskModal = ({ show, handleClose, handleConfirm }) => {
-  return (
-    <Modal show={show} onHide={handleClose} animation={false}>
-      <Modal.Header closeButton>
-        <Modal.Title>Delete A Task</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>Are you sure you want to delete this task?</Modal.Body>
-      <Modal.Footer>
-        <Button onClick={handleConfirm}>Yes</Button>
-        <Button onClick={handleClose}>Cancel</Button>
-      </Modal.Footer>
-    </Modal>
-  );
-};
 
 export const TaskTableRow = ({ task, onDelete }) => {
   return (
@@ -67,10 +52,10 @@ export const CreateTaskModal = ({ show, handleClose }) => {
   const [mutate, { data, loading }] = CreateMyTask();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState(null);
 
   const handleSubmit = async () => {
-    setError("");
+    setError(null);
 
     try {
       await mutate({
@@ -209,6 +194,8 @@ export const EditTaskModal = ({ show, handleClose, task }) => {
           }
         ]
       });
+
+      return handleClose();
     } catch (e) {
       setError(e.message);
     }
@@ -275,6 +262,56 @@ export const EditTaskModal = ({ show, handleClose, task }) => {
           </Container>
         </Form>
       </Modal.Body>
+    </Modal>
+  );
+};
+
+export const DeleteTaskModal = ({ show, handleClose, task }) => {
+  const [mutate, { data, loading }] = DeleteMyTask();
+  const [error, setError] = useState(null);
+
+  if (!task) {
+    return null;
+  }
+
+  const handleSubmit = async () => {
+    setError("");
+
+    try {
+      // delete the task
+      await mutate({
+        variables: {
+          userTaskId: task.userTaskInfo.id
+        },
+        refetchQueries: [
+          {
+            query
+          }
+        ]
+      });
+      return handleClose();
+    } catch (e) {
+      setError(e.message);
+    }
+  };
+
+  if (!task) return null;
+
+  return (
+    <Modal show={show} onHide={handleClose} animation={false}>
+      <Modal.Header closeButton>
+        <Modal.Title>Delete A Task</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>Are you sure you want to delete '{task.name}'?</Modal.Body>
+      {data ? (
+        <Alert variant="success" className="mt-1">
+          Task deleted!
+        </Alert>
+      ) : null}
+      <Modal.Footer>
+        {data ? null : <Button onClick={handleSubmit}>Yes</Button>}
+        <Button onClick={handleClose}>{data ? "Done" : "Cancel"}</Button>
+      </Modal.Footer>
     </Modal>
   );
 };
@@ -394,6 +431,13 @@ export default function TaskTable({ tasks }) {
     setShowEditModal(true);
   };
 
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const handleCloseDeleteModal = () => setShowDeleteModal(false);
+  const handleShowDeleteModal = (e, data) => {
+    setCurrentTask(data);
+    setShowDeleteModal(true);
+  };
+
   const columns = React.useMemo(
     () => [
       {
@@ -417,13 +461,12 @@ export default function TaskTable({ tasks }) {
                       variant="warning"
                       className="mr-1"
                       onClick={e => handleShowEditModal(e, row.original)}
-                      // onClick={e => console.log(row.original)}
                     >
                       <FontAwesomeIcon alt="edit task" icon={faEdit} />
                     </Button>
                     <Button
                       variant="danger"
-                      onClick={e => console.log(row.original)}
+                      onClick={e => handleShowDeleteModal(e, row.original)}
                     >
                       <FontAwesomeIcon alt="delete task" icon={faTrash} />
                     </Button>
@@ -462,6 +505,11 @@ export default function TaskTable({ tasks }) {
       <EditTaskModal
         show={showEditModal}
         handleClose={handleCloseEditModal}
+        task={currentTask}
+      />
+      <DeleteTaskModal
+        show={showDeleteModal}
+        handleClose={handleCloseDeleteModal}
         task={currentTask}
       />
       {tasks && tasks.length ? (
