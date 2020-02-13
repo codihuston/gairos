@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   Container,
   Row,
@@ -254,7 +255,7 @@ function ReactTable({ columns, data }) {
           })}
         </tbody>
       </Table>
-      <div>Showing the first 20 results of {rows.length} rows</div>
+      {/* <div>Showing the first 20 results of {rows.length} rows</div> */}
     </>
   );
 }
@@ -309,10 +310,21 @@ export default function TaskTable({ tasks }) {
 
   return (
     <div>
-      <Button variant="primary" onClick={handleShowCreateModal}>
-        <FontAwesomeIcon icon={faPlus} />
-        &nbsp;Create
-      </Button>
+      <h2>
+        Manage Tasks
+        <Button
+          variant="primary"
+          className="ml-1"
+          onClick={handleShowCreateModal}
+        >
+          <FontAwesomeIcon icon={faPlus} />
+          &nbsp;Create
+        </Button>
+      </h2>
+      <p>
+        Manage your tasks below. Later, you can track them{" "}
+        <Link to="/track">here!</Link>
+      </p>
       <CreateTaskModal
         show={showCreateModal}
         handleClose={handleCloseCreateModal}
@@ -320,7 +332,7 @@ export default function TaskTable({ tasks }) {
       {tasks && tasks.length ? (
         <ReactTable columns={columns} data={tasks}></ReactTable>
       ) : (
-        <div>You don't have any tasks yet!</div>
+        <p>You don't have any tasks yet!</p>
       )}
     </div>
   );
