@@ -167,7 +167,9 @@ export const EditTaskModal = ({ show, handleClose, task }) => {
   const [mutate, { data, loading }] = UpdateMyTask();
   const [name, setName] = useState(task && task.name ? task.name : "");
   const [description, setDescription] = useState(
-    task && task.description ? task.description : ""
+    task && task.userTaskInfo && task.userTaskInfo.description
+      ? task.userTaskInfo.description
+      : ""
   );
   const [error, setError] = useState("");
 
@@ -186,9 +188,6 @@ export const EditTaskModal = ({ show, handleClose, task }) => {
           }
         ]
       });
-
-      setName("");
-      setDescription("");
     } catch (e) {
       setError(e.message);
     }
@@ -234,7 +233,7 @@ export const EditTaskModal = ({ show, handleClose, task }) => {
             ) : null}
             {data ? (
               <Alert variant="success" className="mt-1">
-                Task update!
+                Task updated!
               </Alert>
             ) : null}
           </Form.Group>
@@ -248,7 +247,7 @@ export const EditTaskModal = ({ show, handleClose, task }) => {
                   visibility: loading ? "hidden" : "visible"
                 }}
               >
-                Create
+                Update
               </Button>
               <Button
                 variant="secondary"
