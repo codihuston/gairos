@@ -12,9 +12,7 @@ export default function Home() {
 
   if (loading) {
     return <Loading />;
-  }
-
-  if (error) {
+  } else if (error) {
     console.error(error);
     return (
       <Alert variant="danger">
@@ -22,10 +20,11 @@ export default function Home() {
         Please notify a developer if this persists!
       </Alert>
     );
+  } else {
+    return (
+      <div>
+        <TaskTable tasks={data.getMyTasks} />
+      </div>
+    );
   }
-  return (
-    <div>
-      <TaskTable tasks={data.getMyTasks} />
-    </div>
-  );
 }

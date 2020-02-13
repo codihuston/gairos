@@ -44,6 +44,34 @@ export const CREATE_MY_TASK = gql`
   }
 `;
 
+export const UPDATE_MY_TASK = gql`
+  mutation(
+    $userTaskId: ID!
+    $description: String
+    $isPublic: Boolean
+    $isArchived: Boolean
+    $eventColorId: String
+  ) {
+    updateMyTask(
+      input: {
+        userTaskId: $userTaskId
+        description: $description
+        isPublic: $isPublic
+        isArchived: $isArchived
+        eventColorId: $eventColorId
+      }
+    ) {
+      id
+      description
+      isPublic
+      isArchived
+      eventColorId
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
 export const DELETE_MY_TASK = gql`
   mutation($userTaskId: ID!) {
     deleteMyTask(input: { userTaskId: $userTaskId })

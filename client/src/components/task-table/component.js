@@ -1,15 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   Container,
   Row,
-  Col,
   Table,
   Modal,
   Form,
   Button,
-  Alert,
-  Input
+  Alert
 } from "react-bootstrap";
 import { useTable, useSortBy, useGlobalFilter } from "react-table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,9 +16,11 @@ import { faPlus } from "@fortawesome/pro-light-svg-icons";
 
 import { component as Loading } from "../loading";
 import CreateMyTask from "../../graphql/mutations/hooks/create-my-task";
-import DeleteMyTask from "../../graphql/mutations/hooks/delete-my-task";
+import UpdateMyTask from "../../graphql/mutations/hooks/update-my-task";
+// import DeleteMyTask from "../../graphql/mutations/hooks/delete-my-task";
 
 import { GET_MY_TASKS as query } from "../../graphql/queries";
+import TaskList from "../task-list/component";
 
 export const DeleteTaskModal = ({ show, handleClose, handleConfirm }) => {
   return (
@@ -163,6 +163,110 @@ export const CreateTaskModal = ({ show, handleClose }) => {
   );
 };
 
+export const EditTaskModal = ({ show, handleClose, task }) => {
+  const [mutate, { data, loading }] = UpdateMyTask();
+  const [name, setName] = useState(task && task.name ? task.name : "");
+  const [description, setDescription] = useState(
+    task && task.description ? task.description : ""
+  );
+  const [error, setError] = useState("");
+
+  const handleSubmit = async () => {
+    setError("");
+
+    try {
+      await mutate({
+        variables: {
+          userTaskId: task.userTaskInfo.id,
+          description
+        },
+        refetchQueries: [
+          {
+            query
+          }
+        ]
+      });
+
+      setName("");
+      setDescription("");
+    } catch (e) {
+      setError(e.message);
+    }
+  };
+
+  const handleChangeName = e => {
+    setName(e.target.value);
+  };
+
+  const handleChangeDescription = e => {
+    setDescription(e.target.value);
+  };
+
+  return (
+    <Modal show={show} onHide={handleClose} animation={false}>
+      <Modal.Header closeButton>
+        <Modal.Title>Edit {task && task.name ? task.name : "Task"}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form>
+          <Form.Group controlId="formTaskName">
+            <Form.Label>Name</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Name your task"
+              value={name}
+              onChange={handleChangeName}
+            />
+          </Form.Group>
+
+          <Form.Group controlId="formTaskDescription">
+            <Form.Label>Description</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Describe your task"
+              value={description}
+              onChange={handleChangeDescription}
+            />
+            {error ? (
+              <Alert variant="danger" className="mt-1">
+                {error}
+              </Alert>
+            ) : null}
+            {data ? (
+              <Alert variant="success" className="mt-1">
+                Task update!
+              </Alert>
+            ) : null}
+          </Form.Group>
+          <Container fluid className="mt-1">
+            <Row className="justify-content-end">
+              {loading ? <Loading /> : null}
+              <Button
+                variant="primary"
+                onClick={handleSubmit}
+                style={{
+                  visibility: loading ? "hidden" : "visible"
+                }}
+              >
+                Create
+              </Button>
+              <Button
+                variant="secondary"
+                onClick={handleClose}
+                style={{
+                  visibility: loading ? "hidden" : "visible"
+                }}
+              >
+                Cancel
+              </Button>
+            </Row>
+          </Container>
+        </Form>
+      </Modal.Body>
+    </Modal>
+  );
+};
+
 function GlobalFilter({
   preGlobalFilteredRows,
   globalFilter,
@@ -192,6 +296,11 @@ function GlobalFilter({
   );
 }
 
+/**
+ * TODO: implement memoization (don't re-render table unnecessarily when parent
+ * state is updated, i.e. currentTask is update)
+ * @param {*} param0
+ */
 function ReactTable({ columns, data }) {
   const {
     getTableProps,
@@ -200,7 +309,6 @@ function ReactTable({ columns, data }) {
     rows,
     prepareRow,
     state,
-    flatColumns,
     preGlobalFilteredRows,
     setGlobalFilter
   } = useTable(
@@ -261,9 +369,18 @@ function ReactTable({ columns, data }) {
 }
 
 export default function TaskTable({ tasks }) {
+  const [currentTask, setCurrentTask] = useState(null);
+
   const [showCreateModal, setShowCreateModal] = useState(false);
   const handleCloseCreateModal = () => setShowCreateModal(false);
   const handleShowCreateModal = () => setShowCreateModal(true);
+
+  const [showEditModal, setShowEditModal] = useState(false);
+  const handleCloseEditModal = () => setShowEditModal(false);
+  const handleShowEditModal = (e, data) => {
+    setCurrentTask(data);
+    setShowEditModal(true);
+  };
 
   const columns = React.useMemo(
     () => [
@@ -287,7 +404,8 @@ export default function TaskTable({ tasks }) {
                     <Button
                       variant="warning"
                       className="mr-1"
-                      onClick={e => console.log(row.original)}
+                      onClick={e => handleShowEditModal(e, row.original)}
+                      // onClick={e => console.log(row.original)}
                     >
                       <FontAwesomeIcon alt="edit task" icon={faEdit} />
                     </Button>
@@ -329,6 +447,15 @@ export default function TaskTable({ tasks }) {
         show={showCreateModal}
         handleClose={handleCloseCreateModal}
       />
+      {currentTask ? (
+        <EditTaskModal
+          show={showEditModal}
+          handleClose={handleCloseEditModal}
+          task={currentTask}
+        />
+      ) : (
+        ""
+      )}
       {tasks && tasks.length ? (
         <ReactTable columns={columns} data={tasks}></ReactTable>
       ) : (
