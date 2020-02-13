@@ -74,6 +74,8 @@ export const CreateTaskModal = ({ show, handleClose }) => {
 
       setName("");
       setDescription("");
+
+      return handleClose();
     } catch (e) {
       setError(e.message);
     }
@@ -308,8 +310,8 @@ export const DeleteTaskModal = ({ show, handleClose, task }) => {
         ) : null}
       </Modal.Body>
       <Modal.Footer>
-        {data ? null : <Button onClick={handleSubmit}>Yes</Button>}
-        <Button onClick={handleClose}>{data ? "Done" : "Cancel"}</Button>
+        <Button onClick={handleSubmit}>Yes</Button>
+        <Button onClick={handleClose}>Cancel</Button>
       </Modal.Footer>
     </Modal>
   );
