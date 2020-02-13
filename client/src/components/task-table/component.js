@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import {
   Container,
@@ -163,15 +163,19 @@ export const CreateTaskModal = ({ show, handleClose }) => {
   );
 };
 
+/**
+ * Uses uncontrolled inputs in order to use default values
+ */
 export const EditTaskModal = ({ show, handleClose, task }) => {
   const [mutate, { data, loading }] = UpdateMyTask();
-  const [name, setName] = useState(task && task.name ? task.name : "");
-  const [description, setDescription] = useState(
-    task && task.userTaskInfo && task.userTaskInfo.description
-      ? task.userTaskInfo.description
-      : ""
-  );
   const [error, setError] = useState("");
+
+  const nameInput = useRef(null);
+  const descriptionInput = useRef(null);
+
+  if (!task) {
+    return null;
+  }
 
   const handleSubmit = async () => {
     setError("");
@@ -180,7 +184,7 @@ export const EditTaskModal = ({ show, handleClose, task }) => {
       await mutate({
         variables: {
           userTaskId: task.userTaskInfo.id,
-          description
+          description: descriptionInput.current.value
         },
         refetchQueries: [
           {
@@ -191,14 +195,6 @@ export const EditTaskModal = ({ show, handleClose, task }) => {
     } catch (e) {
       setError(e.message);
     }
-  };
-
-  const handleChangeName = e => {
-    setName(e.target.value);
-  };
-
-  const handleChangeDescription = e => {
-    setDescription(e.target.value);
   };
 
   return (
@@ -213,8 +209,8 @@ export const EditTaskModal = ({ show, handleClose, task }) => {
             <Form.Control
               type="text"
               placeholder="Name your task"
-              value={name}
-              onChange={handleChangeName}
+              defaultValue={task.name}
+              ref={nameInput}
             />
           </Form.Group>
 
@@ -223,15 +219,15 @@ export const EditTaskModal = ({ show, handleClose, task }) => {
             <Form.Control
               type="text"
               placeholder="Describe your task"
-              value={description}
-              onChange={handleChangeDescription}
+              defaultValue={task.userTaskInfo.description}
+              ref={descriptionInput}
             />
             {error ? (
               <Alert variant="danger" className="mt-1">
                 {error}
               </Alert>
             ) : null}
-            {data ? (
+            {data && !error ? (
               <Alert variant="success" className="mt-1">
                 Task updated!
               </Alert>
@@ -446,15 +442,11 @@ export default function TaskTable({ tasks }) {
         show={showCreateModal}
         handleClose={handleCloseCreateModal}
       />
-      {currentTask ? (
-        <EditTaskModal
-          show={showEditModal}
-          handleClose={handleCloseEditModal}
-          task={currentTask}
-        />
-      ) : (
-        ""
-      )}
+      <EditTaskModal
+        show={showEditModal}
+        handleClose={handleCloseEditModal}
+        task={currentTask}
+      />
       {tasks && tasks.length ? (
         <ReactTable columns={columns} data={tasks}></ReactTable>
       ) : (
