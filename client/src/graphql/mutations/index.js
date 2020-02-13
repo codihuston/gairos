@@ -72,6 +72,24 @@ export const UPDATE_MY_TASK = gql`
   }
 `;
 
+export const RENAME_MY_TASK = gql`
+  mutation renameMyTask($userTaskId: ID!, $name: String!) {
+    renameMyTask(input: { userTaskId: $userTaskId, name: $name }) {
+      id
+      name
+      userTaskInfo {
+        id
+        description
+        isPublic
+        task {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
+
 export const DELETE_MY_TASK = gql`
   mutation($userTaskId: ID!) {
     deleteMyTask(input: { userTaskId: $userTaskId })

@@ -13,10 +13,12 @@ import { useTable, useSortBy, useGlobalFilter } from "react-table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/pro-duotone-svg-icons";
 import { faPlus } from "@fortawesome/pro-light-svg-icons";
+import { merge } from "lodash";
 
 import { component as Loading } from "../loading";
 import CreateMyTask from "../../graphql/mutations/hooks/create-my-task";
 import UpdateMyTask from "../../graphql/mutations/hooks/update-my-task";
+import RenameMyTask from "../../graphql/mutations/hooks/rename-my-task";
 // import DeleteMyTask from "../../graphql/mutations/hooks/delete-my-task";
 
 import { GET_MY_TASKS as query } from "../../graphql/queries";
@@ -167,8 +169,12 @@ export const CreateTaskModal = ({ show, handleClose }) => {
  * Uses uncontrolled inputs in order to use default values
  */
 export const EditTaskModal = ({ show, handleClose, task }) => {
-  const [mutate, { data, loading }] = UpdateMyTask();
+  const [mutate, { data: updateData, loading: updateLoading }] = UpdateMyTask();
+  const [rename, { data: renameData, loading: renameLoading }] = RenameMyTask();
   const [error, setError] = useState("");
+
+  const loading = updateLoading || renameLoading;
+  const data = merge(updateData, renameData);
 
   const nameInput = useRef(null);
   const descriptionInput = useRef(null);
@@ -181,6 +187,17 @@ export const EditTaskModal = ({ show, handleClose, task }) => {
     setError("");
 
     try {
+      // rename the user's task if it has changed
+      if (nameInput.current.value !== task.name) {
+        await rename({
+          variables: {
+            userTaskId: task.userTaskInfo.id,
+            name: nameInput.current.value
+          },
+          refetchQueries: [{ query }]
+        });
+      }
+      // update the user task properties
       await mutate({
         variables: {
           userTaskId: task.userTaskInfo.id,
@@ -227,7 +244,7 @@ export const EditTaskModal = ({ show, handleClose, task }) => {
                 {error}
               </Alert>
             ) : null}
-            {data && !error ? (
+            {data ? (
               <Alert variant="success" className="mt-1">
                 Task updated!
               </Alert>
