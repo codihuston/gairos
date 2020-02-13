@@ -4,12 +4,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHomeHeart,
   faHourglassStart,
-  faTags,
+  // faTags,
   faTasks,
   faFileChartLine,
   faHistory,
-  faInfoSquare,
-  faInfo
+  faInfoSquare
 } from "@fortawesome/pro-duotone-svg-icons";
 
 export default function Navigation() {
@@ -30,10 +29,10 @@ export default function Navigation() {
             />
             Track
           </Nav.Link>
-          <Nav.Link href="/tags">
+          {/* <Nav.Link href="/tags">
             <FontAwesomeIcon className="icon-fixed-width" icon={faTags} />
             Tags
-          </Nav.Link>
+          </Nav.Link> */}
           <Nav.Link href="/tasks">
             <FontAwesomeIcon className="icon-fixed-width" icon={faTasks} />
             Tasks
