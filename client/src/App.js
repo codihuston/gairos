@@ -1,9 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { ApolloProvider, useQuery } from "react-apollo";
+import { ToastContainer } from "react-toastify";
 
 import "./scss/main.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "react-toastify/dist/ReactToastify.css";
 import "@fortawesome/fontawesome-pro";
 import { component as Login } from "./pages/login";
 import Pages from "./pages";
@@ -22,6 +24,7 @@ function App({ apolloClient, isLoading }) {
 
   return (
     <ApolloProvider client={apolloClient}>
+      <ToastContainer />
       <IsLoggedIn />
     </ApolloProvider>
   );

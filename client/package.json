@@ -35,6 +35,7 @@
     "react-scripts": "3.3.0",
     "react-table": "^7.0.0-rc.15",
     "react-test-renderer": "^16.12.0",
+    "react-toastify": "^5.5.0",
     "yarn": "^1.22.0"
   },
   "scripts": {

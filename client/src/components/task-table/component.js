@@ -10,6 +10,7 @@ import {
   Alert
 } from "react-bootstrap";
 import { useTable, useSortBy, useGlobalFilter } from "react-table";
+import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/pro-duotone-svg-icons";
 import { faPlus } from "@fortawesome/pro-light-svg-icons";
@@ -22,7 +23,6 @@ import RenameMyTask from "../../graphql/mutations/hooks/rename-my-task";
 import DeleteMyTask from "../../graphql/mutations/hooks/delete-my-task";
 
 import { GET_MY_TASKS as query } from "../../graphql/queries";
-import TaskList from "../task-list/component";
 
 export const TaskTableRow = ({ task, onDelete }) => {
   return (
@@ -70,6 +70,8 @@ export const CreateTaskModal = ({ show, handleClose }) => {
         ]
       });
 
+      toast.success("Task Created!");
+
       setName("");
       setDescription("");
     } catch (e) {
@@ -113,11 +115,6 @@ export const CreateTaskModal = ({ show, handleClose }) => {
             {error ? (
               <Alert variant="danger" className="mt-1">
                 {error}
-              </Alert>
-            ) : null}
-            {data ? (
-              <Alert variant="success" className="mt-1">
-                Task created!
               </Alert>
             ) : null}
           </Form.Group>
@@ -195,6 +192,8 @@ export const EditTaskModal = ({ show, handleClose, task }) => {
         ]
       });
 
+      toast.success("Task Updated!");
+
       return handleClose();
     } catch (e) {
       setError(e.message);
@@ -229,11 +228,6 @@ export const EditTaskModal = ({ show, handleClose, task }) => {
             {error ? (
               <Alert variant="danger" className="mt-1">
                 {error}
-              </Alert>
-            ) : null}
-            {data ? (
-              <Alert variant="success" className="mt-1">
-                Task updated!
               </Alert>
             ) : null}
           </Form.Group>
@@ -289,6 +283,9 @@ export const DeleteTaskModal = ({ show, handleClose, task }) => {
           }
         ]
       });
+
+      toast.success("Task Deleted!");
+
       return handleClose();
     } catch (e) {
       setError(e.message);
@@ -302,12 +299,14 @@ export const DeleteTaskModal = ({ show, handleClose, task }) => {
       <Modal.Header closeButton>
         <Modal.Title>Delete A Task</Modal.Title>
       </Modal.Header>
-      <Modal.Body>Are you sure you want to delete '{task.name}'?</Modal.Body>
-      {data ? (
-        <Alert variant="success" className="mt-1">
-          Task deleted!
-        </Alert>
-      ) : null}
+      <Modal.Body>
+        Are you sure you want to delete '{task.name}'?
+        {error ? (
+          <Alert variant="danger" className="mt-1">
+            {error}
+          </Alert>
+        ) : null}
+      </Modal.Body>
       <Modal.Footer>
         {data ? null : <Button onClick={handleSubmit}>Yes</Button>}
         <Button onClick={handleClose}>{data ? "Done" : "Cancel"}</Button>
