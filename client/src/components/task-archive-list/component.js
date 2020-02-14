@@ -1,14 +1,6 @@
 import React, { useState } from "react";
 
-import {
-  Container,
-  Row,
-  Table,
-  Modal,
-  Form,
-  Button,
-  Alert
-} from "react-bootstrap";
+import { Modal, Button, Alert } from "react-bootstrap";
 
 import UpdateMyTask from "../../graphql/mutations/hooks/update-my-task";
 import { GET_MY_TASKS as query } from "../../graphql/queries";
@@ -49,12 +41,12 @@ export default function TaskArchiveList({ show, handleClose, tasks }) {
                 <li
                   key={task.userTaskInfo.id}
                   title={task.userTaskInfo.description}
+                  className="d-flex justify-content-between mb-3"
                 >
-                  {task.name}
-
-                  <button onClick={e => handleClick(e, task)}>
+                  <div>{task.name}</div>
+                  <Button variant="primary" onClick={e => handleClick(e, task)}>
                     Restore from Archive
-                  </button>
+                  </Button>
                 </li>
               ))
             : "You have no archived tasks!"}
