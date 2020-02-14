@@ -1,5 +1,6 @@
 import { DataSource } from "apollo-datasource";
 import debugLib from "debug";
+
 const debug = debugLib("server:TaskAPI");
 
 export default {
@@ -75,8 +76,6 @@ export default {
     async createUserTask(userId, input) {
       debug("call createUserTask() with args", userId, input);
 
-      let userTask = null;
-
       const [task, created] = await this.models.task.findOrCreate({
         where: {
           name: input.name
@@ -90,14 +89,44 @@ export default {
       debug("\tcreated/found task", task);
 
       // create the user task
-      userTask = await this.models.userTask.create({
-        userId,
-        taskId: task.id,
-        description: input.description,
-        isPublic: input.isPublic,
-        foregroundColor: input.foregroundColor,
-        backgroundColor: input.backgroundColor
+      const [
+        userTask,
+        userTaskWasCreated
+      ] = await this.models.userTask.unscoped().findOrCreate({
+        where: {
+          userId,
+          taskId: task.id
+        },
+        defaults: {
+          userId,
+          taskId: task.id,
+          description: input.description,
+          isPublic: input.isPublic,
+          eventColorId: input.eventColorId
+        },
+        // required w/ .unscoped() in order to find soft-deleted records
+        paranoid: false
       });
+
+      // if the user deleted a task, then re-created it, they'll get a unique
+      // constraint violation; if they follow this workflow, just re-enable
+      // the deleted record
+      debug("\tuser task was created", userTaskWasCreated);
+      debug("\tcreated/found user task", userTask);
+
+      // un-delete if they are re-creating a task they've had in the past
+      if (userTask.deletedAt) {
+        await this.models.userTask.unscoped().update(
+          { deletedAt: null },
+          {
+            where: {
+              id: userTask.id
+            },
+            paranoid: false
+          }
+        );
+        debug("\tundelete userTask", userTask.deletedAt);
+      }
 
       // associate this user task to this task
       // EXPECTED: throws unique violation on userId if trying to
