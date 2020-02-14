@@ -4,7 +4,7 @@ import { Alert, Button } from "react-bootstrap";
 import GetTasks from "../../graphql/queries/hooks/get-tasks";
 import { component as Loading } from "../../components/loading";
 import { component as TaskTable } from "../../components/task-table";
-import { component as TaskArchiveList } from "../../components/task-archive-list";
+import { component as TaskArchiveModal } from "../../components/task-archive-modal";
 
 export default function Home() {
   const { error, data, loading } = GetTasks({
@@ -40,7 +40,7 @@ export default function Home() {
       <div>
         {/* only show non-archived tasks */}
         <TaskTable tasks={tasks} />
-        <TaskArchiveList
+        <TaskArchiveModal
           show={show}
           handleClose={handleClose}
           tasks={archivedTasks}
