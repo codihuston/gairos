@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import { Modal, Button, Alert, Form, Container, Row } from "react-bootstrap";
 import { toast } from "react-toastify";
 
@@ -80,26 +80,31 @@ export default ({ show, handleClose }) => {
           </Form.Group>
           <Container fluid className="mt-1">
             <Row className="justify-content-end">
-              {loading ? <Loading /> : null}
-              <Button
-                variant="primary"
-                onClick={handleSubmit}
-                className="mr-1"
-                style={{
-                  visibility: loading ? "hidden" : "visible"
-                }}
-              >
-                Create
-              </Button>
-              <Button
-                variant="secondary"
-                onClick={handleClose}
-                style={{
-                  visibility: loading ? "hidden" : "visible"
-                }}
-              >
-                Cancel
-              </Button>
+              {loading ? (
+                <Loading />
+              ) : (
+                <Fragment>
+                  <Button
+                    variant="primary"
+                    onClick={handleSubmit}
+                    className="mr-1"
+                    style={{
+                      visibility: loading ? "hidden" : "visible"
+                    }}
+                  >
+                    Create
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    onClick={handleClose}
+                    style={{
+                      visibility: loading ? "hidden" : "visible"
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </Fragment>
+              )}
             </Row>
           </Container>
         </Form>
