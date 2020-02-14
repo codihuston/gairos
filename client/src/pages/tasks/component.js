@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Alert } from "react-bootstrap";
+import { Alert, Button } from "react-bootstrap";
 
 import GetTasks from "../../graphql/queries/hooks/get-tasks";
 import { component as Loading } from "../../components/loading";
@@ -45,7 +45,9 @@ export default function Home() {
           handleClose={handleClose}
           tasks={archivedTasks}
         />
-        <button onClick={handleShow}>Show Archive</button>
+        <Button variant="secondary" onClick={handleShow}>
+          Show Archive
+        </Button>
       </div>
     );
   }
