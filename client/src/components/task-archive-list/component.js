@@ -15,9 +15,10 @@ import { GET_MY_TASKS as query } from "../../graphql/queries";
 
 export default function TaskArchiveList({ show, handleClose, tasks }) {
   const [mutate, { data, loading }] = UpdateMyTask();
-  const [error, setError] = useState("");
+  const [error, setError] = useState(null);
 
   const handleClick = async (e, task) => {
+    setError(null);
     try {
       // update the user task properties
       await mutate({
@@ -58,7 +59,7 @@ export default function TaskArchiveList({ show, handleClose, tasks }) {
               ))
             : "You have no archived tasks!"}
         </ul>
-        <Alert variant="danger">{error ? error : null}</Alert>
+        {<Alert variant="danger">error</Alert> ? error : null}
       </Modal.Body>
     </Modal>
   );
