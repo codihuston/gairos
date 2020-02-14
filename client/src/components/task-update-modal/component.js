@@ -64,9 +64,13 @@ export default ({ show, handleClose, task }) => {
   return (
     <Modal show={show} onHide={handleClose} animation={false}>
       <Modal.Header closeButton>
-        <Modal.Title>Edit {task && task.name ? task.name : "Task"}</Modal.Title>
+        <Modal.Title>Edit A Task</Modal.Title>
       </Modal.Header>
       <Modal.Body>
+        <p>
+          You are editing the task named "
+          {task && task.name ? task.name : "Task"}"
+        </p>
         <Form>
           <Form.Group controlId="formTaskName">
             <Form.Label>Name</Form.Label>
