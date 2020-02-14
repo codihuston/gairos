@@ -1,23 +1,9 @@
 import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
-import {
-  Container,
-  Row,
-  Table,
-  Modal,
-  Form,
-  Button,
-  Alert
-} from "react-bootstrap";
+import { Row, Table, Form, Button } from "react-bootstrap";
 import { useTable, useSortBy, useGlobalFilter } from "react-table";
-import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/pro-duotone-svg-icons";
-import { merge } from "lodash";
-
-import { component as Loading } from "../loading";
-
-import { GET_MY_TASKS as query } from "../../graphql/queries";
 
 export const TaskTableRow = ({ task, onDelete }) => {
   return (
