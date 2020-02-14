@@ -9,6 +9,7 @@ import { component as TaskTable } from "../../components/task-table";
 import { component as TaskArchiveModal } from "../../components/task-archive-modal";
 import { component as CreateTaskModal } from "../../components/task-create-modal";
 import { component as UpdateTaskModal } from "../../components/task-update-modal";
+import { component as DeleteTaskModal } from "../../components/task-delete-modal";
 
 export default function Home() {
   const { error, data, loading } = GetTasks({
@@ -29,6 +30,13 @@ export default function Home() {
   const handleShowEditModal = (e, data) => {
     setCurrentTask(data);
     setShowEditModal(true);
+  };
+
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const handleCloseDeleteModal = () => setShowDeleteModal(false);
+  const handleShowDeleteModal = (e, data) => {
+    setCurrentTask(data);
+    setShowDeleteModal(true);
   };
 
   if (loading) {
@@ -79,6 +87,11 @@ export default function Home() {
         <UpdateTaskModal
           show={showEditModal}
           handleClose={handleCloseEditModal}
+          task={currentTask}
+        />
+        <DeleteTaskModal
+          show={showDeleteModal}
+          handleClose={handleCloseDeleteModal}
           task={currentTask}
         />
         <TaskArchiveModal
