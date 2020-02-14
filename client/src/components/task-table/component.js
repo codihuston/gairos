@@ -126,6 +126,7 @@ export const CreateTaskModal = ({ show, handleClose }) => {
               <Button
                 variant="primary"
                 onClick={handleSubmit}
+                className="mr-1"
                 style={{
                   visibility: loading ? "hidden" : "visible"
                 }}
