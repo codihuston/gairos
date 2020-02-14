@@ -243,7 +243,8 @@ export default {
       const userTask = await this.getUserTask({
         where: {
           id: input.userTaskId
-        }
+        },
+        paranoid: false
       });
 
       debug("\tfound userTask", userTask);
@@ -266,11 +267,13 @@ export default {
       // NOTE: using static method (public method is broken for postgres, which
       // returns empty array [] as of 2020/01/27)
       // SEE: https://github.com/sequelize/sequelize/issues/10508
-      const res = await this.models.userTask.destroy({
+      const res = await this.models.userTask.unscoped().destroy({
         where: {
           userId,
           id: input.userTaskId
-        }
+        },
+        // required to override soft delete
+        force: true
       });
 
       debug("\tresult", res);
