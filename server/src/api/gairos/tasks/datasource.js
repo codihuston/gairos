@@ -114,10 +114,17 @@ export default {
       debug("\tuser task was created", userTaskWasCreated);
       debug("\tcreated/found user task", userTask);
 
-      // un-delete if they are re-creating a task they've had in the past
-      if (userTask.deletedAt) {
+      // un-delete/archive if they are re-creating a task they've had in the
+      // past; also update fields with the given values
+      if (userTask.deletedAt || userTask.isArchived) {
         await this.models.userTask.unscoped().update(
-          { deletedAt: null },
+          {
+            deletedAt: null,
+            isArchived: false,
+            description: input.description,
+            isPublic: input.isPublic,
+            eventColorId: input.eventColorId
+          },
           {
             where: {
               id: userTask.id
