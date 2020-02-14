@@ -39,6 +39,7 @@ export const GET_MY_TASKS = gql`
         id
         description
         isPublic
+        isArchived
       }
     }
   }

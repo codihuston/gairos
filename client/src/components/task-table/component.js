@@ -7,7 +7,9 @@ import {
   Modal,
   Form,
   Button,
-  Alert
+  Alert,
+  InputGroup,
+  FormControl
 } from "react-bootstrap";
 import { useTable, useSortBy, useGlobalFilter } from "react-table";
 import { toast } from "react-toastify";
@@ -264,7 +266,9 @@ export const EditTaskModal = ({ show, handleClose, task }) => {
 };
 
 export const DeleteTaskModal = ({ show, handleClose, task }) => {
-  const [mutate, { data, loading }] = DeleteMyTask();
+  const [remove] = DeleteMyTask();
+  const [update] = UpdateMyTask();
+  const shouldDeleteInput = useRef(null);
   const [error, setError] = useState(null);
 
   if (!task) {
@@ -275,19 +279,34 @@ export const DeleteTaskModal = ({ show, handleClose, task }) => {
     setError("");
 
     try {
+      console.log("flag", shouldDeleteInput.current.checked);
       // delete the task
-      await mutate({
-        variables: {
-          userTaskId: task.userTaskInfo.id
-        },
-        refetchQueries: [
-          {
-            query
-          }
-        ]
-      });
+      if (shouldDeleteInput.current.checked) {
+        console.log("remove completely");
+        await remove({
+          variables: {
+            userTaskId: task.userTaskInfo.id
+          },
+          refetchQueries: [
+            {
+              query
+            }
+          ]
+        });
 
-      toast.success("Task Deleted!");
+        toast.success("Task Permanently Deleted!");
+      }
+      // archive the task
+      else {
+        console.log("update");
+        await update({
+          variables: {
+            userTaskId: task.userTaskInfo.id,
+            isArchived: true
+          },
+          refetchQueries: [{ query }]
+        });
+      }
 
       return handleClose();
     } catch (e) {
@@ -303,7 +322,23 @@ export const DeleteTaskModal = ({ show, handleClose, task }) => {
         <Modal.Title>Delete A Task</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        Are you sure you want to delete '{task.name}'?
+        <p>Are you sure you want to delete '{task.name}'?</p>
+        <p>
+          This action will archive this task so that your history with this task
+          remains intact. This will NOT destroy any recorded history of this
+          task. If you want to completely remove all traces of this task in your
+          history, check the checkbox option below.
+        </p>
+        <div className="m-3">
+          <Form.Group controlId="formBasicCheckbox">
+            <Form.Check
+              type="checkbox"
+              label="Permanently delete this task and its task history"
+              defaultChecked={false}
+              ref={shouldDeleteInput}
+            />
+          </Form.Group>
+        </div>
         {error ? (
           <Alert variant="danger" className="mt-1">
             {error}

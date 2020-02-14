@@ -11,6 +11,8 @@ type Task {
   name: ID!
   users: [User]
   userTaskInfo: UserTaskInfo
+  isPublic: Boolean
+  isArchived: Boolean
   createdAt: GraphQLDateTime
   updatedAt: GraphQLDateTime
 }

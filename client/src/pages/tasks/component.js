@@ -23,7 +23,10 @@ export default function Home() {
   } else {
     return (
       <div>
-        <TaskTable tasks={data.getMyTasks} />
+        {/* only show non-archived tasks */}
+        <TaskTable
+          tasks={data.getMyTasks.filter(task => !task.userTaskInfo.isArchived)}
+        />
       </div>
     );
   }
