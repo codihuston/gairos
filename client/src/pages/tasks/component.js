@@ -42,9 +42,10 @@ export default function Home() {
       </Alert>
     );
   } else {
-    // TODO: separate archived tasks from non-archived tasks
+    // separate archived tasks from non-archived tasks
     const tasks = [];
     const archivedTasks = [];
+
     data.getMyTasks.filter(task => {
       if (task.userTaskInfo.isArchived) {
         archivedTasks.push(task);
