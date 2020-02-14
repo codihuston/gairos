@@ -79,7 +79,11 @@ export default function Home() {
             Show Archive
           </Button>
         </h2>
-        <TaskTable tasks={tasks} onEdit={handleShowEditModal} />
+        <TaskTable
+          tasks={tasks}
+          onEdit={handleShowEditModal}
+          onDelete={handleShowDeleteModal}
+        />
         <CreateTaskModal
           show={showCreateModal}
           handleClose={handleCloseCreateModal}
