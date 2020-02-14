@@ -169,5 +169,24 @@ export default {
 
       return res ? true : false;
     }
+
+    /**
+     * Destroy the user's session...
+     */
+    async logout(session) {
+      if (session && session.id) {
+        const res = await this.models.session.destroy({
+          where: {
+            sid: session.id
+          },
+          force: true
+        });
+
+        console.log("Session destroyed", session.id, res);
+        return res ? true : false;
+      } else {
+        return false;
+      }
+    }
   }
 };

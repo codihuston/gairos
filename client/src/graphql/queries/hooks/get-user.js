@@ -5,7 +5,7 @@ import { GET_ME } from "..";
 
 const defaultOpts = {
   options: {
-    fetchPolicy: "cache"
+    fetchPolicy: "cache-first"
   }
 };
 

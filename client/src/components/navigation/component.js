@@ -11,6 +11,8 @@ import {
   faInfoSquare
 } from "@fortawesome/pro-duotone-svg-icons";
 
+import { component as LogoutButton } from "../logout-button";
+
 export default function Navigation() {
   return (
     <Navbar bg="light" expand="lg">
@@ -51,6 +53,9 @@ export default function Navigation() {
           <Nav.Link href="/about">
             <FontAwesomeIcon className="icon-fixed-width" icon={faInfoSquare} />
             About
+          </Nav.Link>
+          <Nav.Link href="/logout">
+            <LogoutButton />
           </Nav.Link>
         </Nav>
       </Navbar.Collapse>

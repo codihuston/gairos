@@ -9,6 +9,7 @@ extend type Query {
 }
 
 extend type Mutation {
+  logout: Boolean
   updateMyProfile(input: UserInput): User
   deleteMyAccount(deleteCalendar: Boolean): Boolean
   createMyTaskHistory(input: CreateTaskHistoryInput): UserTaskHistory

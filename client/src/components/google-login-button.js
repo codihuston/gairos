@@ -5,7 +5,7 @@ import { getApiAuthUrl } from "../config";
 class GoogleSignInButton extends React.Component {
   render() {
     return (
-      // TODO: variablize href
+      // variablize href
       <a className="btn-google" href={getApiAuthUrl()}>
         <div className="btn-google__content">
           <img src={GoogleSignin} alt="Google Sign In Button"></img>

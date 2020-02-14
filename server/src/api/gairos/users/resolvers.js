@@ -38,6 +38,10 @@ export default {
     /**
      * Users
      */
+    logout: combineResolvers(async (parent, args, { session, dataSources }) => {
+      // destroy this session
+      return await dataSources.UserAPI.logout(session);
+    }),
     updateMyProfile: combineResolvers(
       isAuthenticated,
       isGivenUser,

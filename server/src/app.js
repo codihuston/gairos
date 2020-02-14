@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser";
 import logger from "morgan";
 import session from "express-session";
 import cors from "cors";
-// for data store
+// for session data store
 import ConnectSessionStore from "connect-session-sequelize";
 import { ApolloServer } from "apollo-server-express";
 
@@ -62,6 +62,7 @@ export default resolveGraphqlDefinitions()
         saveUninitialized: true,
         // TODO: use redis store for access token (to not persist them on disk)?
         store: new SequelizeStore({
+          // defaults: expiry is 24 hours; expired sessions removed evey 15 mins
           db: sequelize,
           table: "session"
         }),

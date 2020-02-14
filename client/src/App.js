@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { ApolloProvider, useQuery } from "react-apollo";
+import { ApolloProvider } from "react-apollo";
 import { ToastContainer } from "react-toastify";
 
 import "./scss/main.scss";
@@ -9,12 +9,28 @@ import "react-toastify/dist/ReactToastify.css";
 import "@fortawesome/fontawesome-pro";
 import { component as Login } from "./pages/login";
 import Pages from "./pages";
-import { GET_ME } from "./graphql/queries";
+import GetUser from "./graphql/queries/hooks/get-user";
 
+/**
+ * Login flow:
+ * - click google sign in button
+ * - redirected to api server to handle oauth auth code flow
+ * - redirected to /login on front-end client
+ * - conditionally redirected to /first-setup or /home
+ *
+ * NOTES:
+ * - after login, the google button appears to be re-rendered
+ * - sometimes, logout is required to be pressed twice
+ */
 function IsLoggedIn() {
-  const { data } = useQuery(GET_ME);
+  // try fetching user info from graphql server
+  const { data } = GetUser();
 
-  return data && data.me ? <Pages /> : <Login />;
+  // if there is a response, we are logged in
+  if (data && data.me) {
+    return <Pages />;
+  }
+  return <Login />;
 }
 
 function App({ apolloClient, isLoading }) {
