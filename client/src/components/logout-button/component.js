@@ -23,7 +23,7 @@ function LogoutButton({ client }) {
       // client.clearStore();
 
       // redirect to login?
-      // history.push("/login");
+      history.push("/login");
       window.location.reload();
     } catch (e) {
       console.error(e);

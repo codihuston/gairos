@@ -4,11 +4,9 @@ import { Redirect } from "react-router-dom";
 import GetUser from "../../graphql/queries/hooks/get-user";
 
 export default function IsFirstSetupCompleted() {
-  const user = GetUser();
+  const { data } = GetUser();
 
-  console.log("User", user);
-
-  return user && user.isFirstSetupCompleted ? (
+  return data && data.me && data.me.isFirstSetupCompleted ? (
     <Redirect to="/home" />
   ) : (
     <Redirect to="/first-setup" />
