@@ -8,11 +8,14 @@ import { component as Loading } from "../../components/loading";
 import { component as TaskTable } from "../../components/task-table";
 import { component as TaskArchiveModal } from "../../components/task-archive-modal";
 import { component as CreateTaskModal } from "../../components/task-create-modal";
+import { component as UpdateTaskModal } from "../../components/task-update-modal";
 
 export default function Home() {
   const { error, data, loading } = GetTasks({
     fetchPolicy: "cache-and-network"
   });
+  const [currentTask, setCurrentTask] = useState(null);
+
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -20,6 +23,13 @@ export default function Home() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const handleCloseCreateModal = () => setShowCreateModal(false);
   const handleShowCreateModal = () => setShowCreateModal(true);
+
+  const [showEditModal, setShowEditModal] = useState(false);
+  const handleCloseEditModal = () => setShowEditModal(false);
+  const handleShowEditModal = (e, data) => {
+    setCurrentTask(data);
+    setShowEditModal(true);
+  };
 
   if (loading) {
     return <Loading />;
@@ -60,10 +70,15 @@ export default function Home() {
             Show Archive
           </Button>
         </h2>
-        <TaskTable tasks={tasks} />
+        <TaskTable tasks={tasks} onEdit={handleShowEditModal} />
         <CreateTaskModal
           show={showCreateModal}
           handleClose={handleCloseCreateModal}
+        />
+        <UpdateTaskModal
+          show={showEditModal}
+          handleClose={handleCloseEditModal}
+          task={currentTask}
         />
         <TaskArchiveModal
           show={show}

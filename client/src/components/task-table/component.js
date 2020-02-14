@@ -13,13 +13,10 @@ import { useTable, useSortBy, useGlobalFilter } from "react-table";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/pro-duotone-svg-icons";
-import { faPlus } from "@fortawesome/pro-light-svg-icons";
 import { merge } from "lodash";
 
 import { component as Loading } from "../loading";
-import CreateMyTask from "../../graphql/mutations/hooks/create-my-task";
 import UpdateMyTask from "../../graphql/mutations/hooks/update-my-task";
-import RenameMyTask from "../../graphql/mutations/hooks/rename-my-task";
 import DeleteMyTask from "../../graphql/mutations/hooks/delete-my-task";
 
 import { GET_MY_TASKS as query } from "../../graphql/queries";
@@ -45,119 +42,6 @@ export const TaskTableRow = ({ task, onDelete }) => {
         </button>
       </td>
     </tr>
-  );
-};
-
-/**
- * Uses uncontrolled inputs in order to use default values
- */
-export const EditTaskModal = ({ show, handleClose, task }) => {
-  const [mutate, { data: updateData, loading: updateLoading }] = UpdateMyTask();
-  const [rename, { data: renameData, loading: renameLoading }] = RenameMyTask();
-  const [error, setError] = useState("");
-
-  const loading = updateLoading || renameLoading;
-  const data = merge(updateData, renameData);
-
-  const nameInput = useRef(null);
-  const descriptionInput = useRef(null);
-
-  if (!task) {
-    return null;
-  }
-
-  const handleSubmit = async () => {
-    setError("");
-
-    try {
-      // rename the user's task if it has changed
-      if (nameInput.current.value !== task.name) {
-        await rename({
-          variables: {
-            userTaskId: task.userTaskInfo.id,
-            name: nameInput.current.value
-          },
-          refetchQueries: [{ query }]
-        });
-      }
-      // update the user task properties
-      await mutate({
-        variables: {
-          userTaskId: task.userTaskInfo.id,
-          description: descriptionInput.current.value
-        },
-        refetchQueries: [
-          {
-            query
-          }
-        ]
-      });
-
-      toast.success("Task Updated!");
-
-      return handleClose();
-    } catch (e) {
-      setError(e.message);
-    }
-  };
-
-  return (
-    <Modal show={show} onHide={handleClose} animation={false}>
-      <Modal.Header closeButton>
-        <Modal.Title>Edit {task && task.name ? task.name : "Task"}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Form>
-          <Form.Group controlId="formTaskName">
-            <Form.Label>Name</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Name your task"
-              defaultValue={task.name}
-              ref={nameInput}
-            />
-          </Form.Group>
-
-          <Form.Group controlId="formTaskDescription">
-            <Form.Label>Description</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Describe your task"
-              defaultValue={task.userTaskInfo.description}
-              ref={descriptionInput}
-            />
-            {error ? (
-              <Alert variant="danger" className="mt-1">
-                {error}
-              </Alert>
-            ) : null}
-          </Form.Group>
-          <Container fluid className="mt-1">
-            <Row className="justify-content-end">
-              {loading ? <Loading /> : null}
-              <Button
-                variant="primary"
-                onClick={handleSubmit}
-                style={{
-                  visibility: loading ? "hidden" : "visible"
-                }}
-              >
-                Update
-              </Button>
-              <Button
-                variant="secondary"
-                onClick={handleClose}
-                style={{
-                  visibility: loading ? "hidden" : "visible"
-                }}
-              >
-                Cancel
-              </Button>
-            </Row>
-          </Container>
-        </Form>
-      </Modal.Body>
-    </Modal>
   );
 };
 
@@ -350,15 +234,8 @@ function ReactTable({ columns, data }) {
   );
 }
 
-export default function TaskTable({ tasks }) {
+export default function TaskTable({ tasks, onEdit }) {
   const [currentTask, setCurrentTask] = useState(null);
-
-  const [showEditModal, setShowEditModal] = useState(false);
-  const handleCloseEditModal = () => setShowEditModal(false);
-  const handleShowEditModal = (e, data) => {
-    setCurrentTask(data);
-    setShowEditModal(true);
-  };
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const handleCloseDeleteModal = () => setShowDeleteModal(false);
@@ -389,7 +266,7 @@ export default function TaskTable({ tasks }) {
                     <Button
                       variant="warning"
                       className="mr-1"
-                      onClick={e => handleShowEditModal(e, row.original)}
+                      onClick={e => onEdit(e, row.original)}
                     >
                       <FontAwesomeIcon alt="edit task" icon={faEdit} />
                     </Button>
@@ -416,11 +293,6 @@ export default function TaskTable({ tasks }) {
         Manage your tasks below. Later, you can track them{" "}
         <Link to="/track">here!</Link>
       </p>
-      <EditTaskModal
-        show={showEditModal}
-        handleClose={handleCloseEditModal}
-        task={currentTask}
-      />
       <DeleteTaskModal
         show={showDeleteModal}
         handleClose={handleCloseDeleteModal}
