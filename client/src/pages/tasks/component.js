@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { Alert, Button } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/pro-light-svg-icons";
 
 import GetTasks from "../../graphql/queries/hooks/get-tasks";
 import { component as Loading } from "../../components/loading";
 import { component as TaskTable } from "../../components/task-table";
 import { component as TaskArchiveModal } from "../../components/task-archive-modal";
+import { component as CreateTaskModal } from "../../components/task-create-modal";
 
 export default function Home() {
   const { error, data, loading } = GetTasks({
@@ -13,6 +16,10 @@ export default function Home() {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const handleCloseCreateModal = () => setShowCreateModal(false);
+  const handleShowCreateModal = () => setShowCreateModal(true);
 
   if (loading) {
     return <Loading />;
@@ -39,15 +46,30 @@ export default function Home() {
     return (
       <div>
         {/* only show non-archived tasks */}
+        <h2>
+          Manage Tasks
+          <Button
+            variant="primary"
+            className="ml-1 mr-1"
+            onClick={handleShowCreateModal}
+          >
+            <FontAwesomeIcon icon={faPlus} />
+            &nbsp;Create
+          </Button>
+          <Button variant="secondary" onClick={handleShow}>
+            Show Archive
+          </Button>
+        </h2>
         <TaskTable tasks={tasks} />
+        <CreateTaskModal
+          show={showCreateModal}
+          handleClose={handleCloseCreateModal}
+        />
         <TaskArchiveModal
           show={show}
           handleClose={handleClose}
           tasks={archivedTasks}
         />
-        <Button variant="secondary" onClick={handleShow}>
-          Show Archive
-        </Button>
       </div>
     );
   }

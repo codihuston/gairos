@@ -48,108 +48,6 @@ export const TaskTableRow = ({ task, onDelete }) => {
   );
 };
 
-export const CreateTaskModal = ({ show, handleClose }) => {
-  const [mutate, { data, loading }] = CreateMyTask();
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [error, setError] = useState(null);
-
-  const handleSubmit = async () => {
-    setError(null);
-
-    try {
-      await mutate({
-        variables: {
-          name,
-          description
-        },
-        refetchQueries: [
-          {
-            query
-          }
-        ]
-      });
-
-      toast.success("Task Created!");
-
-      setName("");
-      setDescription("");
-
-      return handleClose();
-    } catch (e) {
-      setError(e.message);
-    }
-  };
-
-  const handleChangeName = e => {
-    setName(e.target.value);
-  };
-
-  const handleChangeDescription = e => {
-    setDescription(e.target.value);
-  };
-
-  return (
-    <Modal show={show} onHide={handleClose} animation={false}>
-      <Modal.Header closeButton>
-        <Modal.Title>Create A Task</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Form>
-          <Form.Group controlId="formTaskName">
-            <Form.Label>Name</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Name your task"
-              value={name}
-              onChange={handleChangeName}
-            />
-          </Form.Group>
-
-          <Form.Group controlId="formTaskDescription">
-            <Form.Label>Description</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Describe your task"
-              value={description}
-              onChange={handleChangeDescription}
-            />
-            {error ? (
-              <Alert variant="danger" className="mt-1">
-                {error}
-              </Alert>
-            ) : null}
-          </Form.Group>
-          <Container fluid className="mt-1">
-            <Row className="justify-content-end">
-              {loading ? <Loading /> : null}
-              <Button
-                variant="primary"
-                onClick={handleSubmit}
-                className="mr-1"
-                style={{
-                  visibility: loading ? "hidden" : "visible"
-                }}
-              >
-                Create
-              </Button>
-              <Button
-                variant="secondary"
-                onClick={handleClose}
-                style={{
-                  visibility: loading ? "hidden" : "visible"
-                }}
-              >
-                Cancel
-              </Button>
-            </Row>
-          </Container>
-        </Form>
-      </Modal.Body>
-    </Modal>
-  );
-};
-
 /**
  * Uses uncontrolled inputs in order to use default values
  */
@@ -455,10 +353,6 @@ function ReactTable({ columns, data }) {
 export default function TaskTable({ tasks }) {
   const [currentTask, setCurrentTask] = useState(null);
 
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const handleCloseCreateModal = () => setShowCreateModal(false);
-  const handleShowCreateModal = () => setShowCreateModal(true);
-
   const [showEditModal, setShowEditModal] = useState(false);
   const handleCloseEditModal = () => setShowEditModal(false);
   const handleShowEditModal = (e, data) => {
@@ -518,25 +412,10 @@ export default function TaskTable({ tasks }) {
 
   return (
     <div>
-      <h2>
-        Manage Tasks
-        <Button
-          variant="primary"
-          className="ml-1"
-          onClick={handleShowCreateModal}
-        >
-          <FontAwesomeIcon icon={faPlus} />
-          &nbsp;Create
-        </Button>
-      </h2>
       <p>
         Manage your tasks below. Later, you can track them{" "}
         <Link to="/track">here!</Link>
       </p>
-      <CreateTaskModal
-        show={showCreateModal}
-        handleClose={handleCloseCreateModal}
-      />
       <EditTaskModal
         show={showEditModal}
         handleClose={handleCloseEditModal}
