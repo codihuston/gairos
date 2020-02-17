@@ -1,5 +1,5 @@
 import { useMutation } from "react-apollo";
 
-import { DELETE_MY_TASK } from "..";
+import { DELETE_MY_TASK as mutation } from "..";
 
-export default id => useMutation(DELETE_MY_TASK);
+export default id => useMutation(mutation);

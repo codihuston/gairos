@@ -1,5 +1,5 @@
 import { useMutation } from "react-apollo";
 
-import { CREATE_MY_TASK } from "..";
+import { CREATE_MY_TASK as mutation } from "..";
 
-export default () => useMutation(CREATE_MY_TASK);
+export default () => useMutation(mutation);

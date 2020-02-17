@@ -1,5 +1,5 @@
 import { useMutation } from "react-apollo";
 
-import { RENAME_MY_TASK } from "..";
+import { RENAME_MY_TASK as mutation } from "..";
 
-export default () => useMutation(RENAME_MY_TASK);
+export default () => useMutation(mutation);

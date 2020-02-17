@@ -1,5 +1,5 @@
 import { useMutation } from "react-apollo";
 
-import { LOGOUT } from "..";
+import { LOGOUT as mutation } from "..";
 
-export default () => useMutation(LOGOUT);
+export default () => useMutation(mutation);
