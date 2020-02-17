@@ -7,14 +7,23 @@ import "moment-precise-range-plugin";
 import { cloneDeep } from "lodash";
 
 export default function Tracker({ task }) {
+  // whether or not the tas is being tracked
   const [isTracking, setIsTracking] = useState(false);
+  // set the very at very first play; used to display overall elapsed time
+  // across multiple instances of tracking userTaskHistory
+  const [originalTime, setOriginalTime] = useState(null);
+  // reset on each play
   const [startTime, setStartTime] = useState(null);
+  // the initial value of elapsedTime is set to currentTime
+  // on each second thereafter, 1 second is added to it (for each second that
+  // the task is being tracked), used only for display purposes
   const [elapsedTime, setElapsedTime] = useState(null);
-  // const [interval, setInterval] = useState()
-  const [currentTime, setCurrentTime] = useState(null);
 
   const handlePlay = () => {
     setIsTracking(true);
+    if (!originalTime) {
+      setOriginalTime(new moment());
+    }
     setStartTime(new moment());
   };
 
@@ -31,13 +40,19 @@ export default function Tracker({ task }) {
 
   useEffect(() => {
     let interval = null;
+    // only track current time if task is being tracked
     if (isTracking) {
       interval = setInterval(() => {
-        if (!currentTime) {
-          setCurrentTime(new moment());
+        // set the initial time if not set already
+        if (!elapsedTime) {
+          setElapsedTime(new moment());
         } else {
-          // must set state to new object to trigger re-render
-          setCurrentTime(prev => cloneDeep(prev.add(1, "second")));
+          // NOTE: must set state to new object to trigger re-render
+          // this uses the base time (from original value of elapsedTime)
+          // instead of the literal current instant of time; this is done
+          // to prevent the rendered output from "skipping". This is used
+          // strictly for display purposes only!
+          setElapsedTime(prev => cloneDeep(prev.add(1, "second")));
         }
       }, 1000);
     }
@@ -52,7 +67,9 @@ export default function Tracker({ task }) {
       <div title={task.description}>{task.name}</div>
       <div>
         Elapsed Time:{" "}
-        {startTime && currentTime ? currentTime.preciseDiff(startTime) : null}
+        {originalTime && elapsedTime
+          ? elapsedTime.preciseDiff(originalTime)
+          : null}
       </div>
       <div>
         {isTracking ? (
