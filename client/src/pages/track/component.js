@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 
 import GetTasks from "../../graphql/queries/hooks/get-tasks";
 import { component as TaskSelect } from "../../components/select-text";
@@ -10,10 +11,8 @@ export default function Home() {
     fetchPolicy: "cache-and-network"
   });
   const [trackers, setTrackers] = useState([]);
-  const [message, setMessage] = useState(null);
 
   const handleSelect = (e, data) => {
-    setMessage(null);
     let shouldTrack = true;
     // if task is not already tracked
     for (let i = 0; i < trackers.length; i++) {
@@ -32,7 +31,7 @@ export default function Home() {
         `Task '${data.name}' is already being tracked. You may not track the` +
         ` same task more than once.`;
       console.warn(msg);
-      setMessage(msg);
+      toast.warn(msg);
     }
   };
 
@@ -56,7 +55,6 @@ export default function Home() {
         displayMember="name"
         handleSelect={handleSelect}
       />
-      {message ? <div>{message}</div> : null}
       {trackers.map(task => (
         <Tracker
           key={task.id}
