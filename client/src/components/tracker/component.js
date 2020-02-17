@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faPause, faStop } from "@fortawesome/pro-duotone-svg-icons";
-import { Button } from "react-bootstrap";
+import { Alert, Button } from "react-bootstrap";
 import moment from "moment";
 import "moment-precise-range-plugin";
 import { cloneDeep } from "lodash";
+
+import CreateMyTaskHistory from "../../graphql/mutations/hooks/create-my-task-history";
 
 export default function Tracker({ task, handleRemove }) {
   // whether or not the tas is being tracked
@@ -18,24 +20,39 @@ export default function Tracker({ task, handleRemove }) {
   // on each second thereafter, 1 second is added to it (for each second that
   // the task is being tracked), used only for display purposes
   const [elapsedTime, setElapsedTime] = useState(null);
+  const [error, setError] = useState(null);
+  const [mutate, { loading, data }] = CreateMyTaskHistory();
 
   const handlePlay = () => {
+    // start tracking
     setIsTracking(true);
+    // set reference time for elapsedTime if not set yet
     if (!originalTime) {
       setOriginalTime(new moment());
     }
+    // init startTime
     setStartTime(new moment());
   };
 
-  const handlePause = () => {
+  const handlePause = async () => {
+    // stop tracking
     setIsTracking(false);
+    // get endTime (now)
     const endTime = new moment();
-    // TODO: create userTaskHistory with current startTime and NOW
-    console.log(
-      "Create userTaskHistory",
-      startTime.toISOString(),
-      endTime.toISOString()
-    );
+
+    try {
+      // create the instance w/ start+endTimes
+      await mutate({
+        variables: {
+          userTaskId: task.userTaskInfo.id,
+          startTime: startTime.toISOString(),
+          endTime: endTime.toISOString()
+        }
+      });
+    } catch (e) {
+      console.error(e);
+      setError(e);
+    }
   };
 
   const handleStop = () => {
@@ -87,18 +104,27 @@ export default function Tracker({ task, handleRemove }) {
           : null}
       </div>
       <div>
-        {isTracking ? (
-          <Button variant="warning" onClick={handlePause}>
-            <FontAwesomeIcon icon={faPause} />
-          </Button>
+        {error ? <Alert variant="danger">{error.message}</Alert> : null}
+      </div>
+      <div>
+        {loading ? (
+          "Saving..."
         ) : (
-          <Button variant="success" onClick={handlePlay}>
-            <FontAwesomeIcon icon={faPlay} />
-          </Button>
+          <>
+            {isTracking ? (
+              <Button variant="warning" onClick={handlePause}>
+                <FontAwesomeIcon icon={faPause} />
+              </Button>
+            ) : (
+              <Button variant="success" onClick={handlePlay}>
+                <FontAwesomeIcon icon={faPlay} />
+              </Button>
+            )}
+            <Button variant="danger" className="ml-1" onClick={handleStop}>
+              <FontAwesomeIcon icon={faStop} />
+            </Button>
+          </>
         )}
-        <Button variant="danger" className="ml-1" onClick={handleStop}>
-          <FontAwesomeIcon icon={faStop} />
-        </Button>
       </div>
     </div>
   );

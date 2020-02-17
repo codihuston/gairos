@@ -106,6 +106,43 @@ export const DELETE_MY_TASK = gql`
 `;
 
 /*******************************************************************************
+ * User Task History
+ ******************************************************************************/
+export const CREATE_MY_TASK_HISTORY = gql`
+  mutation(
+    $userTaskId: ID!
+    $startTime: GraphQLDateTime!
+    $endTime: GraphQLDateTime
+    $eventColorId: String
+  ) {
+    createMyTaskHistory(
+      input: {
+        userTaskId: $userTaskId
+        startTime: $startTime
+        endTime: $endTime
+        eventColorId: $eventColorId
+      }
+    ) {
+      id
+      startTime
+      endTime
+      eventId
+      eventColorId
+      createdAt
+      updatedAt
+      userTaskInfo {
+        id
+        description
+        task {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
+
+/*******************************************************************************
  * User Profile
  ******************************************************************************/
 export const UPDATE_MY_PROFILE = gql`
