@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlay, faStop } from "@fortawesome/pro-duotone-svg-icons";
+import { faPlay, faPause, faStop } from "@fortawesome/pro-duotone-svg-icons";
 import { Button } from "react-bootstrap";
 import moment from "moment";
 import "moment-precise-range-plugin";
 import { cloneDeep } from "lodash";
 
-export default function Tracker({ task }) {
+export default function Tracker({ task, handleRemove }) {
   // whether or not the tas is being tracked
   const [isTracking, setIsTracking] = useState(false);
   // set the very at very first play; used to display overall elapsed time
@@ -27,7 +27,7 @@ export default function Tracker({ task }) {
     setStartTime(new moment());
   };
 
-  const handleStop = () => {
+  const handlePause = () => {
     setIsTracking(false);
     const endTime = new moment();
     // TODO: create userTaskHistory with current startTime and NOW
@@ -36,6 +36,15 @@ export default function Tracker({ task }) {
       startTime.toISOString(),
       endTime.toISOString()
     );
+  };
+
+  const handleStop = () => {
+    // stop tracking
+    if (isTracking) {
+      handlePause();
+    }
+    // remove self from dom
+    handleRemove(task.id);
   };
 
   useEffect(() => {
@@ -73,14 +82,17 @@ export default function Tracker({ task }) {
       </div>
       <div>
         {isTracking ? (
-          <Button variant="danger" onClick={handleStop}>
-            <FontAwesomeIcon icon={faStop} />
+          <Button variant="warning" onClick={handlePause}>
+            <FontAwesomeIcon icon={faPause} />
           </Button>
         ) : (
           <Button variant="success" onClick={handlePlay}>
             <FontAwesomeIcon icon={faPlay} />
           </Button>
         )}
+        <Button variant="danger" onClick={handleStop}>
+          <FontAwesomeIcon icon={faStop} />
+        </Button>
       </div>
     </div>
   );

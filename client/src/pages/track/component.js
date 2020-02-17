@@ -36,6 +36,11 @@ export default function Home() {
     }
   };
 
+  const handleRemove = id => {
+    const temp = trackers.filter(task => task.id !== id);
+    setTrackers(temp);
+  };
+
   if (loading) {
     return <Loading />;
   }
@@ -53,7 +58,11 @@ export default function Home() {
       />
       {message ? <div>{message}</div> : null}
       {trackers.map(task => (
-        <Tracker key={task.id} task={task}></Tracker>
+        <Tracker
+          key={task.id}
+          task={task}
+          handleRemove={handleRemove}
+        ></Tracker>
       ))}
     </div>
   );
