@@ -41,7 +41,13 @@ export default function Tracker({ task, handleRemove }) {
   const handleStop = () => {
     // stop tracking
     if (isTracking) {
-      handlePause();
+      const confirm =
+        window.confirm(
+          "Do you want to save the currently tracked progress?"
+        ) === true;
+      if (confirm) {
+        handlePause();
+      }
     }
     // remove self from dom
     handleRemove(task.id);
@@ -90,7 +96,7 @@ export default function Tracker({ task, handleRemove }) {
             <FontAwesomeIcon icon={faPlay} />
           </Button>
         )}
-        <Button variant="danger" onClick={handleStop}>
+        <Button variant="danger" className="ml-1" onClick={handleStop}>
           <FontAwesomeIcon icon={faStop} />
         </Button>
       </div>
