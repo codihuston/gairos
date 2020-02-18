@@ -22,10 +22,8 @@ export default ({ show, handleClose, task }) => {
     setError("");
 
     try {
-      console.log("flag", shouldDeleteInput.current.checked);
       // delete the task
       if (shouldDeleteInput.current.checked) {
-        console.log("remove completely");
         await remove({
           variables: {
             userTaskId: task.userTaskInfo.id
@@ -41,7 +39,6 @@ export default ({ show, handleClose, task }) => {
       }
       // archive the task
       else {
-        console.log("update");
         await update({
           variables: {
             userTaskId: task.userTaskInfo.id,

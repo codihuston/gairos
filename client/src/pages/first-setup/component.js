@@ -111,8 +111,6 @@ function FirstSetupComponent(props) {
           isFirstSetupCompleted: true
         }
       });
-
-      console.log("Update Res", updateRes);
     } catch (e) {
       hasErrorOccured = true;
     }

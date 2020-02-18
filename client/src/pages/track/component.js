@@ -42,8 +42,7 @@ export default function Home() {
     }
     // track it
     if (shouldTrack) {
-      // TODO: mutate tracker task
-      console.log("add user task", task.userTaskInfo.id);
+      // mutate task tracker
       try {
         await mutate({
           variables: {
@@ -62,8 +61,6 @@ export default function Home() {
       } catch (e) {
         console.error(e);
       }
-
-      // setTrackers([...trackers, task]);
     } else {
       const msg =
         `Task '${task.name}' is already being tracked. You may not track the` +
@@ -75,7 +72,6 @@ export default function Home() {
 
   const handleRemove = async id => {
     try {
-      console.log("remove", id);
       await deleteTracker({
         variables: {
           id
