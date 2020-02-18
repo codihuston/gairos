@@ -7,6 +7,7 @@ import GetTasks from "../../graphql/queries/hooks/get-tasks";
 import GetMyTrackers from "../../graphql/queries/hooks/get-trackers";
 import { GET_MY_TRACKERS } from "../../graphql/queries";
 import { CREATE_MY_TRACKER } from "../../graphql/mutations";
+import DeleteMyTracker from "../../graphql/mutations/hooks/delete-my-tracker";
 import { component as TaskSelect } from "../../components/select-text";
 import { component as Loading } from "../../components/loading";
 import { component as Tracker } from "../../components/tracker";
@@ -26,6 +27,7 @@ export default function Home() {
   });
   const { data: trackers } = GetMyTrackers();
   const [mutate] = useMutation(CREATE_MY_TRACKER);
+  const [deleteTracker] = DeleteMyTracker();
 
   const handleSelect = async (e, task) => {
     let shouldTrack = true;
@@ -71,10 +73,23 @@ export default function Home() {
     }
   };
 
-  const handleRemove = id => {
-    const temp = trackers.filter(task => task.id !== id);
-    // TODO: use mutation to delete the tracker
-    // setTrackers(temp);
+  const handleRemove = async id => {
+    try {
+      console.log("remove", id);
+      await deleteTracker({
+        variables: {
+          id
+        },
+        refetchQueries: [
+          {
+            query: GET_MY_TRACKERS
+          }
+        ]
+      });
+    } catch (e) {
+      console.error(e);
+      toast.error(e);
+    }
   };
 
   if (loading) {

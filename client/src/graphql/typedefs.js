@@ -20,6 +20,7 @@ export default gql`
       startTime: String
       originalTime: String
     ): Tracker
+    deleteTracker(id: ID!): Boolean
   }
 
   extend type Tracker {

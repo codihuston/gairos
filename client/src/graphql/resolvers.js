@@ -102,8 +102,46 @@ export default {
       }
       console.log("UPDATE TRACKER", args);
     },
-    removeTracker(parent, args, { cache }) {
-      // TODO: implement on TRACKER STOP
+    deleteTracker(parent, args, { cache }) {
+      const { id } = args;
+
+      // get existing trackers
+      const queryResult = cache.readQuery({
+        query: GET_MY_TRACKERS
+      });
+
+      // if there are any...
+      if (queryResult) {
+        const { getTrackers } = queryResult;
+        // get the tracker-to-be-updated
+        let trackerExists = findTracker(getTrackers, id);
+
+        if (trackerExists) {
+          // shape what will be stored in cache
+          const otherTrackers = getTrackers.filter(
+            tracker => tracker.task.userTaskInfo.id !== id
+          );
+
+          console.log("Other trackers", otherTrackers);
+
+          // delete this task (set getTrackers to array without this obj)
+          const data = {
+            getTrackers: [...otherTrackers]
+          };
+
+          // cache it
+          cache.writeQuery({ query: GET_MY_TRACKERS, data });
+
+          return data;
+        } else {
+          // the tracker does not exist...
+          console.warn(
+            "A tracker does not exist for the given task... could not delete."
+          );
+        }
+      } else {
+        console.warn("There are no trackers of which to delete.");
+      }
     }
   }
 };

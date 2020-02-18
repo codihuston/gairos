@@ -105,7 +105,7 @@ export default function Tracker({
       }
     }
     // remove self from dom
-    handleRemove(task.id);
+    handleRemove(task.userTaskInfo.id);
   };
 
   useEffect(() => {

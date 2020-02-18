@@ -39,6 +39,12 @@ export const UPDATE_MY_TRACKER = gql`
   }
 `;
 
+export const DELETE_MY_TRACKER = gql`
+  mutation($id: ID!) {
+    deleteTracker(id: $id) @client
+  }
+`;
+
 /*******************************************************************************
  * Auth
  ******************************************************************************/
