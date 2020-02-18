@@ -8,12 +8,12 @@ import { cloneDeep } from "lodash";
 
 import CreateMyTaskHistory from "../../graphql/mutations/hooks/create-my-task-history";
 
-export default function Tracker({ task, handleRemove }) {
+export default function Tracker({ task, originalTime: temp, handleRemove }) {
   // whether or not the tas is being tracked
   const [isTracking, setIsTracking] = useState(false);
   // set the very at very first play; used to display overall elapsed time
   // across multiple instances of tracking userTaskHistory
-  const [originalTime, setOriginalTime] = useState(null);
+  const [originalTime, setOriginalTime] = useState(temp);
   // reset on each play
   const [startTime, setStartTime] = useState(null);
   // the initial value of elapsedTime is set to currentTime
@@ -26,7 +26,7 @@ export default function Tracker({ task, handleRemove }) {
   const handlePlay = () => {
     // start tracking
     setIsTracking(true);
-    // set reference time for elapsedTime if not set yet
+    // TODO: set reference time for elapsedTime if not set yet USING MUTATION
     if (!originalTime) {
       setOriginalTime(new moment());
     }
@@ -79,8 +79,8 @@ export default function Tracker({ task, handleRemove }) {
         if (!elapsedTime) {
           setElapsedTime(new moment());
         } else {
-          // NOTE: must set state to new object to trigger re-render
-          // this uses the base time (from original value of elapsedTime)
+          // NOTE: must set state to new object to trigger re-render.
+          // This uses the base time (from original value of elapsedTime)
           // instead of the literal current instant of time; this is done
           // to prevent the rendered output from "skipping". This is used
           // strictly for display purposes only!
