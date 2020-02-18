@@ -46,7 +46,7 @@ export default function Tracker({
           id: task.userTaskInfo.id,
           task,
           isTracking: true,
-          startTime: new moment(),
+          startTime: new moment().toISOString(),
           originalTime: temp
         },
         refetchQueries: [
@@ -84,7 +84,7 @@ export default function Tracker({
       await createTaskHistory({
         variables: {
           userTaskId: task.userTaskInfo.id,
-          startTime: startTime.toISOString(),
+          startTime: startTime,
           endTime: endTime.toISOString()
         }
       });
