@@ -9,6 +9,7 @@ export const CREATE_MY_TRACKER = gql`
     $task: Task!
     $isTracking: Boolean
     $startTime: String
+    $elapsedTime: String
     $originalTime: String
   ) {
     addTracker(
@@ -16,6 +17,7 @@ export const CREATE_MY_TRACKER = gql`
       task: $task
       isTracking: $isTracking
       startTime: $startTime
+      elapsedTime: $elapsedTime
       originalTime: $originalTime
     ) @client
   }
@@ -27,6 +29,7 @@ export const UPDATE_MY_TRACKER = gql`
     $task: Task!
     $isTracking: Boolean
     $startTime: String
+    $elapsedTime: String
     $originalTime: String
   ) {
     updateTracker(
@@ -34,6 +37,7 @@ export const UPDATE_MY_TRACKER = gql`
       task: $task
       isTracking: $isTracking
       startTime: $startTime
+      elapsedTime: $elapsedTime
       originalTime: $originalTime
     ) @client
   }

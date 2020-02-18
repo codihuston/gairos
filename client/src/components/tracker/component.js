@@ -19,12 +19,15 @@ export default function Tracker({
   // set the very at very first play; used to display overall elapsed time
   // across multiple instances of tracking userTaskHistory
   originalTime,
+  elapsedTime: lastElapsedTime,
   handleRemove
 }) {
   // the initial value of elapsedTime is set to currentTime
   // on each second thereafter, 1 second is added to it (for each second that
   // the task is being tracked), used only for display purposes
-  const [elapsedTime, setElapsedTime] = useState(null);
+  const [elapsedTime, setElapsedTime] = useState(
+    lastElapsedTime ? new moment(lastElapsedTime) : null
+  );
   const [error, setError] = useState(null);
   const [createTaskHistory, { loading: loadingCreate }] = CreateMyTaskHistory();
   const [updateMyTracker, { loading: loadingUpdate }] = UpdateMyTracker();
@@ -47,6 +50,7 @@ export default function Tracker({
           task,
           isTracking: true,
           startTime: new moment().toISOString(),
+          elapsedTime,
           originalTime: temp
         },
         refetchQueries: [
@@ -72,7 +76,8 @@ export default function Tracker({
           task,
           isTracking: false,
           startTime,
-          originalTime
+          originalTime,
+          elapsedTime: elapsedTime.toISOString()
         },
         refetchQueries: [
           {
@@ -131,6 +136,23 @@ export default function Tracker({
         // to prevent the rendered output from "skipping". This is used
         // strictly for display purposes only!
         setElapsedTime(prev => cloneDeep(prev.add(1, "second")));
+
+        // update last elapsedTime (so elapsedTime is correct on refreshes)
+        updateMyTracker({
+          variables: {
+            id: task.userTaskInfo.id,
+            task,
+            isTracking,
+            startTime,
+            originalTime,
+            elapsedTime: elapsedTime.toISOString()
+          },
+          refetchQueries: [
+            {
+              query: GET_MY_TRACKERS
+            }
+          ]
+        });
       }, 1000);
     }
 

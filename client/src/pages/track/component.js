@@ -50,7 +50,8 @@ export default function Home() {
             task,
             isTracking: false,
             startTime: null,
-            originalTime: null
+            originalTime: null,
+            elapsedTime: null
           },
           refetchQueries: [
             {
@@ -111,6 +112,7 @@ export default function Home() {
             isTracking={tracker.isTracking}
             startTime={tracker.startTime}
             originalTime={tracker.originalTime}
+            elapsedTime={tracker.elapsedTime}
             handleRemove={handleRemove}
           ></Tracker>
         ))}

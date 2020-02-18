@@ -15,7 +15,15 @@ export default {
   Mutation: {
     // get required fields
     addTracker(parent, args, { cache }) {
-      const { id, task, isTracking, originalTime, startTime } = args;
+      const {
+        id,
+        task,
+        isTracking,
+        originalTime,
+        startTime,
+        elapsedTime
+      } = args;
+
       let existingTracker = false;
 
       // get existing trackers
@@ -42,6 +50,7 @@ export default {
               task,
               isTracking,
               startTime,
+              elapsedTime,
               originalTime
             }
           ]
@@ -59,7 +68,14 @@ export default {
     },
     updateTracker(parent, args, { cache }) {
       // implement on TRACKER UPDATE
-      const { id, task, isTracking, startTime, originalTime } = args;
+      const {
+        id,
+        task,
+        isTracking,
+        startTime,
+        originalTime,
+        elapsedTime
+      } = args;
 
       // get existing trackers
       const queryResult = cache.readQuery({
@@ -86,7 +102,8 @@ export default {
             task,
             isTracking,
             startTime,
-            originalTime
+            originalTime,
+            elapsedTime
           };
 
           const data = {

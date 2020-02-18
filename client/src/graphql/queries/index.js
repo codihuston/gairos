@@ -56,6 +56,7 @@ export const GET_MY_TRACKERS = gql`
       isTracking
       startTime
       originalTime
+      elapsedTime
       task {
         id
         name
