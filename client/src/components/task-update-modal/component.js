@@ -1,7 +1,6 @@
 import React, { useState, useRef, Fragment } from "react";
 import { Modal, Button, Alert, Form, Container, Row } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { merge } from "lodash";
 
 import { component as Loading } from "../loading";
 import RenameMyTask from "../../graphql/mutations/hooks/rename-my-task";
@@ -12,12 +11,11 @@ import { GET_MY_TASKS as query } from "../../graphql/queries";
  * Uses uncontrolled inputs in order to use default values
  */
 export default ({ show, handleClose, task }) => {
-  const [mutate, { data: updateData, loading: updateLoading }] = UpdateMyTask();
-  const [rename, { data: renameData, loading: renameLoading }] = RenameMyTask();
+  const [mutate, { loading: updateLoading }] = UpdateMyTask();
+  const [rename, { loading: renameLoading }] = RenameMyTask();
   const [error, setError] = useState("");
 
   const loading = updateLoading || renameLoading;
-  const data = merge(updateData, renameData);
 
   const nameInput = useRef(null);
   const descriptionInput = useRef(null);

@@ -7,7 +7,7 @@ import CreateMyTask from "../../graphql/mutations/hooks/create-my-task";
 import { GET_MY_TASKS as query } from "../../graphql/queries";
 
 export default ({ show, handleClose }) => {
-  const [mutate, { data, loading }] = CreateMyTask();
+  const [mutate, { loading }] = CreateMyTask();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [error, setError] = useState(null);

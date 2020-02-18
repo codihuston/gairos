@@ -6,7 +6,8 @@ import {
   Redirect
 } from "react-router-dom";
 
-import logo from "../logo.svg";
+// TODO: implement logo
+// import logo from "../logo.svg";
 
 import { component as IsFirstSetupCompleted } from "../components/is-first-setup-completed";
 import { component as ExampleComponent } from "../components/examples/example-component";

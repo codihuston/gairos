@@ -106,7 +106,7 @@ function FirstSetupComponent(props) {
     // TODO: update user profile, since calendarId and isFirstSetupCompleted
     // should be updated!
     try {
-      const updateRes = await updateMyProfile({
+      await updateMyProfile({
         variables: {
           isFirstSetupCompleted: true
         }

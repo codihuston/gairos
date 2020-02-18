@@ -54,7 +54,7 @@ export default function Home() {
     const tasks = [];
     const archivedTasks = [];
 
-    data.getMyTasks.filter(task => {
+    data.getMyTasks.forEach(task => {
       if (task.userTaskInfo.isArchived) {
         archivedTasks.push(task);
       } else {

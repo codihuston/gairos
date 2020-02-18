@@ -6,7 +6,7 @@ import UpdateMyTask from "../../graphql/mutations/hooks/update-my-task";
 import { GET_MY_TASKS as query } from "../../graphql/queries";
 
 export default function TaskArchiveList({ show, handleClose, tasks }) {
-  const [mutate, { data, loading }] = UpdateMyTask();
+  const [mutate] = UpdateMyTask();
   const [error, setError] = useState(null);
 
   const handleClick = async (e, task) => {

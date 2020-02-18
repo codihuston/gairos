@@ -2,8 +2,7 @@ import {
   ApolloClient,
   ApolloLink,
   HttpLink,
-  InMemoryCache,
-  gql
+  InMemoryCache
 } from "apollo-boost";
 import { CachePersistor } from "apollo-cache-persist";
 import { getApiGraphqlUrl } from "../config";

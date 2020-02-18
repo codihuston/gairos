@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { Row, Table, Form, Button } from "react-bootstrap";
 import { useTable, useSortBy, useGlobalFilter } from "react-table";
@@ -166,7 +166,7 @@ export default function TaskTable({ tasks, onEdit, onDelete }) {
         ]
       }
     ],
-    []
+    [onEdit, onDelete]
   );
 
   return (

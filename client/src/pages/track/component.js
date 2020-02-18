@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { toast } from "react-toastify";
-import { useQuery, useMutation } from "react-apollo";
-import gql from "graphql-tag";
+import { useMutation } from "react-apollo";
 
 import GetTasks from "../../graphql/queries/hooks/get-tasks";
 import GetMyTrackers from "../../graphql/queries/hooks/get-trackers";
