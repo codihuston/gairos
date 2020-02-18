@@ -1,9 +1,11 @@
+import { clone } from "lodash";
+
 import { GET_MY_TRACKERS } from "./queries";
 
 const findTracker = (trackers, id) => {
   for (let i = 0; i < trackers.length; i++) {
     if (trackers[i].id === id) {
-      return trackers[i];
+      return [trackers[i], i];
     }
   }
   return false;
@@ -14,7 +16,7 @@ export default {
     // get required fields
     addTracker(parent, args, { cache }) {
       const { id, task, isTracking, originalTime, startTime } = args;
-      let trackerExists = false;
+      let existingTracker = false;
 
       // get existing trackers
       const queryResult = cache.readQuery({
@@ -24,11 +26,11 @@ export default {
 
       // if there are any...
       if (queryResult && getTrackers) {
-        trackerExists = findTracker(getTrackers, task.userTaskInfo.id);
+        existingTracker = findTracker(getTrackers, task.userTaskInfo.id);
       }
 
       // if tracker is already being tracked, skip caching it
-      if (!trackerExists) {
+      if (!existingTracker) {
         const data = {
           getTrackers: [
             ...getTrackers,
@@ -53,7 +55,7 @@ export default {
         // the tracker already exists
       }
 
-      return trackerExists;
+      return existingTracker;
     },
     updateTracker(parent, args, { cache }) {
       // implement on TRACKER UPDATE
@@ -68,28 +70,27 @@ export default {
       // if there are any...
       if (queryResult && getTrackers) {
         // get the tracker-to-be-updated
-        let trackerExists = findTracker(getTrackers, task.userTaskInfo.id);
+        let [existingTracker, index] = findTracker(
+          getTrackers,
+          task.userTaskInfo.id
+        );
 
-        if (trackerExists) {
-          // shape what will be stored in cache
-          const otherTrackers = getTrackers.filter(
-            tracker => tracker.task.userTaskInfo.id !== task.userTaskInfo.id
-          );
+        if (existingTracker && index >= 0 && getTrackers[index]) {
+          // update the tracker at the given index
+          const temp = clone(getTrackers);
+
+          temp[index] = {
+            type: "id",
+            __typename: "Tracker",
+            id,
+            task,
+            isTracking,
+            startTime,
+            originalTime
+          };
 
           const data = {
-            getTrackers: [
-              ...otherTrackers,
-              // add fields as needed
-              {
-                type: "id",
-                __typename: "Tracker",
-                id,
-                task,
-                isTracking,
-                startTime,
-                originalTime
-              }
-            ]
+            getTrackers: temp
           };
 
           // cache it
@@ -117,9 +118,9 @@ export default {
       if (queryResult) {
         const { getTrackers } = queryResult;
         // get the tracker-to-be-updated
-        let trackerExists = findTracker(getTrackers, id);
+        let existingTracker = findTracker(getTrackers, id);
 
-        if (trackerExists) {
+        if (existingTracker) {
           // shape what will be stored in cache
           const otherTrackers = getTrackers.filter(
             tracker => tracker.task.userTaskInfo.id !== id
