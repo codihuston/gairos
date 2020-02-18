@@ -11,61 +11,62 @@ const findTracker = (trackers, id) => {
 
 export default {
   Mutation: {
-    // TODO: get require fields
+    // get required fields
     addTracker(parent, args, { cache }) {
-      console.log("QQQ ARGS", args);
       const { id, task, isTracking, originalTime, startTime } = args;
+      let trackerExists = false;
 
       // get existing trackers
       const queryResult = cache.readQuery({
         query: GET_MY_TRACKERS
       });
+      const { getTrackers } = queryResult;
 
       // if there are any...
-      if (queryResult) {
-        const { getTrackers } = queryResult;
-        let trackerExists = findTracker(getTrackers, task.userTaskInfo.id);
-
-        // if tracker is already being tracked, skip caching it
-        if (!trackerExists) {
-          console.log("SPREAD", ...getTrackers);
-          const data = {
-            getTrackers: [
-              ...getTrackers,
-              // TODO: add fields as needed
-              {
-                type: "id",
-                __typename: "Tracker",
-                id,
-                task,
-                isTracking,
-                startTime,
-                originalTime
-              }
-            ]
-          };
-
-          console.log("QQQ write", data.getTrackers);
-          // cache it
-          cache.writeQuery({ query: GET_MY_TRACKERS, data });
-
-          return data.getTrackers;
-        }
+      if (queryResult && getTrackers) {
+        trackerExists = findTracker(getTrackers, task.userTaskInfo.id);
       }
-      return [];
+
+      // if tracker is already being tracked, skip caching it
+      if (!trackerExists) {
+        const data = {
+          getTrackers: [
+            ...getTrackers,
+            // add fields as needed
+            {
+              type: "id",
+              __typename: "Tracker",
+              id,
+              task,
+              isTracking,
+              startTime,
+              originalTime
+            }
+          ]
+        };
+
+        // cache it
+        cache.writeQuery({ query: GET_MY_TRACKERS, data });
+
+        return data.getTrackers;
+      } else {
+        // the tracker already exists
+      }
+
+      return trackerExists;
     },
     updateTracker(parent, args, { cache }) {
-      // TODO: implement on TRACKER UPDATE
+      // implement on TRACKER UPDATE
       const { id, task, isTracking, startTime, originalTime } = args;
 
       // get existing trackers
       const queryResult = cache.readQuery({
         query: GET_MY_TRACKERS
       });
+      const { getTrackers } = queryResult;
 
       // if there are any...
-      if (queryResult) {
-        const { getTrackers } = queryResult;
+      if (queryResult && getTrackers) {
         // get the tracker-to-be-updated
         let trackerExists = findTracker(getTrackers, task.userTaskInfo.id);
 
@@ -74,12 +75,11 @@ export default {
           const otherTrackers = getTrackers.filter(
             tracker => tracker.task.userTaskInfo.id !== task.userTaskInfo.id
           );
-          console.log("Other trackers", otherTrackers);
 
           const data = {
             getTrackers: [
               ...otherTrackers,
-              // TODO: add fields as needed
+              // add fields as needed
               {
                 type: "id",
                 __typename: "Tracker",
@@ -97,10 +97,13 @@ export default {
 
           return data;
         } else {
-          // the tracker does not exist...
+          console.warn(
+            "No tracker was found for the given task, could not update."
+          );
         }
+      } else {
+        console.warn("There are no trackers for tasks of which to update.");
       }
-      console.log("UPDATE TRACKER", args);
     },
     deleteTracker(parent, args, { cache }) {
       const { id } = args;
@@ -121,8 +124,6 @@ export default {
           const otherTrackers = getTrackers.filter(
             tracker => tracker.task.userTaskInfo.id !== id
           );
-
-          console.log("Other trackers", otherTrackers);
 
           // delete this task (set getTrackers to array without this obj)
           const data = {
