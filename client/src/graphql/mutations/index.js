@@ -4,7 +4,7 @@ import gql from "graphql-tag";
  * Local (Client only)
  ******************************************************************************/
 export const CREATE_MY_TRACKER = gql`
-  mutation addTracker(
+  mutation(
     $id: ID!
     $task: Task!
     $isTracking: Boolean
@@ -22,7 +22,7 @@ export const CREATE_MY_TRACKER = gql`
 `;
 
 export const UPDATE_MY_TRACKER = gql`
-  mutation updateTracker(
+  mutation(
     $id: ID!
     $task: Task!
     $isTracking: Boolean
