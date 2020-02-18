@@ -112,8 +112,13 @@ export default function Tracker({
 
   useEffect(() => {
     let interval = null;
-    // set the initial time if not set already
-    if (!elapsedTime) {
+
+    // initialize elapsedTime only if originalTime is initialized. originalTime
+    // is only initialized when "play" is clicked the first time. This fixes the
+    // "reverse countdown issue" that occurs when opening a tracker, waiting
+    // X seconds, and starting it. In that case, the tracker would COUNT DOWN
+    // from now + X seconds until 0 is reached then count up
+    if (originalTime && !elapsedTime) {
       setElapsedTime(new moment());
     }
 
