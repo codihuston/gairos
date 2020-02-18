@@ -5,6 +5,23 @@ export default gql`
     getTrackers: [Tracker]
   }
 
+  extend type Mutation {
+    addTracker(
+      id: ID!
+      task: Task!
+      isTracking: Boolean
+      startTime: String
+      originalTime: String
+    ): Tracker
+    updateTracker(
+      id: ID!
+      task: Task!
+      isTracking: Boolean
+      startTime: String
+      originalTime: String
+    ): Tracker
+  }
+
   extend type Tracker {
     id: ID!
     task: Task
@@ -26,9 +43,5 @@ export default gql`
     isArchived: Boolean
     createdAt: String
     updatedAt: String
-  }
-
-  extend type Mutation {
-    addTracker(id: ID!): Tracker
   }
 `;

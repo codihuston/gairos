@@ -48,6 +48,7 @@ export default function Home() {
             id: task.userTaskInfo.id,
             task,
             isTracking: false,
+            startTime: null,
             originalTime: null
           },
           refetchQueries: [
@@ -97,6 +98,7 @@ export default function Home() {
             key={tracker.task.userTaskInfo.id}
             task={tracker.task}
             isTracking={tracker.isTracking}
+            startTime={tracker.startTime}
             originalTime={tracker.originalTime}
             handleRemove={handleRemove}
           ></Tracker>

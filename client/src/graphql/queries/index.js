@@ -54,6 +54,7 @@ export const GET_MY_TRACKERS = gql`
     getTrackers @client {
       id
       isTracking
+      startTime
       originalTime
       task {
         id

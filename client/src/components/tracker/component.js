@@ -6,43 +6,82 @@ import moment from "moment";
 import "moment-precise-range-plugin";
 import { cloneDeep } from "lodash";
 
+import { GET_MY_TRACKERS } from "../../graphql/queries";
 import CreateMyTaskHistory from "../../graphql/mutations/hooks/create-my-task-history";
+import UpdateMyTracker from "../../graphql/mutations/hooks/update-my-tracker";
 
-export default function Tracker({ task, originalTime: temp, handleRemove }) {
-  // whether or not the tas is being tracked
-  const [isTracking, setIsTracking] = useState(false);
+export default function Tracker({
+  task,
+  // whether or not the task is being tracked
+  isTracking,
+  // reset on each play (each pause/play peroid is ONE record in db)
+  startTime,
   // set the very at very first play; used to display overall elapsed time
   // across multiple instances of tracking userTaskHistory
-  const [originalTime, setOriginalTime] = useState(temp);
-  // reset on each play
-  const [startTime, setStartTime] = useState(null);
+  originalTime,
+  handleRemove
+}) {
   // the initial value of elapsedTime is set to currentTime
   // on each second thereafter, 1 second is added to it (for each second that
   // the task is being tracked), used only for display purposes
   const [elapsedTime, setElapsedTime] = useState(null);
   const [error, setError] = useState(null);
-  const [mutate, { loading, data }] = CreateMyTaskHistory();
+  const [createTaskHistory, { loading: loadingCreate }] = CreateMyTaskHistory();
+  const [updateMyTracker, { loading: loadingUpdate }] = UpdateMyTracker();
 
-  const handlePlay = () => {
-    // start tracking
-    setIsTracking(true);
-    // TODO: set reference time for elapsedTime if not set yet USING MUTATION
+  const loading = loadingCreate || loadingUpdate;
+
+  const handlePlay = async () => {
+    let temp = originalTime;
+    // set reference time for elapsedTime if not set yet
     if (!originalTime) {
-      setOriginalTime(new moment());
+      // setOriginalTime(new moment());
+      temp = new moment();
     }
-    // init startTime
-    setStartTime(new moment());
+
+    try {
+      // update tracker with the new startTime and originalTime (client cache)
+      await updateMyTracker({
+        variables: {
+          id: task.userTaskInfo.id,
+          task,
+          isTracking: true,
+          startTime: new moment(),
+          originalTime: temp
+        },
+        refetchQueries: [
+          {
+            query: GET_MY_TRACKERS
+          }
+        ]
+      });
+    } catch (e) {
+      setError(e);
+    }
   };
 
   const handlePause = async () => {
-    // stop tracking
-    setIsTracking(false);
-    // get endTime (now)
-    const endTime = new moment();
-
     try {
-      // create the instance w/ start+endTimes
-      await mutate({
+      // get endTime (now)
+      const endTime = new moment();
+
+      // stop the tracker (client cache)
+      await updateMyTracker({
+        variables: {
+          id: task.userTaskInfo.id,
+          task,
+          isTracking: false,
+          startTime,
+          originalTime
+        },
+        refetchQueries: [
+          {
+            query: GET_MY_TRACKERS
+          }
+        ]
+      });
+      // create the instance w/ start+endTimes (database)
+      await createTaskHistory({
         variables: {
           userTaskId: task.userTaskInfo.id,
           startTime: startTime.toISOString(),
@@ -50,7 +89,6 @@ export default function Tracker({ task, originalTime: temp, handleRemove }) {
         }
       });
     } catch (e) {
-      console.error(e);
       setError(e);
     }
   };
@@ -72,20 +110,20 @@ export default function Tracker({ task, originalTime: temp, handleRemove }) {
 
   useEffect(() => {
     let interval = null;
+    // set the initial time if not set already
+    if (!elapsedTime) {
+      setElapsedTime(new moment());
+    }
+
     // only track current time if task is being tracked
     if (isTracking) {
       interval = setInterval(() => {
-        // set the initial time if not set already
-        if (!elapsedTime) {
-          setElapsedTime(new moment());
-        } else {
-          // NOTE: must set state to new object to trigger re-render.
-          // This uses the base time (from original value of elapsedTime)
-          // instead of the literal current instant of time; this is done
-          // to prevent the rendered output from "skipping". This is used
-          // strictly for display purposes only!
-          setElapsedTime(prev => cloneDeep(prev.add(1, "second")));
-        }
+        // NOTE: must set state to new object to trigger re-render.
+        // This uses the base time (from original value of elapsedTime)
+        // instead of the literal current instant of time; this is done
+        // to prevent the rendered output from "skipping". This is used
+        // strictly for display purposes only!
+        setElapsedTime(prev => cloneDeep(prev.add(1, "second")));
       }, 1000);
     }
 

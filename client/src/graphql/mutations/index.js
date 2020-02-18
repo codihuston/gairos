@@ -8,12 +8,32 @@ export const CREATE_MY_TRACKER = gql`
     $id: ID!
     $task: Task!
     $isTracking: Boolean
+    $startTime: String
     $originalTime: String
   ) {
     addTracker(
       id: $id
       task: $task
       isTracking: $isTracking
+      startTime: $startTime
+      originalTime: $originalTime
+    ) @client
+  }
+`;
+
+export const UPDATE_MY_TRACKER = gql`
+  mutation updateTracker(
+    $id: ID!
+    $task: Task!
+    $isTracking: Boolean
+    $startTime: String
+    $originalTime: String
+  ) {
+    updateTracker(
+      id: $id
+      task: $task
+      isTracking: $isTracking
+      startTime: $startTime
       originalTime: $originalTime
     ) @client
   }
