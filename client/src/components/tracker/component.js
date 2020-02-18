@@ -98,7 +98,9 @@ export default function Tracker({
     if (isTracking) {
       const confirm =
         window.confirm(
-          "Do you want to save the currently tracked progress?"
+          "You are currently tracking this task. " +
+            "Click 'OK' to save this progress. " +
+            "Click 'Cancel' to discard this progress."
         ) === true;
       if (confirm) {
         handlePause();
