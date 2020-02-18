@@ -40,6 +40,32 @@ export const GET_MY_TASKS = gql`
         description
         isPublic
         isArchived
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const GET_MY_TRACKERS = gql`
+  query {
+    getTrackers @client {
+      id
+      isTracking
+      originalTime
+      task {
+        id
+        name
+        userTaskInfo {
+          id
+          description
+          isPublic
+          isArchived
+        }
+        createdAt
+        updatedAt
       }
     }
   }

@@ -1,6 +1,25 @@
 import gql from "graphql-tag";
 
 /*******************************************************************************
+ * Local (Client only)
+ ******************************************************************************/
+export const CREATE_MY_TRACKER = gql`
+  mutation addTracker(
+    $id: ID!
+    $task: Task!
+    $isTracking: Boolean
+    $originalTime: String
+  ) {
+    addTracker(
+      id: $id
+      task: $task
+      isTracking: $isTracking
+      originalTime: $originalTime
+    ) @client
+  }
+`;
+
+/*******************************************************************************
  * Auth
  ******************************************************************************/
 export const LOGOUT = gql`
