@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faPause, faStop } from "@fortawesome/pro-duotone-svg-icons";
 import { Alert, Button } from "react-bootstrap";
@@ -31,6 +31,7 @@ export default function Tracker({
   const [error, setError] = useState(null);
   const [createTaskHistory, { loading: loadingCreate }] = CreateMyTaskHistory();
   const [updateMyTracker, { loading: loadingUpdate }] = UpdateMyTracker();
+  const savedCallback = useRef();
 
   const loading = loadingCreate || loadingUpdate;
 
@@ -115,9 +116,7 @@ export default function Tracker({
     handleRemove(task.userTaskInfo.id);
   };
 
-  useEffect(() => {
-    let interval = null;
-
+  function callback() {
     // initialize elapsedTime only if originalTime is initialized. originalTime
     // is only initialized when "play" is clicked the first time. This fixes the
     // "reverse countdown issue" that occurs when opening a tracker, waiting
@@ -129,15 +128,15 @@ export default function Tracker({
 
     // only track current time if task is being tracked
     if (isTracking) {
-      interval = setInterval(() => {
-        // NOTE: must set state to new object to trigger re-render.
-        // This uses the base time (from original value of elapsedTime)
-        // instead of the literal current instant of time; this is done
-        // to prevent the rendered output from "skipping". This is used
-        // strictly for display purposes only!
-        setElapsedTime(prev => cloneDeep(prev.add(1, "second")));
+      // NOTE: must set state to new object to trigger re-render.
+      // This uses the base time (from original value of elapsedTime)
+      // instead of the literal current instant of time; this is done
+      // to prevent the rendered output from "skipping". This is used
+      // strictly for display purposes only!
+      setElapsedTime(prev => cloneDeep(prev.add(1, "second")));
 
-        // update last elapsedTime (so elapsedTime is correct on refreshes)
+      // update last elapsedTime (so elapsedTime is correct on refreshes)
+      try {
         updateMyTracker({
           variables: {
             id: task.userTaskInfo.id,
@@ -145,7 +144,7 @@ export default function Tracker({
             isTracking,
             startTime,
             originalTime,
-            elapsedTime: elapsedTime.toISOString()
+            elapsedTime: elapsedTime ? elapsedTime.toISOString() : null
           },
           refetchQueries: [
             {
@@ -153,13 +152,70 @@ export default function Tracker({
             }
           ]
         });
-      }, 1000);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }
+
+  useEffect(() => {
+    savedCallback.current = callback;
+  });
+
+  useEffect(() => {
+    function tick() {
+      savedCallback.current();
     }
 
-    return () => {
-      clearInterval(interval);
-    };
-  });
+    let id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  // useEffect(() => {
+  //   let interval = null;
+
+  //   // initialize elapsedTime only if originalTime is initialized. originalTime
+  //   // is only initialized when "play" is clicked the first time. This fixes the
+  //   // "reverse countdown issue" that occurs when opening a tracker, waiting
+  //   // X seconds, and starting it. In that case, the tracker would COUNT DOWN
+  //   // from now + X seconds until 0 is reached then count up
+  //   if (originalTime && !elapsedTime) {
+  //     setElapsedTime(new moment());
+  //   }
+
+  //   // only track current time if task is being tracked
+  //   if (isTracking) {
+  //     interval = setInterval(() => {
+  //       // NOTE: must set state to new object to trigger re-render.
+  //       // This uses the base time (from original value of elapsedTime)
+  //       // instead of the literal current instant of time; this is done
+  //       // to prevent the rendered output from "skipping". This is used
+  //       // strictly for display purposes only!
+  //       setElapsedTime(prev => cloneDeep(prev.add(1, "second")));
+
+  //       // update last elapsedTime (so elapsedTime is correct on refreshes)
+  //       updateMyTracker({
+  //         variables: {
+  //           id: task.userTaskInfo.id,
+  //           task,
+  //           isTracking,
+  //           startTime,
+  //           originalTime,
+  //           elapsedTime: elapsedTime.toISOString()
+  //         },
+  //         refetchQueries: [
+  //           {
+  //             query: GET_MY_TRACKERS
+  //           }
+  //         ]
+  //       });
+  //     }, 1000);
+  //   }
+
+  //   return () => {
+  //     clearInterval(interval);
+  //   };
+  // });
 
   return (
     <div>
