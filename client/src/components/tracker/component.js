@@ -192,7 +192,9 @@ export default function Tracker({
           minWidth: "50%"
         }}
       >
-        <div title={task.description}>{task.name}</div>
+        <div className="font-weight-bold" title={task.description}>
+          {task.name}
+        </div>
         <div>
           {originalTime && elapsedTime ? (
             <div className="text-muted">
