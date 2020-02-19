@@ -72,3 +72,26 @@ export const GET_MY_TRACKERS = gql`
     }
   }
 `;
+
+export const GET_MY_TASK_HISTORY = gql`
+  query {
+    getMyTaskHistory {
+      id
+      startTime
+      endTime
+      eventColorId
+      createdAt
+      updatedAt
+      userTaskInfo {
+        id
+        description
+        isPublic
+        isArchived
+        task {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
