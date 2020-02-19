@@ -2,6 +2,18 @@ import { clone } from "lodash";
 
 import { GET_MY_TRACKERS } from "./queries";
 
+/**
+ * Returns the ROOT_MUTATION object in the apollo cache (that is stored in
+ * local storage)
+ * @param {*} cache
+ */
+const getRootMutation = cache => {
+  if (cache && cache.data && cache.data.data && cache.data.data.ROOT_MUTATION) {
+    return cache.data.data.ROOT_MUTATION;
+  }
+  return {};
+};
+
 const findTracker = (trackers, id) => {
   for (let i = 0; i < trackers.length; i++) {
     if (trackers[i].id === id) {
@@ -56,6 +68,16 @@ export default {
           ]
         };
 
+        // delete old mutations (they hog up cache, and are no longer needed)
+        Object.keys(getRootMutation(cache)).forEach(key => {
+          if (
+            key.includes("addTracker") &&
+            key.includes(task.userTaskInfo.id)
+          ) {
+            delete cache.data.data.ROOT_MUTATION[key];
+          }
+        });
+
         // cache it
         cache.writeQuery({ query: GET_MY_TRACKERS, data });
 
@@ -107,8 +129,8 @@ export default {
             getTrackers: temp
           };
 
-          // delete old mutations (they hog up cache, and no longer needed)
-          Object.keys(cache.data.data.ROOT_MUTATION).forEach(key => {
+          // delete old mutations (they hog up cache, and are no longer needed)
+          Object.keys(getRootMutation(cache)).forEach(key => {
             if (
               key.includes("updateTracker") &&
               key.includes(task.userTaskInfo.id)
@@ -158,6 +180,18 @@ export default {
 
           // cache it
           cache.writeQuery({ query: GET_MY_TRACKERS, data });
+
+          // delete old mutations (they hog up cache, and are no longer needed)
+          Object.keys(getRootMutation(cache)).forEach(key => {
+            if (
+              (key.includes("updateTracker") ||
+                key.includes("addTracker") ||
+                key.includes("deleteTracker")) &&
+              key.includes(id)
+            ) {
+              delete cache.data.data.ROOT_MUTATION[key];
+            }
+          });
 
           return data;
         } else {
