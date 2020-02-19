@@ -99,20 +99,29 @@ export default function Home() {
         displayMember="name"
         handleSelect={handleSelect}
       />
-      {trackers.getTrackers &&
-        trackers.getTrackers.map(tracker => {
-          return (
-            <Tracker
-              key={tracker.task.userTaskInfo.id}
-              task={tracker.task}
-              isTracking={tracker.isTracking}
-              startTime={tracker.startTime}
-              originalTime={tracker.originalTime}
-              elapsedTime={tracker.elapsedTime}
-              handleRemove={handleRemove}
-            ></Tracker>
-          );
-        })}
+      <div
+        className="mx-auto"
+        style={{
+          width: "80%"
+        }}
+      >
+        <div className="d-flex flex-wrap justify-content-center">
+          {trackers.getTrackers &&
+            trackers.getTrackers.map(tracker => {
+              return (
+                <Tracker
+                  key={tracker.task.userTaskInfo.id}
+                  task={tracker.task}
+                  isTracking={tracker.isTracking}
+                  startTime={tracker.startTime}
+                  originalTime={tracker.originalTime}
+                  elapsedTime={tracker.elapsedTime}
+                  handleRemove={handleRemove}
+                ></Tracker>
+              );
+            })}
+        </div>
+      </div>
     </div>
   );
 }

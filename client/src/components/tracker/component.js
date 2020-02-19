@@ -180,18 +180,38 @@ export default function Tracker({
   }, incrementDelay + 1000);
 
   return (
-    <div>
-      <div title={task.description}>{task.name}</div>
-      <div>
-        Elapsed Time:{" "}
-        {originalTime && elapsedTime
-          ? elapsedTime.preciseDiff(originalTime)
-          : null}
+    <div
+      className="d-flex m-1 justify-content-center"
+      style={{
+        flexBasis: "100%"
+      }}
+    >
+      <div
+        style={{
+          flexBasis: "50%",
+          minWidth: "50%"
+        }}
+      >
+        <div title={task.description}>{task.name}</div>
+        <div>
+          {originalTime && elapsedTime ? (
+            <div className="text-muted">
+              {elapsedTime.preciseDiff(originalTime)}
+            </div>
+          ) : (
+            <div className="text-muted">Ready to track!</div>
+          )}
+        </div>
+        <div>
+          {error ? <Alert variant="danger">{error.message}</Alert> : null}
+        </div>
       </div>
-      <div>
-        {error ? <Alert variant="danger">{error.message}</Alert> : null}
-      </div>
-      <div>
+      <div
+        style={{
+          flexBasis: "30%",
+          minWidth: "30%"
+        }}
+      >
         {loading ? (
           "Saving..."
         ) : (
