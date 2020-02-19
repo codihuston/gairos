@@ -207,6 +207,7 @@ export default function Tracker({
         </div>
       </div>
       <div
+        className="d-flex justify-content-end align-items-center"
         style={{
           flexBasis: "30%",
           minWidth: "30%"

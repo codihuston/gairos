@@ -93,18 +93,18 @@ export default function Home() {
 
   return (
     <div>
-      <TaskSelect
-        placeholder="Select a task"
-        options={data.getMyTasks}
-        displayMember="name"
-        handleSelect={handleSelect}
-      />
       <div
         className="mx-auto"
         style={{
           width: "80%"
         }}
       >
+        <TaskSelect
+          placeholder="Select a task"
+          options={data.getMyTasks}
+          displayMember="name"
+          handleSelect={handleSelect}
+        />
         <div className="d-flex flex-wrap justify-content-center">
           {trackers.getTrackers &&
             trackers.getTrackers.map(tracker => {
