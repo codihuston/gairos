@@ -52,7 +52,9 @@ const getApolloClient = async () => {
   // configure a persistent cache using local storage
   const persistor = new CachePersistor({
     cache,
-    storage: window.localStorage
+    storage: window.localStorage,
+    // 4MB (chrome local storage max is 5MB)
+    maxSize: 419428
   });
 
   // use the current version
