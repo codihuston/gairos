@@ -90,11 +90,9 @@ export default {
           getTrackers,
           task.userTaskInfo.id
         );
-
         if (existingTracker && index >= 0 && getTrackers[index]) {
           // update the tracker at the given index
           const temp = clone(getTrackers);
-
           temp[index] = {
             type: "id",
             __typename: "Tracker",
@@ -105,12 +103,21 @@ export default {
             originalTime,
             elapsedTime
           };
-
           const data = {
             getTrackers: temp
           };
 
-          // cache it
+          // delete old mutations (they hog up cache, and no longer needed)
+          Object.keys(cache.data.data.ROOT_MUTATION).forEach(key => {
+            if (
+              key.includes("updateTracker") &&
+              key.includes(task.userTaskInfo.id)
+            ) {
+              delete cache.data.data.ROOT_MUTATION[key];
+            }
+          });
+
+          // cache.writeQuery({ query: GET_MY_TRACKERS, data });
           cache.writeQuery({ query: GET_MY_TRACKERS, data });
 
           return data;
@@ -122,6 +129,7 @@ export default {
       } else {
         console.warn("There are no trackers for tasks of which to update.");
       }
+      return null;
     },
     deleteTracker(parent, args, { cache }) {
       const { id } = args;

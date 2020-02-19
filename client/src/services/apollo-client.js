@@ -55,6 +55,7 @@ const getApolloClient = async () => {
     storage: window.localStorage,
     // 4MB (chrome local storage max is 5MB)
     maxSize: 419428
+    // debug: true // prints cache size as it changes in realtime
   });
 
   // use the current version
