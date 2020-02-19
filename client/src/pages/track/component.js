@@ -29,11 +29,16 @@ export default function Home() {
   const [deleteTracker] = DeleteMyTracker();
 
   const handleSelect = async (e, task) => {
+    const { getTrackers } = trackers;
     let shouldTrack = true;
     // if task is not already tracked
-    for (let i = 0; i < trackers.length; i++) {
+    for (let i = 0; i < getTrackers.length; i++) {
       const taskIsAlreadyTracked =
-        task.id && trackers[i] && trackers[i].id && trackers[i].id === task.id;
+        task.userTaskInfo &&
+        getTrackers[i] &&
+        getTrackers[i].task &&
+        getTrackers[i].task.userTaskInfo &&
+        getTrackers[i].task.userTaskInfo.id === task.userTaskInfo.id;
       if (taskIsAlreadyTracked) {
         shouldTrack = false;
         break;
@@ -104,17 +109,20 @@ export default function Home() {
         handleSelect={handleSelect}
       />
       {trackers.getTrackers &&
-        trackers.getTrackers.map(tracker => (
-          <Tracker
-            key={tracker.task.userTaskInfo.id}
-            task={tracker.task}
-            isTracking={tracker.isTracking}
-            startTime={tracker.startTime}
-            originalTime={tracker.originalTime}
-            elapsedTime={tracker.elapsedTime}
-            handleRemove={handleRemove}
-          ></Tracker>
-        ))}
+        trackers.getTrackers.map(tracker => {
+          console.log("init tracker", tracker.task.name, tracker.isTracking);
+          return (
+            <Tracker
+              key={tracker.task.userTaskInfo.id}
+              task={tracker.task}
+              isTracking={tracker.isTracking}
+              startTime={tracker.startTime}
+              originalTime={tracker.originalTime}
+              elapsedTime={tracker.elapsedTime}
+              handleRemove={handleRemove}
+            ></Tracker>
+          );
+        })}
     </div>
   );
 }
