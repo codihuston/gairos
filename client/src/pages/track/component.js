@@ -11,15 +11,6 @@ import { component as TaskSelect } from "../../components/select-text";
 import { component as Loading } from "../../components/loading";
 import { component as Tracker } from "../../components/tracker";
 
-/**
- * TODO: clean this up!
- * [x] clean up apollo-client service
- * [x] create resolvers/typeDefs file for client
- * - define Tracker Type
- * - properly add / query the cached Trackers
- * [x] Load trackers from cache
- * - remove a cached Tracker when a tracker is "Stopped"
- */
 export default function Home() {
   const { error, data, loading } = GetTasks({
     fetchPolicy: "cache-and-network"
@@ -110,7 +101,6 @@ export default function Home() {
       />
       {trackers.getTrackers &&
         trackers.getTrackers.map(tracker => {
-          console.log("init tracker", tracker.task.name, tracker.isTracking);
           return (
             <Tracker
               key={tracker.task.userTaskInfo.id}

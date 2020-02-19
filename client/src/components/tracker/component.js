@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faPause, faStop } from "@fortawesome/pro-duotone-svg-icons";
 import { Alert, Button } from "react-bootstrap";
@@ -6,6 +6,7 @@ import moment from "moment";
 import "moment-precise-range-plugin";
 import { cloneDeep } from "lodash";
 
+import { useInterval } from "../../utils";
 import { GET_MY_TRACKERS } from "../../graphql/queries";
 import CreateMyTaskHistory from "../../graphql/mutations/hooks/create-my-task-history";
 import UpdateMyTracker from "../../graphql/mutations/hooks/update-my-tracker";
@@ -31,9 +32,9 @@ export default function Tracker({
   const [error, setError] = useState(null);
   const [createTaskHistory, { loading: loadingCreate }] = CreateMyTaskHistory();
   const [updateMyTracker, { loading: loadingUpdate }] = UpdateMyTracker();
-  const savedCallback = useRef();
-
   const loading = loadingCreate || loadingUpdate;
+  // how quickly the counter is incremented in ms (1000ms = 1s)
+  const incrementDelay = 1000;
 
   const handlePlay = async () => {
     let temp = originalTime;
@@ -116,7 +117,10 @@ export default function Tracker({
     handleRemove(task.userTaskInfo.id);
   };
 
-  function callback() {
+  /**
+   * Handle elapsedTime increment
+   */
+  useInterval(async () => {
     // initialize elapsedTime only if originalTime is initialized. originalTime
     // is only initialized when "play" is clicked the first time. This fixes the
     // "reverse countdown issue" that occurs when opening a tracker, waiting
@@ -126,7 +130,7 @@ export default function Tracker({
       setElapsedTime(new moment());
     }
 
-    // only track current time if task is being tracked
+    // only increment current time if task is being tracked
     if (isTracking) {
       // NOTE: must set state to new object to trigger re-render.
       // This uses the base time (from original value of elapsedTime)
@@ -134,17 +138,33 @@ export default function Tracker({
       // to prevent the rendered output from "skipping". This is used
       // strictly for display purposes only!
       setElapsedTime(prev => cloneDeep(prev.add(1, "second")));
+    }
+  }, incrementDelay);
 
+  /**
+   * Handle caching of elapsedTime (so the elapsedTime is persistent upon
+   * page refreshes), written every 1s after the incrementDelay
+   *
+   * This is used for display purposes only, and does not affect the duration
+   * in which is written to google calendar / gairos
+   */
+  useInterval(async () => {
+    // only track current time if task is being tracked
+    if (isTracking) {
       // update last elapsedTime (so elapsedTime is correct on refreshes)
       try {
-        updateMyTracker({
+        await updateMyTracker({
           variables: {
             id: task.userTaskInfo.id,
             task,
             isTracking,
             startTime,
             originalTime,
-            elapsedTime: elapsedTime ? elapsedTime.toISOString() : null
+            elapsedTime: elapsedTime
+              ? elapsedTime
+                  .add(incrementDelay / 1000 + 1, "second")
+                  .toISOString()
+              : null
           },
           refetchQueries: [
             {
@@ -156,66 +176,8 @@ export default function Tracker({
         console.error(e);
       }
     }
-  }
-
-  useEffect(() => {
-    savedCallback.current = callback;
-  });
-
-  useEffect(() => {
-    function tick() {
-      savedCallback.current();
-    }
-
-    let id = setInterval(tick, 1000);
-    return () => clearInterval(id);
-  }, []);
-
-  // useEffect(() => {
-  //   let interval = null;
-
-  //   // initialize elapsedTime only if originalTime is initialized. originalTime
-  //   // is only initialized when "play" is clicked the first time. This fixes the
-  //   // "reverse countdown issue" that occurs when opening a tracker, waiting
-  //   // X seconds, and starting it. In that case, the tracker would COUNT DOWN
-  //   // from now + X seconds until 0 is reached then count up
-  //   if (originalTime && !elapsedTime) {
-  //     setElapsedTime(new moment());
-  //   }
-
-  //   // only track current time if task is being tracked
-  //   if (isTracking) {
-  //     interval = setInterval(() => {
-  //       // NOTE: must set state to new object to trigger re-render.
-  //       // This uses the base time (from original value of elapsedTime)
-  //       // instead of the literal current instant of time; this is done
-  //       // to prevent the rendered output from "skipping". This is used
-  //       // strictly for display purposes only!
-  //       setElapsedTime(prev => cloneDeep(prev.add(1, "second")));
-
-  //       // update last elapsedTime (so elapsedTime is correct on refreshes)
-  //       updateMyTracker({
-  //         variables: {
-  //           id: task.userTaskInfo.id,
-  //           task,
-  //           isTracking,
-  //           startTime,
-  //           originalTime,
-  //           elapsedTime: elapsedTime.toISOString()
-  //         },
-  //         refetchQueries: [
-  //           {
-  //             query: GET_MY_TRACKERS
-  //           }
-  //         ]
-  //       });
-  //     }, 1000);
-  //   }
-
-  //   return () => {
-  //     clearInterval(interval);
-  //   };
-  // });
+    // always update cache 1s after the incrementDelay
+  }, incrementDelay + 1000);
 
   return (
     <div>
