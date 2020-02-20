@@ -53,24 +53,35 @@ click "APIs & services" > Dashboard
     1. Record these in your `.env-development` where appropriate
         1. IMPORANT: callback urls must match here and in the server
 
-Lastly, as an attempt to approve developer experience, you can either set
-`DB_SYNC_WITH_SEQUELIZE` to `true` or `false`.
+As an attempt to approve developer experience, you can either set:
 
-`Note:` This option will be set forcibly to `false` if the `NODE_ENV` matches
+- `DB_SYNC_WITH_SEQUELIZE` to `true` or `false`.
+    
+    `Note:` This option will be set forcibly to `false` if the `NODE_ENV` matches
 `*prod*`
+
+- `DEV_AUTO_LOGIN` to `true` or `false`, which will intialize a session as
+using the first seeded user when you make your first request to the server.
+This is useful to prevent having to log in manually each time. 
+    - This is particularly useful for when developin gon the back-end 
+    See section on `GraphiQL Setup` for more info on authentication when working
+    on the back-end
+    - If working on the front-end, you may want to turn this off so that you
+    can test the Google API configuration through your own account (as the
+    seeded user does not have a google account)
 
 1. If `true`:
     1. When the server boots up the database will be completely emptied, and
     the seeders will be executed to populate the database with any default rows
     `FOR NON-PRODUCTION ENVIRONMENTS ONLY`
-1. If `false`:
+2. If `false`:
     1. The tables should still be automatically created, and they `WILL NOT` be
     truncated, nor will the seeders be ran
         1. You can run the seeders manually in the commandline yourself
     1. `NOTE:` if you make changes to a `model definition`, the change
     `WILL NOT` be reflected in the database unless you either:
         1. Set this option to `true`, or...
-        1. Delete the existing table yourself and restart the server
+        2. Delete the existing table yourself and restart the server
 
 #### Database Setup
 The database server must be running in order for the server to start.
