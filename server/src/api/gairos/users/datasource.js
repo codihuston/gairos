@@ -111,7 +111,8 @@ export default {
               }
             ]
           }
-        ]
+        ],
+        order: [["startTime", "DESC"]]
       });
 
       debug("\tresult", res);
