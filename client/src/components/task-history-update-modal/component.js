@@ -37,25 +37,34 @@ export default ({ show, handleClose, taskHistory }) => {
     setError("");
 
     try {
-      // update the user task properties
-      await mutate({
-        variables: {
-          id: taskHistory.id,
-          userTaskId: taskHistory.userTaskInfo.id,
-          startTime,
-          endTime,
-          eventColorId: "1"
-        },
-        refetchQueries: [
-          {
-            query
-          }
-        ]
-      });
+      if (!startTime || !endTime) {
+        throw new Error("The start and end times must be provided!");
+      }
 
-      toast.success("Task History Updated!");
+      const isStartTimeBeforeEndTime = startTime <= endTime;
+      if (isStartTimeBeforeEndTime) {
+        // update the user task properties
+        await mutate({
+          variables: {
+            id: taskHistory.id,
+            userTaskId: taskHistory.userTaskInfo.id,
+            startTime,
+            endTime,
+            eventColorId: "1"
+          },
+          refetchQueries: [
+            {
+              query
+            }
+          ]
+        });
 
-      return handleClose();
+        toast.success("Task History Updated!");
+
+        return handleClose();
+      } else {
+        throw new Error("The start time must come before the end time!");
+      }
     } catch (e) {
       setError(e.message);
     }
