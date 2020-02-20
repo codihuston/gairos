@@ -61,7 +61,13 @@ function ReactTable({ columns, data }) {
     nextPage,
     previousPage,
     setPageSize,
-    state: { pageIndex, pageSize, globalFilter },
+    state: {
+      pageIndex,
+      pageSize,
+      globalFilter,
+      //required in order for sort to work
+      sortBy
+    },
 
     // Search / Filtering Props
     preGlobalFilteredRows,
@@ -197,6 +203,7 @@ export default function TaskTable({ taskHistories, onEdit, onDelete }) {
           },
           {
             Header: "End",
+            accessor: "endTime",
             Cell: ({ row }) => {
               if (row && row.original) {
                 return (
