@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Switch, Route, Link, Redirect, useRouteMatch } from "react-router-dom";
 import { useMutation } from "react-apollo";
-import { Button } from "react-bootstrap";
+import { Button, ListGroup } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck } from "@fortawesome/pro-duotone-svg-icons";
 
 import { APP_NAME } from "../../config";
 import GetUser from "../../graphql/queries/hooks/get-user";
@@ -155,7 +157,7 @@ function FirstSetupComponent(props) {
           <Route path={`${match.path}/create-calendar`}>
             <CalendarContainer onClick={handleSetCalendar} />
             {calendar && calendar.summary ? (
-              <Button variant="success">
+              <Button variant="info">
                 <Link
                   to={`${match.path}/create-tasks`}
                   className="no-style"
@@ -184,8 +186,14 @@ function FirstSetupComponent(props) {
                 If this calendar exists in your Google Calendar, we will use it,
                 otherwise we will create it.
               </p>
-              {calendar.summary}
-              {calendar.isCreated ? "Created!" : null}
+              <ListGroup>
+                <ListGroup.Item>
+                  {calendar.summary}
+                  {calendar.isCreated ? (
+                    <FontAwesomeIcon icon={faCheck} />
+                  ) : null}
+                </ListGroup.Item>
+              </ListGroup>
             </div>
             <div>
               <TaskList tasks={tasks}>
@@ -204,7 +212,20 @@ function FirstSetupComponent(props) {
             {isSubmitDisabled ? null : (
               <button onClick={handleSubmit}>Submit</button>
             )}
-            {isNextDisabled ? null : <Link to="/home">Take me home!</Link>}
+            {isNextDisabled ? null : (
+              <Button variant="info" className="mt-1">
+                <Link
+                  to={`/home`}
+                  className="no-style"
+                  style={{
+                    textDecoration: "none",
+                    color: "white"
+                  }}
+                >
+                  Take me home!
+                </Link>
+              </Button>
+            )}
           </Route>
           <Route path={`${match.path}`}>
             <h2>Welcome to {APP_NAME}!</h2>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { Button, InputGroup, FormControl } from "react-bootstrap";
 
 import { component as TaskList } from "../../components/task-list";
 
@@ -74,31 +75,50 @@ function FirstSetupTasks({ tasks, handleAddTask, nextPath }) {
       </p>
       <form>
         <div>
-          <label htmlFor="name">Name * </label>
-          <input
-            id="name"
-            type="text"
-            placeholder="Enter a task name"
-            value={newTask.name}
-            onChange={setNewTaskName}
-          />
+          <InputGroup className="mb-3">
+            <InputGroup.Prepend>
+              <InputGroup.Text id="">Name*</InputGroup.Text>
+            </InputGroup.Prepend>
+            <FormControl
+              id="name"
+              type="text"
+              placeholder="Enter a task name"
+              value={newTask.name}
+              onChange={setNewTaskName}
+            />
+          </InputGroup>
+          <InputGroup className="mb-3">
+            <InputGroup.Prepend>
+              <InputGroup.Text id="">Description</InputGroup.Text>
+            </InputGroup.Prepend>
+            <FormControl
+              id="description"
+              type="text"
+              placeholder="Describe your task"
+              value={newTask.description}
+              onChange={setNewTaskDescription}
+            />
+          </InputGroup>
         </div>
-        <div>
-          <label htmlFor="description">Description</label>
-          <input
-            id="description"
-            type="text"
-            placeholder="Describe your task"
-            value={newTask.description}
-            onChange={setNewTaskDescription}
-          />
-        </div>
-        <button onClick={addTask} disabled={isAddDisabled}>
+        <Button variant="success" onClick={addTask} disabled={isAddDisabled}>
           Add
-        </button>
+        </Button>
       </form>
       <TaskList tasks={tasks} />
-      {isNextDisabled ? null : <Link to={nextPath}>Next</Link>}
+      {isNextDisabled ? null : (
+        <Button variant="info" className="mt-1">
+          <Link
+            to={nextPath}
+            className="no-style"
+            style={{
+              textDecoration: "none",
+              color: "white"
+            }}
+          >
+            Next
+          </Link>
+        </Button>
+      )}
     </div>
   );
 }
