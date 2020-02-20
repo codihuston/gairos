@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { component as Loading } from "../loading";
 import RenameMyTask from "../../graphql/mutations/hooks/rename-my-task";
 import UpdateMyTask from "../../graphql/mutations/hooks/update-my-task";
-import { GET_MY_TASKS as query } from "../../graphql/queries";
+import { GET_MY_TASKS, GET_MY_TASK_HISTORY } from "../../graphql/queries";
 
 /**
  * Uses uncontrolled inputs in order to use default values
@@ -35,7 +35,10 @@ export default ({ show, handleClose, task }) => {
             userTaskId: task.userTaskInfo.id,
             name: nameInput.current.value
           },
-          refetchQueries: [{ query }]
+          refetchQueries: [
+            { query: GET_MY_TASKS },
+            { query: GET_MY_TASK_HISTORY }
+          ]
         });
       }
       // update the user task properties
@@ -45,9 +48,8 @@ export default ({ show, handleClose, task }) => {
           description: descriptionInput.current.value
         },
         refetchQueries: [
-          {
-            query
-          }
+          { query: GET_MY_TASKS },
+          { query: GET_MY_TASK_HISTORY }
         ]
       });
 
