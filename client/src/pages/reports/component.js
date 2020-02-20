@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { InputGroup, Button, FormControl } from "react-bootstrap";
+import { InputGroup, Button, Alert } from "react-bootstrap";
 import { Legend, BarChart, XAxis, YAxis, Tooltip, Bar } from "recharts";
 
 import { component as Loading } from "../../components/loading";
@@ -14,6 +14,7 @@ export default function Home() {
   const [showDays, setShowDays] = useState(false);
   const [showWeeks, setShowWeeks] = useState(false);
   const windowSize = useWindowSize();
+  const maxBarSize = 20;
   // the key of which to sum all values and to determine max domain of graph
   let maxKey = null;
 
@@ -24,10 +25,10 @@ export default function Home() {
   if (error) {
     console.error(error);
     return (
-      <div>
-        An error has occured. Please try again. Report this to a developer if
+      <Alert variant="danger">
+        An error has occurred. Please try again. Report this to a developer if
         the issue persists.
-      </div>
+      </Alert>
     );
   }
 
@@ -119,11 +120,31 @@ export default function Home() {
           <XAxis type="number" domain={[0, max]} />
           <YAxis dataKey="name" type="category" />
           <Tooltip />
-          {showSeconds ? <Bar dataKey="seconds" fill="#F7DF84" label /> : null}
-          {showMinutes ? <Bar dataKey="minutes" fill="#7EB59C" label /> : null}
-          {showHours ? <Bar dataKey="hours" fill="#D0CEAE" label /> : null}
-          {showDays ? <Bar dataKey="days" fill="#E9BA8D" label /> : null}
-          {showWeeks ? <Bar dataKey="weeks" fill="#F25B4D" label /> : null}
+          {showSeconds ? (
+            <Bar
+              dataKey="seconds"
+              maxBarSize={maxBarSize}
+              fill="#F7DF84"
+              label
+            />
+          ) : null}
+          {showMinutes ? (
+            <Bar
+              dataKey="minutes"
+              maxBarSize={maxBarSize}
+              fill="#7EB59C"
+              label
+            />
+          ) : null}
+          {showHours ? (
+            <Bar dataKey="hours" maxBarSize={maxBarSize} fill="#D0CEAE" label />
+          ) : null}
+          {showDays ? (
+            <Bar dataKey="days" maxBarSize={maxBarSize} fill="#E9BA8D" label />
+          ) : null}
+          {showWeeks ? (
+            <Bar dataKey="weeks" maxBarSize={maxBarSize} fill="#F25B4D" label />
+          ) : null}
         </BarChart>
       </div>
     </div>

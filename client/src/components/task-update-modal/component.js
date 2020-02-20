@@ -102,6 +102,7 @@ export default ({ show, handleClose, task }) => {
                 <Fragment>
                   <Button
                     variant="primary"
+                    className="mr-1"
                     onClick={handleSubmit}
                     style={{
                       visibility: loading ? "hidden" : "visible"
