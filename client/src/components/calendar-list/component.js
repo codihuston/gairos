@@ -1,17 +1,26 @@
 import React from "react";
+import { ListGroup } from "react-bootstrap";
 
 export default function CalendarList({ calendars, onClick }) {
   return (
-    <div>
+    <ListGroup
+      style={{
+        position: "absolute",
+        width: "100%"
+      }}
+    >
       {calendars.map((calendar, i) => (
-        <li
+        <ListGroup.Item
           key={i}
           title={calendar.description}
           onClick={e => onClick(e, calendar)}
+          style={{
+            cursor: "pointer"
+          }}
         >
           {calendar.summary}
-        </li>
+        </ListGroup.Item>
       ))}
-    </div>
+    </ListGroup>
   );
 }

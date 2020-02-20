@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Switch, Route, Link, Redirect, useRouteMatch } from "react-router-dom";
 import { useMutation } from "react-apollo";
+import { Button } from "react-bootstrap";
 
 import { APP_NAME } from "../../config";
 import GetUser from "../../graphql/queries/hooks/get-user";
@@ -153,9 +154,19 @@ function FirstSetupComponent(props) {
         <Switch>
           <Route path={`${match.path}/create-calendar`}>
             <CalendarContainer onClick={handleSetCalendar} />
-            TODO: Conditionally hide nav -->
             {calendar && calendar.summary ? (
-              <Link to={`${match.path}/create-tasks`}>Next</Link>
+              <Button variant="success">
+                <Link
+                  to={`${match.path}/create-tasks`}
+                  className="no-style"
+                  style={{
+                    textDecoration: "none",
+                    color: "white"
+                  }}
+                >
+                  Next
+                </Link>
+              </Button>
             ) : null}
           </Route>
           <Route path={`${match.path}/create-tasks`}>
