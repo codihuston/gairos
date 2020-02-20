@@ -27,6 +27,10 @@ export default function Home() {
     return <div>loading</div>;
   }
 
+  if (error) {
+    console.error(error);
+  }
+
   return (
     <div>
       <TaskHistoryTable

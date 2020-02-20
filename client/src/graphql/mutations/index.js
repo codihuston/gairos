@@ -226,6 +226,12 @@ export const UPDATE_MY_TASK_HISTORY = gql`
     }
   }
 `;
+
+export const DELETE_MY_TASK_HISTORY = gql`
+  mutation($id: ID!) {
+    deleteMyTaskHistory(input: { id: $id })
+  }
+`;
 /*******************************************************************************
  * User Profile
  ******************************************************************************/

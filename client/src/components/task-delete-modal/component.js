@@ -14,6 +14,7 @@ export default ({ show, handleClose, task }) => {
   const [error, setError] = useState(null);
 
   const loading = isDeleteLoading || isUpdateLoading;
+
   if (!task) {
     return null;
   }
@@ -53,8 +54,6 @@ export default ({ show, handleClose, task }) => {
       setError(e.message);
     }
   };
-
-  if (!task) return null;
 
   return (
     <Modal show={show} onHide={handleClose} animation={false}>

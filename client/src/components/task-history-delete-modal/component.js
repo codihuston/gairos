@@ -1,25 +1,27 @@
-import React, { useState, Fragment } from "react";
-import { Modal, Button, Alert, Form, Container, Row } from "react-bootstrap";
+import React, { useState } from "react";
+import { Modal, Button, Alert } from "react-bootstrap";
 import { toast } from "react-toastify";
+import moment from "moment";
 
 import { component as Loading } from "../loading";
-import CreateMyTask from "../../graphql/mutations/hooks/create-my-task";
-import { GET_MY_TASKS as query } from "../../graphql/queries";
+import DeleteMyTaskHistory from "../../graphql/mutations/hooks/delete-my-task-history";
+import { GET_MY_TASK_HISTORY as query } from "../../graphql/queries";
 
-export default ({ show, handleClose }) => {
-  const [mutate, { loading }] = CreateMyTask();
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
+export default ({ show, handleClose, taskHistory }) => {
+  const [remove, { loading }] = DeleteMyTaskHistory();
   const [error, setError] = useState(null);
 
+  if (!taskHistory) {
+    return null;
+  }
+
   const handleSubmit = async () => {
-    setError(null);
+    setError("");
 
     try {
-      await mutate({
+      await remove({
         variables: {
-          name,
-          description
+          id: taskHistory.id
         },
         refetchQueries: [
           {
@@ -28,10 +30,7 @@ export default ({ show, handleClose }) => {
         ]
       });
 
-      toast.success("Task Created!");
-
-      setName("");
-      setDescription("");
+      toast.success("Task History Permanently Deleted!");
 
       return handleClose();
     } catch (e) {
@@ -39,76 +38,43 @@ export default ({ show, handleClose }) => {
     }
   };
 
-  const handleChangeName = e => {
-    setName(e.target.value);
-  };
-
-  const handleChangeDescription = e => {
-    setDescription(e.target.value);
-  };
-
   return (
     <Modal show={show} onHide={handleClose} animation={false}>
       <Modal.Header closeButton>
-        <Modal.Title>Create A Task</Modal.Title>
+        <Modal.Title>Delete A Task History</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form>
-          <Form.Group controlId="formTaskName">
-            <Form.Label>Name</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Name your task"
-              value={name}
-              onChange={handleChangeName}
-            />
-          </Form.Group>
-
-          <Form.Group controlId="formTaskDescription">
-            <Form.Label>Description</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Describe your task"
-              value={description}
-              onChange={handleChangeDescription}
-            />
-            {error ? (
-              <Alert variant="danger" className="mt-1">
-                {error}
-              </Alert>
-            ) : null}
-          </Form.Group>
-          <Container fluid className="mt-1">
-            <Row className="justify-content-end">
-              {loading ? (
-                <Loading />
-              ) : (
-                <Fragment>
-                  <Button
-                    variant="primary"
-                    onClick={handleSubmit}
-                    className="mr-1"
-                    style={{
-                      visibility: loading ? "hidden" : "visible"
-                    }}
-                  >
-                    Create
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    onClick={handleClose}
-                    style={{
-                      visibility: loading ? "hidden" : "visible"
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                </Fragment>
-              )}
-            </Row>
-          </Container>
-        </Form>
+        <p>Are you sure you want to delete this task history?</p>
+        <p>
+          This action will completely delete this task history instance starting
+          from:
+        </p>
+        <div>
+          {taskHistory && taskHistory.startTime && taskHistory.endTime ? (
+            <>
+              <div>
+                {new moment(taskHistory.startTime).format("LL hh:mm:ss A")}
+              </div>
+              <div>to</div>
+              <div>
+                {new moment(taskHistory.endTime).format("LL hh:mm:ss A")}
+              </div>
+            </>
+          ) : null}
+        </div>
+        {error ? (
+          <Alert variant="danger" className="mt-1">
+            {error}
+          </Alert>
+        ) : null}
       </Modal.Body>
+      <Modal.Footer>
+        {loading ? <Loading /> : null}
+        <Button onClick={handleSubmit}>Yes</Button>
+        <Button variant="secondary" onClick={handleClose}>
+          Cancel
+        </Button>
+      </Modal.Footer>
     </Modal>
   );
 };
