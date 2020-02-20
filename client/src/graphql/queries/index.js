@@ -95,3 +95,27 @@ export const GET_MY_TASK_HISTORY = gql`
     }
   }
 `;
+
+export const GET_MY_TASK_REPORT = gql`
+  query {
+    getMyTaskReport {
+      taskId
+      userTaskId
+      name
+      description
+      exact {
+        years
+        months
+        days
+        hours
+        minutes
+        seconds
+      }
+      seconds
+      minutes
+      hours
+      days
+      weeks
+    }
+  }
+`;
