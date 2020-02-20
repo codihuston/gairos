@@ -209,6 +209,7 @@ export default {
         TRUNC((EXTRACT(EPOCH FROM ctt.exact)/86400)::NUMERIC, 4) AS "days",
         TRUNC((EXTRACT(EPOCH FROM ctt.exact)/604800)::NUMERIC, 4) "weeks"
         FROM cte_test AS ctt
+        ORDER BY ctt.exact DESC
       `;
 
       if (!userId) {
