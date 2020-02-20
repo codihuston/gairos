@@ -68,6 +68,11 @@ export default ({ show, handleClose, task }) => {
           task. If you want to completely remove all traces of this task in your
           history, check the checkbox option below.
         </p>
+        <Alert variant="info">
+          If you opt to permanently delete this task, any recorded task history
+          will be deleted from our database, and WILL NOT be deleted from your
+          Google Calendar!
+        </Alert>
         <div className="m-3">
           <Form.Group controlId="formBasicCheckbox">
             <Form.Check

@@ -62,6 +62,10 @@ export default ({ show, handleClose, taskHistory }) => {
             </>
           ) : null}
         </div>
+        <Alert variant="info">
+          If you choose to delete this, it will also be removed from your Google
+          Calendar!
+        </Alert>
         {error ? (
           <Alert variant="danger" className="mt-1">
             {error}
