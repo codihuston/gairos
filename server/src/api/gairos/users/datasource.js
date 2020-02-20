@@ -6,9 +6,10 @@ const debug = debugLib("server:UserAPI");
 export default {
   name: "UserAPI",
   Class: class UserAPI extends DataSource {
-    constructor({ models }) {
+    constructor({ models, sequelize }) {
       super();
       this.models = models;
+      this.sequelize = sequelize;
     }
 
     /**
@@ -187,6 +188,45 @@ export default {
       } else {
         return false;
       }
+    }
+
+    async getMyTaskReport(userId) {
+      const query = `
+      WITH cte_test AS (
+        SELECT t.id AS "taskId", ut.id AS "userTaskId", t.name, ut.description, SUM(age(uth."endTime", uth."startTime")) AS exact FROM "userTasks"  AS ut
+        LEFT JOIN "tasks" AS t ON ut."taskId" = t.id AND t."deletedAt" IS NULL
+        LEFT JOIN "userTaskHistories" as uth ON ut.id = uth."userTaskId" AND ut."deletedAt" IS NULL
+        WHERE "userId" = $userId AND uth."deletedAt" IS NULL
+        GROUP BY ut.id, t.id, t.name
+      )
+      SELECT ctt."taskId", 
+        ctt."userTaskId",
+        ctt.name, ctt.description,
+        ctt.exact,
+        EXTRACT(EPOCH FROM ctt.exact)::NUMERIC AS "seconds",
+        TRUNC((EXTRACT(EPOCH FROM ctt.exact)/60)::NUMERIC, 3) AS "minutes",
+        TRUNC((EXTRACT(EPOCH FROM ctt.exact)/3600)::NUMERIC, 3) AS "hours",
+        TRUNC((EXTRACT(EPOCH FROM ctt.exact)/86400)::NUMERIC, 4) AS "days",
+        TRUNC((EXTRACT(EPOCH FROM ctt.exact)/604800)::NUMERIC, 4) "weeks"
+        FROM cte_test AS ctt
+      `;
+
+      if (!userId) {
+        throw new Error(
+          "A user is required in order to fetch their task report!"
+        );
+      }
+
+      // NOTE: 'interval' data types are automatically nested into json objects
+      const output = await this.sequelize.query(query, {
+        dialectOptions: {
+          decimalNumbers: true
+        },
+        bind: { userId },
+        type: this.sequelize.QueryTypes.SELECT
+      });
+
+      return output;
     }
   }
 };

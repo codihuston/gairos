@@ -6,6 +6,7 @@ extend type Query {
   getMyTags: [UserTag]
   getMyTasks: [Task]
   getMyTaskHistory: [UserTaskHistory]
+  getMyTaskReport: [UserTaskReport]
 }
 
 extend type Mutation {
@@ -103,6 +104,28 @@ type UserTaskTag{
   userTaskInfo: UserTaskInfo
 }
 
+type UserTaskReport{
+  taskId: ID!
+  userTaskId: ID!
+  name: String
+  description: String
+  exact: Interval
+  seconds: String
+  minutes: String
+  hours: String
+  days: String
+  weeks: String
+}
+
+type Interval {
+  years: Int
+  months: Int
+  days: Int
+  hours: Int
+  minutes: Int
+  seconds: Int
+  milliseconds: Int
+}
 # ------------------------------------------------------------------------------
 # INPUTS
 # ------------------------------------------------------------------------------

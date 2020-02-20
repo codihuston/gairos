@@ -3,7 +3,7 @@ import { join } from "path";
 import debugLib from "debug";
 import glob from "glob";
 
-import { models } from "../db";
+import { models, sequelize } from "../db";
 import { GooglePeople, GoogleCalendar } from "./google";
 
 // fetch the modules in each sub-directory under /api
@@ -62,7 +62,10 @@ export const resolveGraphqlDefinitions = () =>
           // load datasource
           if (dataSource) {
             // pass models into this api (removes need for import)
-            gqlDataSources[dataSource.name] = new dataSource.Class({ models });
+            gqlDataSources[dataSource.name] = new dataSource.Class({
+              models,
+              sequelize
+            });
           } else {
             debug(
               "\tWARNING: Graphql Data Source not found for this resource (optional)"

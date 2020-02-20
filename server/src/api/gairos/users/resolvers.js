@@ -32,6 +32,12 @@ export default {
       async (parent, args, { me, dataSources }) => {
         return await dataSources.UserAPI.getTaskHistory(me.id);
       }
+    ),
+    getMyTaskReport: combineResolvers(
+      isAuthenticated,
+      async (parent, args, { me, dataSources }) => {
+        return await dataSources.UserAPI.getMyTaskReport(me.id);
+      }
     )
   },
   Mutation: {
