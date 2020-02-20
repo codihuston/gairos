@@ -18,7 +18,6 @@ function GlobalFilter({
   setGlobalFilter
 }) {
   const count = preGlobalFilteredRows.length;
-
   return (
     <Form className="">
       <Form.Group as={Row} className="">
@@ -47,22 +46,36 @@ function ReactTable({ columns, data }) {
     getTableBodyProps,
     headerGroups,
     prepareRow,
-    preGlobalFilteredRows,
-    setGlobalFilter,
-    pageOptions,
     page,
-    state: { pageIndex, pageSize, globalFilter },
-    gotoPage,
-    previousPage,
-    nextPage,
-    setPageSize,
+    // Instead of using 'rows', we'll use page,
+    // which has only the rows for the active page
+    rows,
+
+    // Pagination Props
+    // The rest of these things are super handy, too ;)
     canPreviousPage,
-    canNextPage
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    setPageSize,
+    state: { pageIndex, pageSize, globalFilter },
+
+    // Search / Filtering Props
+    preGlobalFilteredRows,
+    setGlobalFilter
   } = useTable(
     {
       columns,
-      data
+      data,
+      initialState: { pageindex: 2 }
+      // defaultColumn,
+      // filterTypes
     },
+    // useFilters,
+
     useGlobalFilter,
     useSortBy,
     usePagination
@@ -157,6 +170,7 @@ export default function TaskTable({ taskHistories, onEdit, onDelete }) {
         columns: [
           {
             Header: "Name",
+            accessor: "userTaskInfo.task.name",
             Cell: ({ row }) => {
               if (row && row.original) {
                 return (
@@ -171,16 +185,12 @@ export default function TaskTable({ taskHistories, onEdit, onDelete }) {
           },
           {
             Header: "Start",
+            accessor: "startTime",
             Cell: ({ row }) => {
+              console.log(row);
               if (row && row.original) {
-                return (
-                  <div>
-                    <span>
-                      {new moment(row.original.startTime).format(
-                        "MM-DD-YYYY hh:mm:ss"
-                      )}
-                    </span>
-                  </div>
+                return new moment(row.original.startTime).format(
+                  "MM-DD-YYYY hh:mm:ss"
                 );
               }
             }
