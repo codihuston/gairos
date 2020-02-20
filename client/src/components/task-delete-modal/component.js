@@ -87,7 +87,9 @@ export default ({ show, handleClose, task }) => {
       <Modal.Footer>
         {loading ? <Loading /> : null}
         <Button onClick={handleSubmit}>Yes</Button>
-        <Button onClick={handleClose}>Cancel</Button>
+        <Button variant="secondary" onClick={handleClose}>
+          Cancel
+        </Button>
       </Modal.Footer>
     </Modal>
   );
