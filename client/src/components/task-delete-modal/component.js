@@ -6,6 +6,7 @@ import { component as Loading } from "../loading";
 import UpdateMyTask from "../../graphql/mutations/hooks/update-my-task";
 import DeleteMyTask from "../../graphql/mutations/hooks/delete-my-task";
 import { GET_MY_TASKS as query } from "../../graphql/queries";
+import { GET_MY_TASK_HISTORY } from "../../graphql/queries";
 
 export default ({ show, handleClose, task }) => {
   const [remove, { loading: isDeleteLoading }] = DeleteMyTask();
@@ -32,7 +33,8 @@ export default ({ show, handleClose, task }) => {
           refetchQueries: [
             {
               query
-            }
+            },
+            { query: GET_MY_TASK_HISTORY }
           ]
         });
 
@@ -45,7 +47,7 @@ export default ({ show, handleClose, task }) => {
             userTaskId: task.userTaskInfo.id,
             isArchived: true
           },
-          refetchQueries: [{ query }]
+          refetchQueries: [{ query }, { query: GET_MY_TASK_HISTORY }]
         });
       }
 
