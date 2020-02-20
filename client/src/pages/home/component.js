@@ -12,9 +12,9 @@ export default function Home() {
         </p>
       </Jumbotron>
       <p>
-        In the near future, weekly reports on your task tracking progess will be
-        displayed here =). For now, you can view them in{" "}
-        <Link to="/reports">your reports secion!</Link>
+        In the near future, weekly reports on your progess will be displayed
+        here =). For now, you can view them in{" "}
+        <Link to="/reports">your reports section!</Link>
       </p>
     </div>
   );
