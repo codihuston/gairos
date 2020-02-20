@@ -193,7 +193,6 @@ export default function TaskTable({ taskHistories, onEdit, onDelete }) {
             Header: "Start",
             accessor: "startTime",
             Cell: ({ row }) => {
-              console.log(row);
               if (row && row.original) {
                 return new moment(row.original.startTime).format(
                   "MM-DD-YYYY hh:mm:ss"

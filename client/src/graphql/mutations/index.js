@@ -191,6 +191,41 @@ export const CREATE_MY_TASK_HISTORY = gql`
   }
 `;
 
+export const UPDATE_MY_TASK_HISTORY = gql`
+  mutation(
+    $id: ID!
+    $userTaskId: ID!
+    $startTime: GraphQLDateTime!
+    $endTime: GraphQLDateTime!
+    $eventColorId: String
+  ) {
+    updateMyTaskHistory(
+      input: {
+        id: $id
+        userTaskId: $userTaskId
+        eventColorId: $eventColorId
+        startTime: $startTime
+        endTime: $endTime
+      }
+    ) {
+      id
+      startTime
+      endTime
+      eventId
+      eventColorId
+      createdAt
+      updatedAt
+      userTaskInfo {
+        id
+        description
+        task {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
 /*******************************************************************************
  * User Profile
  ******************************************************************************/
