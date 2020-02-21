@@ -1,5 +1,12 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Developer notes
+You many add environment variables to `.env` as described [here](https://create-react-app.dev/docs/adding-custom-environment-variables/#adding-development-environment-variables-in-env). Be careful not to
+store sensitive data, as this will be completely visible on the client side. Only public variables that are not sensitive should go here.
+
+### Getting started
+Before starting the app, copy `.env-example` to `.env`.
+
 ## Available Scripts
 
 In the project directory, you can run:
