@@ -368,7 +368,7 @@ export default {
 
           // then delete from gairos
           const [
-            taskHistoryInstance,
+            taskHistoryInstance, // eslint-disable-line
             wasDeleted
           ] = await TaskAPI.deleteUserTaskHistoryByInstance(
             userTaskHistory,

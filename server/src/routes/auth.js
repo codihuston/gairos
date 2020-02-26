@@ -32,6 +32,7 @@ router.get("/google/cb", async function(req, response, next) {
     const ip = req.header("x-forwarded-for") || req.connection.remoteAddress;
     const { tokens, res } = await oauth2Client.getToken(code);
 
+    debug("Google response", res);
     debug("Got back tokens", tokens);
 
     // set tokens on this google oauth2Client

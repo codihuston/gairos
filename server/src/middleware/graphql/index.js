@@ -10,7 +10,7 @@ export const isAuthenticated = (parent, args, { me, session }) => {
   return skip;
 };
 
-export const isDeveloper = (parent, args, { me, session }) => {
+export const isDeveloper = () => {
   // TODO: refactor when roles are implemented
   if (isDevelopmentEnvironment) {
     return skip;
@@ -18,7 +18,7 @@ export const isDeveloper = (parent, args, { me, session }) => {
   throw UnauthorizedError;
 };
 
-export const isGivenUser = (parent, { input }, { me, session }) => {
+export const isGivenUser = (parent, { input }, { me }) => {
   // if given a user id
   if (input && input.userId) {
     // ensure it matches in session
