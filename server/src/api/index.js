@@ -76,6 +76,7 @@ export const resolveGraphqlDefinitions = () =>
         }
       } catch (e) {
         console.warn("SKIPPING: Cannot dynamically load module:", e);
+        reject(reject);
       }
     }
 
