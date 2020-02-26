@@ -156,7 +156,7 @@ const model = (sequelize, DataTypes) => {
       };
 
       // find or create the user
-      const [user, wasCreated] = await User.findOrCreate({
+      const [user] = await User.findOrCreate({
         where: {
           googleId: resourceName
         },

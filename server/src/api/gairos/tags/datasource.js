@@ -47,7 +47,7 @@ export default {
       let userTag = null;
 
       // find or create this tag
-      const [tag, created] = await this.models.tag.findOrCreate({
+      const [tag] = await this.models.tag.findOrCreate({
         where: {
           name: input.name
         },
@@ -130,7 +130,7 @@ export default {
       }
 
       // find or create the given tag name
-      let [tag, created] = await this.models.tag.findOrCreate({
+      let [tag] = await this.models.tag.findOrCreate({
         where: {
           name: input.name
         },
