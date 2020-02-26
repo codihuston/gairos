@@ -89,7 +89,11 @@ export default resolveGraphqlDefinitions()
     debug("GraphQL typeDefs:", typeDefs);
     debug("GraphQL resolvers:", resolvers);
     debug("GraphQL dataSources:", dataSources);
+
     const server = new ApolloServer({
+      engine: {
+        apiKey: process.env.ENGINE_API_KEY
+      },
       // enable debug for development environment only
       debug: isDevelopmentEnvironment,
       typeDefs,

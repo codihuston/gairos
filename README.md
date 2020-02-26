@@ -83,6 +83,29 @@ This is useful to prevent having to log in manually each time.
         1. Set this option to `true`, or...
         2. Delete the existing table yourself and restart the server
 
+#### Apollo Engine Setup
+`IMPORTANT:` the following steps are for `DEVELOPMENT` ONLY:
+
+If you want to use the `Apollo Graph Manager`, which is a metrics dashboard
+that offers some free features (such as reporting metrics on graphql queries),
+you must implement the following configuration.
+
+1. Visit [https://engine.apollographql.com/](https://engine.apollographql.com/) and create a graph such as `gairos-development` (which is the same as the `service name`)
+that apollo will use to register this engine into the graph manager
+
+2. Copy the file `API key` presented to you into the root `.env` file
+   
+   IMPORTANT: server/.env is to be used ONLY for this purpose, all other
+   configurations should be applied in `server/src/config/.env-<ENVIRONMENT>`
+
+3. The `server/apollo.config.js` file is already configured with the
+   aforementioned `service name` and `endpoint` (which must contain the 
+   `/graphql` when on localhost, at least)
+
+4. Run this command in the root of `/server`: `npx apollo service:push`
+5. You should now be able to view metrics on this server in the dashboard
+6. You should re-run the aforementioned command as the schema changes
+
 #### Database Setup
 The database server must be running in order for the server to start.
 
