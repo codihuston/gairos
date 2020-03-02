@@ -6,7 +6,10 @@ cache: yarn
 jobs:
   include:
     - stage: test
-      script: ./test 1
+      script: 
+        - ls -la
+        - cd ./client
+        - yarn install
     - # stage name not required, will continue to use `test`
       script: ./test 2
     - stage: deploy
