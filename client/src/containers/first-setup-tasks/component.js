@@ -126,6 +126,8 @@ function FirstSetupTasks({ tasks, handleAddTask, nextPath }) {
 FirstSetupTasks.propTypes = {
   isAddDisabled: PropTypes.bool,
   isNextDisabled: PropTypes.bool,
+  handleAddTask: PropTypes.func,
+  nextPath: PropTypes.string,
   tasks: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string,
