@@ -1,11 +1,14 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { Row, Table, Form, Button } from "react-bootstrap";
 import { useTable, useSortBy, useGlobalFilter } from "react-table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/pro-duotone-svg-icons";
 
-export const TaskTableRow = ({ task, onDelete }) => {
+import TaskPropTypes from "../../prop-types/task";
+
+function TaskTableRow({ task, onDelete }) {
   return (
     <tr>
       <td>{task.name}</td>
@@ -27,8 +30,9 @@ export const TaskTableRow = ({ task, onDelete }) => {
       </td>
     </tr>
   );
-};
+}
 
+/* eslint-disable */
 function GlobalFilter({
   preGlobalFilteredRows,
   globalFilter,
@@ -124,8 +128,9 @@ function ReactTable({ columns, data }) {
     </>
   );
 }
+/* eslint-enable */
 
-export default function TaskTable({ tasks, onEdit, onDelete }) {
+function TaskTable({ tasks, onEdit, onDelete }) {
   const columns = React.useMemo(
     () => [
       {
@@ -178,8 +183,22 @@ export default function TaskTable({ tasks, onEdit, onDelete }) {
       {tasks && tasks.length ? (
         <ReactTable columns={columns} data={tasks}></ReactTable>
       ) : (
-        <p>You don't have any tasks yet!</p>
+        <p>You don&apos;t have any tasks yet!</p>
       )}
     </div>
   );
 }
+
+TaskTable.propTypes = {
+  tasks: PropTypes.arrayOf(TaskPropTypes),
+  onEdit: PropTypes.func,
+  onDelete: PropTypes.func
+};
+
+TaskTableRow.propTypes = {
+  task: TaskPropTypes,
+  onDelete: PropTypes.func
+};
+
+export { TaskTableRow };
+export default TaskTable;
