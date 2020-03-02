@@ -2,14 +2,12 @@ language: node_js
 node_js:
   - 12.14.1
 
-#env:
-# - DOCKER_COMPOSE_VERSION=1.4.2
-
-before_install:
-  - sudo apt-update
-
-#before_script:
-#  - docker-compose up
-#
-#after_script:
-#  - docker-compose down
+jobs:
+  include:
+    - stage: test-client
+    before_install:
+      - ls -la
+      - cd .\client
+      - yarn install
+    script:
+      - yarn run test
