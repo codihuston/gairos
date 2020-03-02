@@ -1,13 +1,13 @@
 language: node_js
 node_js:
   - 12.14.1
+cache: yarn
 
 jobs:
   include:
-    - stage: test-client
-    before_install:
-      - ls -la
-      - cd ./client
-      - yarn install
-    script:
-      - yarn run test
+    - stage: test
+      script: ./test 1
+    - # stage name not required, will continue to use `test`
+      script: ./test 2
+    - stage: deploy
+      script: ./deploy
