@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-
+import PropTypes from "prop-types";
+import TaskPropTypes from "../../prop-types/task";
 import { Modal, Button, Alert } from "react-bootstrap";
 
 import UpdateMyTask from "../../graphql/mutations/hooks/update-my-task";
 import { GET_MY_TASKS as query } from "../../graphql/queries";
 
-export default function TaskArchiveList({ show, handleClose, tasks }) {
+function TaskArchiveList({ show, handleClose, tasks }) {
   const [mutate] = UpdateMyTask();
   const [error, setError] = useState(null);
 
@@ -56,3 +57,11 @@ export default function TaskArchiveList({ show, handleClose, tasks }) {
     </Modal>
   );
 }
+
+TaskArchiveList.propTypes = {
+  show: PropTypes.bool,
+  handleClose: PropTypes.func,
+  tasks: PropTypes.arrayOf(TaskPropTypes)
+};
+
+export default TaskArchiveList;
