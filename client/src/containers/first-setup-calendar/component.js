@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { useQuery } from "react-apollo";
 import escapeStringRegexp from "escape-string-regexp";
 import { InputGroup, FormControl } from "react-bootstrap";
@@ -8,13 +9,13 @@ import { GET_MY_CALENDARS } from "../../graphql/queries";
 import { component as CalendarList } from "../../components/calendar-list";
 import { component as Loading } from "../../components/loading";
 
-export const CalendarNameInput = ({
+const CalendarNameInput = ({
   onChange,
   value,
   filteredList,
   handleClick,
   handleFocus,
-  handleBlur,
+  handleBlur, // eslint-disable-line
   showDropdown
 }) => {
   return (
@@ -46,7 +47,7 @@ export const CalendarNameInput = ({
   );
 };
 
-export default function CalendarContainer({ onClick = () => {} }) {
+function CalendarContainer({ onClick = () => {} }) {
   const { error, loading, data } = useQuery(GET_MY_CALENDARS);
   const [summary, setSummary] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
@@ -119,3 +120,25 @@ export default function CalendarContainer({ onClick = () => {} }) {
     </div>
   );
 }
+
+CalendarContainer.propTypes = {
+  onClick: PropTypes.func
+};
+
+CalendarNameInput.propTypes = {
+  value: PropTypes.string,
+  onChange: PropTypes.func,
+  handleClick: PropTypes.func,
+  handleFocus: PropTypes.func,
+  handleBlur: PropTypes.func,
+  showDropdown: PropTypes.bool,
+  filteredList: PropTypes.arrayOf(
+    PropTypes.shape({
+      summary: PropTypes.string,
+      description: PropTypes.string
+    })
+  )
+};
+
+export { CalendarNameInput };
+export default CalendarContainer;
