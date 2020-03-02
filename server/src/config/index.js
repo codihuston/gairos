@@ -5,12 +5,15 @@ import { existsSync } from "fs";
 const root = resolve(__dirname);
 let path = "";
 let loaded = false;
+let shouldExit = true;
 
 switch (process.env.NODE_ENV.toLowerCase()) {
   case "production":
+    shouldExit = false;
     path = resolve(root, ".env");
     break;
   case "ci":
+    shouldExit = false;
     path = resolve(root, ".env-ci");
     break;
   case "test":
@@ -27,11 +30,18 @@ if (loaded) {
 // load the appropriate .env file
 else if (!existsSync(path)) {
   console.error(
-    "FATAL: Configuration does not exist for this environment at:",
+    "WARNING: Configuration does not exist for this environment at:",
     path,
-    ". Please see the documentation regarding the '.env' file!"
+    ". Please see the documentation regarding the '.env' file!",
+    "You may ignore this if this is intentional (CI/CD pipeline, production)"
   );
-  process.exit(1);
+
+  if (shouldExit) {
+    console.error(
+      "Force existing, as the corresponding .env file must exist for this environment!"
+    );
+    process.exit(1);
+  }
 } else {
   config({ path: path });
   loaded = true;
