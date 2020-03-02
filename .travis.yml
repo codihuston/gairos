@@ -17,5 +17,7 @@ jobs:
     - # stage name not required, will continue to use `test`
       script: 
         - ls -la
+        - echo $TRAVIS_BUILD_DIR
+        - echo $pwd
         - cd ./cient
         - yarn run test
