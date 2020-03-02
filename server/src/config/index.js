@@ -7,6 +7,8 @@ let path = "";
 let loaded = false;
 let shouldExit = true;
 
+console.log("Current node environment:" + process.env.NODE_ENV);
+
 switch (process.env.NODE_ENV.toLowerCase()) {
   case "production":
     shouldExit = false;
@@ -27,6 +29,7 @@ switch (process.env.NODE_ENV.toLowerCase()) {
 if (loaded) {
   // no-op. already loaded
 }
+
 // load the appropriate .env file
 else if (!existsSync(path)) {
   console.error(
