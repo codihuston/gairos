@@ -13,6 +13,7 @@ jobs:
         - ls -la
         - cd ./client
         - npm config set "@fortawesome:registry" https://npm.fontawesome.com/
+        - echo $FONT_AWESOME_PRO_AUTH_TOKEN
         - npm config set "//npm.fontawesome.com/:_authToken" $FONT_AWESOME_PRO_AUTH_TOKEN
         - yarn install
     - # stage name not required, will continue to use `test`
