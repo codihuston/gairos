@@ -15,6 +15,7 @@ jobs:
         - npm config set "//npm.fontawesome.com/:_authToken" $FONT_AWESOME_PRO_AUTH_TOKEN
         - yarn install
     - # stage name not required, will continue to use `test`
-      script: ./test 2
-    - stage: deploy
-      script: ./deploy
+      script: 
+        - ls -la
+        - cd ./cient
+        - yarn run test
