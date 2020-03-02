@@ -1,14 +1,16 @@
 import React, { useState, useRef } from "react";
+import PropTypes from "prop-types";
 import { Modal, Button, Alert, Form } from "react-bootstrap";
 import { toast } from "react-toastify";
 
+import TaskPropTypes from "../../prop-types/task";
 import { component as Loading } from "../loading";
 import UpdateMyTask from "../../graphql/mutations/hooks/update-my-task";
 import DeleteMyTask from "../../graphql/mutations/hooks/delete-my-task";
 import { GET_MY_TASKS as query } from "../../graphql/queries";
 import { GET_MY_TASK_HISTORY } from "../../graphql/queries";
 
-export default ({ show, handleClose, task }) => {
+function TaskDeleteModal({ show, handleClose, task }) {
   const [remove, { loading: isDeleteLoading }] = DeleteMyTask();
   const [update, { loading: isUpdateLoading }] = UpdateMyTask();
   const shouldDeleteInput = useRef(null);
@@ -63,7 +65,7 @@ export default ({ show, handleClose, task }) => {
         <Modal.Title>Delete A Task</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p>Are you sure you want to delete '{task.name}'?</p>
+        <p>Are you sure you want to delete &ldquo;{task.name}&rdquo;?</p>
         <p>
           This action will archive this task so that your history with this task
           remains intact. This will NOT destroy any recorded history of this
@@ -100,4 +102,12 @@ export default ({ show, handleClose, task }) => {
       </Modal.Footer>
     </Modal>
   );
+}
+
+TaskDeleteModal.propTypes = {
+  show: PropTypes.bool,
+  handleClose: PropTypes.func,
+  task: TaskPropTypes
 };
+
+export default TaskDeleteModal;
