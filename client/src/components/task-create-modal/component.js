@@ -1,12 +1,13 @@
 import React, { useState, Fragment } from "react";
 import { Modal, Button, Alert, Form, Container, Row } from "react-bootstrap";
 import { toast } from "react-toastify";
+import PropTypes from "prop-types";
 
 import { component as Loading } from "../loading";
 import CreateMyTask from "../../graphql/mutations/hooks/create-my-task";
 import { GET_MY_TASKS as query } from "../../graphql/queries";
 
-export default ({ show, handleClose }) => {
+function TaskCreateModal({ show, handleClose }) {
   const [mutate, { loading }] = CreateMyTask();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -111,4 +112,11 @@ export default ({ show, handleClose }) => {
       </Modal.Body>
     </Modal>
   );
+}
+
+TaskCreateModal.propTypes = {
+  show: PropTypes.bool,
+  handleClose: PropTypes.func
 };
+
+export default TaskCreateModal;
