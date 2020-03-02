@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faPause, faStop } from "@fortawesome/pro-duotone-svg-icons";
 import { Alert, Button } from "react-bootstrap";
@@ -6,12 +7,13 @@ import moment from "moment";
 import "moment-precise-range-plugin";
 import { cloneDeep } from "lodash";
 
+import TaskPropTypes from "../../prop-types/task";
 import { useInterval } from "../../utils";
 import { GET_MY_TRACKERS } from "../../graphql/queries";
 import CreateMyTaskHistory from "../../graphql/mutations/hooks/create-my-task-history";
 import UpdateMyTracker from "../../graphql/mutations/hooks/update-my-tracker";
 
-export default function Tracker({
+function Tracker({
   task,
   // whether or not the task is being tracked
   isTracking,
@@ -237,3 +239,15 @@ export default function Tracker({
     </div>
   );
 }
+
+Tracker.propTypes = {
+  task: TaskPropTypes,
+  isTracking: PropTypes.bool,
+  originalTime: PropTypes.string,
+  elapsedTime: PropTypes.string,
+  startTime: PropTypes.string,
+  endTime: PropTypes.string,
+  handleRemove: PropTypes.func
+};
+
+export default Tracker;
