@@ -5,7 +5,7 @@ cache: yarn
 
 jobs:
   include:
-    - stage: build_client
+    - stage: test_client
       env:
         - secure: "IG35XsGEu0eqtoqHoKK0rp2mw40u9PTvC4U+aNJLH9jqinLYgyGeVyFBcL2yUcZgX+/rtZTa6fhxccTwJw7oa89nD5Z+RiNzklwoKm0nkN6jGd5Zu+ane458sFVe3sahGPid7HPOxiVxMzzvbb7d+5Yma+BnoNJt+ojPnaRyZdPs4ueVRptwH7uJTyYF3+c+8zX7/ZmpztA0OqkGOO9R5l4g3D6k2h7+CJsvFc0DJj+b6WXIEwBHQjow3awTeAO2sc7numuF1sYVD5nG2kaCUMMgHHNcPey+G95agcpniEkAOhlp+S10ldyOt7rroe5MybaEyhlr06n2CrmWAIvVxPidVJvQMA3zKZtw+AaMTdKVCtdgnzyxRe468yPmlqCRD8F9rFIB8t/5bY6sxk/KoaJID02UBl7ARbUSfViXnRiiojVuzAbW8GeodrXTvGvL8jZjPas4kedC8V9AxMO6sKSAovaSZbXJC9x3/sEFBfC59j0B566VQphIyLklGBuU8mW3q7y+c5bWrD9M+ojI3TdAWzwPrj7yWq3ivINsLtN6Q3v/NC0seG0UFGeveQELrV14j52f2hABaYy4dLr2OSPPou+DPQZTZG5jUUyipRAedCF3wMp7XuUi74qt+fPiwKE15s7h272g7edBVbTAMMfWYsV5NGOE5F6oGOpMpmA="
       script: 
@@ -14,8 +14,4 @@ jobs:
         - npm config set "@fortawesome:registry" https://npm.fontawesome.com/
         - npm config set "//npm.fontawesome.com/:_authToken" $FONT_AWESOME_PRO_AUTH_TOKEN
         - yarn install
-    - stage: test_client
-      script: 
-        - ls -la
-        - cd $TRAVIS_BUILD_DIR/cient
         - yarn run test
