@@ -41,7 +41,7 @@ else if (!existsSync(path)) {
 
   if (shouldExit) {
     console.error(
-      "Force existing, as the corresponding .env file must exist for this environment!"
+      "Force exiting, as the corresponding .env file must exist for this environment!"
     );
     process.exit(1);
   }

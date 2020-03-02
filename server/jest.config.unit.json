@@ -1,0 +1,12 @@
+{
+  "testTimeout": 10000,
+  "verbose": true,
+  "setupFiles": [
+    "./src/test/index.js"
+  ],
+  "testRegex": "unit.spec\\.js$",
+  "testEnvironment": "node",
+  "transform": {
+    "^.+\\.js$": "babel-jest"
+  }
+}
