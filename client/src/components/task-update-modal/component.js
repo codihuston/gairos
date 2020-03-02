@@ -1,7 +1,9 @@
 import React, { useState, useRef, Fragment } from "react";
+import PropTypes from "prop-types";
 import { Modal, Button, Alert, Form, Container, Row } from "react-bootstrap";
 import { toast } from "react-toastify";
 
+import TaskPropTypes from "../../prop-types/task";
 import { component as Loading } from "../loading";
 import RenameMyTask from "../../graphql/mutations/hooks/rename-my-task";
 import UpdateMyTask from "../../graphql/mutations/hooks/update-my-task";
@@ -10,7 +12,7 @@ import { GET_MY_TASKS, GET_MY_TASK_HISTORY } from "../../graphql/queries";
 /**
  * Uses uncontrolled inputs in order to use default values
  */
-export default ({ show, handleClose, task }) => {
+function TaskUpdateModal({ show, handleClose, task }) {
   const [mutate, { loading: updateLoading }] = UpdateMyTask();
   const [rename, { loading: renameLoading }] = RenameMyTask();
   const [error, setError] = useState("");
@@ -68,8 +70,8 @@ export default ({ show, handleClose, task }) => {
       </Modal.Header>
       <Modal.Body>
         <p>
-          You are editing the task named "
-          {task && task.name ? task.name : "Task"}"
+          You are editing the task named &ldquo;
+          {task && task.name ? task.name : "Task"}&rdquo;
         </p>
         <Form>
           <Form.Group controlId="formTaskName">
@@ -129,4 +131,12 @@ export default ({ show, handleClose, task }) => {
       </Modal.Body>
     </Modal>
   );
+}
+
+TaskUpdateModal.propTypes = {
+  show: PropTypes.bool,
+  handleClose: PropTypes.func,
+  task: TaskPropTypes
 };
+
+export default TaskUpdateModal;
