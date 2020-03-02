@@ -15,3 +15,25 @@ jobs:
         - npm config set "//npm.fontawesome.com/:_authToken" $FONT_AWESOME_PRO_AUTH_TOKEN
         - yarn install
         - yarn run test
+    - stage: test_server
+      env:
+        - NODE_ENV=ci
+        - APP_CLIENT_HTTP_SCHEME=http
+        - APP_CLIENT_HOST=localhost
+        - APP_CLIENT_PORT=3000
+        - APP_CLIENT_LOGIN_URI=login
+        - DB_USER=root
+        - DB_PASSWORD=root
+        - DB_HOST=localhost
+        - DB_PORT=54320
+        - DB_NAME=ci
+        - DB_SYNC_WITH_SEQUELIZE=false
+        - DB_DIALECT=postgres
+        - FAIL_BUILD_IF_SEEDERS_FAIL=true
+      script: 
+        - ls -la
+        - cd $TRAVIS_BUILD_DIR/server
+        - yarn install
+        - yarn run test:unit
+        - yarn run test:int
+        - yarn run test:e2e
