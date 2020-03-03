@@ -32,8 +32,6 @@ if (loaded) {
 
 // load the appropriate .env file
 else if (!existsSync(path)) {
-  console.log("QQQ", shouldExit);
-
   if (shouldExit) {
     console.error(
       "FATAL: Configuration does not exist for this environment at:",
