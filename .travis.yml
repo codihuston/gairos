@@ -30,8 +30,16 @@ jobs:
         - DB_SYNC_WITH_SEQUELIZE=false
         - DB_DIALECT=postgres
         - FAIL_BUILD_IF_SEEDERS_FAIL=true
+        - DOCKER_COMPOSE_VERSION=1.25.2
+      before_install:
+        - sudo rm /usr/local/bin/docker-compose
+        - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+        - chmod +x docker-compose
+        - sudo mv docker-compose /usr/local/bin
       script: 
         - ls -la
+        - docker-compose up -d
+        - docker ps
         - cd $TRAVIS_BUILD_DIR/server
         - yarn install
         - yarn run test:unit
