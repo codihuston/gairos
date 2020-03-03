@@ -1,0 +1,22 @@
+version: '3.7'
+
+services:
+  postgres:
+    container_name: gairos-db01
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-root}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-root}
+    ports:
+      - "54320:5432"
+    networks:
+      default:
+        ipv4_address: 172.25.0.2
+    restart: unless-stopped
+
+networks:
+  default:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.25.0.0/24

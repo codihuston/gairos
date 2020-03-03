@@ -34,6 +34,7 @@ jobs:
         - DB_SYNC_WITH_SEQUELIZE=false
         - DB_DIALECT=postgres
         - FAIL_BUILD_IF_SEEDERS_FAIL=true
+        - DOCKER_COMPOSE_FILE=docker-compose-ci.yml
       #   - DOCKER_COMPOSE_VERSION=1.25.2
       # before_install:
       #   - sudo rm /usr/local/bin/docker-compose
@@ -41,9 +42,9 @@ jobs:
       #   - chmod +rx docker-compose
       #   - sudo mv docker-compose /usr/local/bin
       script: 
-        - ls -la /usr/local/bin
+        - ls -la
         - docker-compose --version
-        - docker-compose up -d
+        - docker-compose -f $DOCKER_COMPOSE_FILE up -d
         - docker ps
         - cd $TRAVIS_BUILD_DIR/server
         - yarn install
