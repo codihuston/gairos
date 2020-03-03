@@ -72,7 +72,9 @@ export const resolveGraphqlDefinitions = () =>
             );
           }
         } else {
-          console.warn("SKIPPING: no typeDefs or resolvers specified");
+          console.warn(
+            "SKIPPING: no typeDefs or resolvers specified for: " + dir
+          );
         }
       } catch (e) {
         console.warn("SKIPPING: Cannot dynamically load module:", e);
