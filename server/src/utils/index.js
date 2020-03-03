@@ -10,6 +10,14 @@ export const isDevelopmentEnvironment = process.env.NODE_ENV.toLowerCase().inclu
   "dev"
 );
 
+export const isTestEnvironment = process.env.NODE_ENV.toLowerCase().includes(
+  "test"
+);
+
+export const isCIEnvironment = process.env.NODE_ENV.toLowerCase().includes(
+  "ci"
+);
+
 export const shouldAutoLogin = process.env.DEV_AUTO_LOGIN === "true";
 
 // there should be a webpack loader for this: https://www.npmjs.com/package/graphql-tag

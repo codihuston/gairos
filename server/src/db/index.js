@@ -5,7 +5,7 @@ import debugLib from "debug";
 import glob from "glob";
 
 import config from "../config";
-import { isProductionEnvironment } from "../utils";
+import { isProductionEnvironment, isCIEnvironment } from "../utils";
 
 const debug = debugLib("server:db-init");
 
@@ -19,7 +19,8 @@ export const sequelize = new Sequelize(
   {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
-    dialect: process.env.DB_DIALECT
+    dialect: process.env.DB_DIALECT,
+    logging: !(isProductionEnvironment || isCIEnvironment)
   }
 );
 
@@ -83,10 +84,14 @@ export default async () => {
      */
     console.log("Please wait while connecting to the database...");
     console.log("Sequelize sync option is set to", eraseDatabaseOnSync);
+    console.log(
+      "Sequelize logging option is set to",
+      !(isProductionEnvironment || isCIEnvironment)
+    );
 
     await sequelize.sync({
       force: eraseDatabaseOnSync,
-      logging: true
+      logging: !(isProductionEnvironment || isCIEnvironment)
     });
 
     console.log("Database connection succeeded!");

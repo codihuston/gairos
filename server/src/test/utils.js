@@ -58,6 +58,7 @@ export const buildApolloServer = async ({ context = defaultContext } = {}) => {
   } = await resolveGraphqlDefinitions();
 
   const server = new ApolloServer({
+    engine: false,
     typeDefs,
     resolvers,
     dataSources,

@@ -7,7 +7,7 @@ let path = "";
 let loaded = false;
 let shouldExit = true;
 
-console.log("Current node environment:" + process.env.NODE_ENV);
+console.log("Current node environment: " + process.env.NODE_ENV);
 
 switch (process.env.NODE_ENV.toLowerCase()) {
   case "production":
