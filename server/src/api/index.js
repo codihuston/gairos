@@ -5,6 +5,7 @@ import glob from "glob";
 
 import { models, sequelize } from "../db";
 import { GooglePeople, GoogleCalendar } from "./google";
+import { isDevelopmentEnvironment } from "../utils";
 
 // fetch the modules in each sub-directory under /api
 const debug = debugLib("server:api");
@@ -72,9 +73,12 @@ export const resolveGraphqlDefinitions = () =>
             );
           }
         } else {
-          console.warn(
-            "SKIPPING: no typeDefs or resolvers specified for: " + dir
-          );
+          // only display this notice if in development
+          if (isDevelopmentEnvironment) {
+            console.warn(
+              "SKIPPING: no typeDefs or resolvers specified for: " + dir
+            );
+          }
         }
       } catch (e) {
         console.warn("SKIPPING: Cannot dynamically load module:", e);
