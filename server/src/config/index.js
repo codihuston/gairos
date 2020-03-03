@@ -32,18 +32,20 @@ if (loaded) {
 
 // load the appropriate .env file
 else if (!existsSync(path)) {
-  console.error(
-    "WARNING: Configuration does not exist for this environment at:",
-    path,
-    ". Please see the documentation regarding the '.env' file!",
-    "You may ignore this if this is intentional (CI/CD pipeline, production)"
-  );
+  console.log("QQQ", shouldExit);
 
   if (shouldExit) {
+    console.error(
+      "FATAL: Configuration does not exist for this environment at:",
+      path,
+      ". Please see the documentation regarding the '.env' file!"
+    );
     console.error(
       "Force exiting, as the corresponding .env file must exist for this environment!"
     );
     process.exit(1);
+  } else {
+    // the configuration does not exist (Production, CI/CD); optional for these
   }
 } else {
   config({ path: path });
