@@ -3,6 +3,9 @@ node_js:
   - 12.14.1
 cache: yarn
 
+services:
+  - docker
+
 jobs:
   include:
     # TODO: unremark after server testing is completed (client testing is done)
