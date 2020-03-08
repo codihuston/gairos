@@ -83,7 +83,8 @@ const model = (sequelize, DataTypes) => {
     // append the total time spent
     const a = moment(startTime);
     const b = moment(endTime);
-    return `${task.name} - ${b.diff(a, "minutes", true)} mins`;
+
+    return `${task.name} - ${b.diff(a, "minutes", true).toFixed(2)} mins`;
   };
 
   Model.prototype.getEventDescription = function() {

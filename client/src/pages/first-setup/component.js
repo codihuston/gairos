@@ -244,7 +244,7 @@ function FirstSetupComponent(props) {
                 will be recorded to your Google Calendar
               </li>
             </ol>
-            <p>So, what are you waiting for? Let's get started!</p>
+            <p>So, what are you waiting for? Let&apos;s get started!</p>
             <Link to={`${match.path}/create-calendar`}>Okay!</Link>
           </Route>
         </Switch>
@@ -255,6 +255,7 @@ function FirstSetupComponent(props) {
 
 FirstSetupComponent.propTypes = {
   calendar: PropTypes.string,
+  location: PropTypes.object,
   data: PropTypes.shape({
     loading: PropTypes.bool,
     getMyCalendars: PropTypes.arrayOf(

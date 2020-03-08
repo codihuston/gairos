@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { withApollo } from "react-apollo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -19,7 +20,7 @@ function LogoutButton({ client }) {
 
       // empty the cache
       localStorage.clear();
-      // client.clearStore();
+      client.clearStore();
 
       // redirect to login
       window.location.reload();
@@ -39,5 +40,9 @@ function LogoutButton({ client }) {
     </div>
   );
 }
+
+LogoutButton.propTypes = {
+  client: PropTypes.object
+};
 
 export default withRouter(withApollo(LogoutButton));

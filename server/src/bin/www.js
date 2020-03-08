@@ -4,16 +4,11 @@
  * Module dependencies.
  */
 
-import config from "../config";
+import config from "../config"; // eslint-disable-line
 import app from "../app";
-import debugLib from "debug";
 import http from "http";
-import { resolve } from "path";
-import { exec } from "child_process";
-import { sequelize } from "../api/gairos";
 import DatabaseConnector from "../db";
 
-const debug = debugLib("server:www");
 const port = normalizePort(process.env.APP_PORT || "3000");
 let server = null;
 

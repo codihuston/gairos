@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 import { Row, Table, Form, Button } from "react-bootstrap";
 import {
   useTable,
@@ -9,9 +9,11 @@ import {
 } from "react-table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/pro-duotone-svg-icons";
-
 import moment from "moment";
 
+import TaskHistoryPropTypes from "../../prop-types/task-history";
+
+/* eslint-disable */
 function GlobalFilter({
   preGlobalFilteredRows,
   globalFilter,
@@ -47,10 +49,6 @@ function ReactTable({ columns, data }) {
     headerGroups,
     prepareRow,
     page,
-    // Instead of using 'rows', we'll use page,
-    // which has only the rows for the active page
-    rows,
-
     // Pagination Props
     // The rest of these things are super handy, too ;)
     canPreviousPage,
@@ -167,8 +165,9 @@ function ReactTable({ columns, data }) {
     </>
   );
 }
+/* eslint-enable */
 
-export default function TaskTable({ taskHistories, onEdit, onDelete }) {
+function TaskTable({ taskHistories, onEdit, onDelete }) {
   const columns = React.useMemo(
     () => [
       {
@@ -252,8 +251,16 @@ export default function TaskTable({ taskHistories, onEdit, onDelete }) {
       {taskHistories && taskHistories.length ? (
         <ReactTable columns={columns} data={taskHistories}></ReactTable>
       ) : (
-        <p>You don't have any tasks yet!</p>
+        <p>You don&apos;t have any tasks yet!</p>
       )}
     </div>
   );
 }
+
+TaskTable.propTypes = {
+  taskHistories: PropTypes.arrayOf(TaskHistoryPropTypes),
+  onEdit: PropTypes.func,
+  onDelete: PropTypes.func
+};
+
+export default TaskTable;

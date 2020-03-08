@@ -1,14 +1,11 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
+import TaskPropTypes from "../../prop-types/task";
 import { Form } from "react-bootstrap";
 
 import { component as Dropdown } from "../select-text-dropdown";
 
-export default function SelectText({
-  placeholder,
-  options,
-  displayMember,
-  handleSelect
-}) {
+function SelectText({ placeholder, options, displayMember, handleSelect }) {
   const [query, setQuery] = useState("");
   const [isVisible, setIsVisible] = useState(false);
 
@@ -68,3 +65,12 @@ export default function SelectText({
     </div>
   );
 }
+
+SelectText.propTypes = {
+  placeholder: PropTypes.string,
+  options: PropTypes.arrayOf(TaskPropTypes),
+  displayMember: PropTypes.string,
+  handleSelect: PropTypes.func
+};
+
+export default SelectText;

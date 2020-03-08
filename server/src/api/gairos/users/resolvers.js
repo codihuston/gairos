@@ -7,12 +7,9 @@ import { isAuthenticated, isGivenUser } from "../../../middleware/graphql";
 
 export default {
   Query: {
-    me: combineResolvers(
-      isAuthenticated,
-      async (parent, args, { me, dataSources }) => {
-        return me;
-      }
-    ),
+    me: combineResolvers(isAuthenticated, async (parent, args, { me }) => {
+      return me;
+    }),
     getMyTags: combineResolvers(
       isAuthenticated,
       async (parent, args, { me, dataSources }) => {
@@ -371,7 +368,7 @@ export default {
 
           // then delete from gairos
           const [
-            taskHistoryInstance,
+            taskHistoryInstance, // eslint-disable-line
             wasDeleted
           ] = await TaskAPI.deleteUserTaskHistoryByInstance(
             userTaskHistory,

@@ -1,14 +1,14 @@
 /**
  * Global configuration variables (read-only) used throughout the project
  */
-const API_HTTP_SCHEME = "http";
-const API_DOMAIN = "localhost";
-const API_PORT = "8000";
-const API_AUTH_URL = "auth/google";
-const API_LOGOUT_URL = "auth/logout";
-const API_GRAPHQL_URL = "graphql";
+const API_HTTP_SCHEME = process.env.REACT_APP_API_HTTP_SCHEME;
+const API_DOMAIN = process.env.REACT_APP_API_DOMAIN;
+const API_PORT = process.env.REACT_APP_API_PORT;
+const API_AUTH_URL = process.env.REACT_APP_API_AUTH_URL;
+const API_LOGOUT_URL = process.env.REACT_APP_API_LOGOUT_URL;
+const API_GRAPHQL_URL = process.env.REACT_APP_API_GRAPHQL_URL;
 
-export const APP_NAME = "Gairos";
+export const APP_NAME = process.env.REACT_APP_NAME;
 
 export const getApiRootUrl = () => {
   let url = "";

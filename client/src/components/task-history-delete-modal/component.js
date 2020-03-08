@@ -1,13 +1,15 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { Modal, Button, Alert } from "react-bootstrap";
 import { toast } from "react-toastify";
 import moment from "moment";
 
+import TaskHistoryPropTypes from "../../prop-types/task-history";
 import { component as Loading } from "../loading";
 import DeleteMyTaskHistory from "../../graphql/mutations/hooks/delete-my-task-history";
 import { GET_MY_TASK_HISTORY as query } from "../../graphql/queries";
 
-export default ({ show, handleClose, taskHistory }) => {
+function TaskHistoryDeleteModal({ show, handleClose, taskHistory }) {
   const [remove, { loading }] = DeleteMyTaskHistory();
   const [error, setError] = useState(null);
 
@@ -81,4 +83,12 @@ export default ({ show, handleClose, taskHistory }) => {
       </Modal.Footer>
     </Modal>
   );
+}
+
+TaskHistoryDeleteModal.propTypes = {
+  show: PropTypes.bool,
+  handleClose: PropTypes.func,
+  taskHistory: TaskHistoryPropTypes
 };
+
+export default TaskHistoryDeleteModal;

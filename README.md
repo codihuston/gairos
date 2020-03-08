@@ -5,7 +5,8 @@
 ### Backend
 
 In the `/server/src/config`, copy `.env-example` into `.env-development` and
-populated the provided fields as needed.
+populated the provided fields as needed. This file is `required` when
+developing.
 
 #### Environment Setup
 
@@ -83,6 +84,29 @@ This is useful to prevent having to log in manually each time.
         1. Set this option to `true`, or...
         2. Delete the existing table yourself and restart the server
 
+#### Apollo Engine Setup
+`IMPORTANT:` the following steps are for `DEVELOPMENT` ONLY:
+
+If you want to use the `Apollo Graph Manager`, which is a metrics dashboard
+that offers some free features (such as reporting metrics on graphql queries),
+you must implement the following configuration.
+
+1. Visit [https://engine.apollographql.com/](https://engine.apollographql.com/) and create a graph such as `gairos-development` (which is the same as the `service name`)
+that apollo will use to register this engine into the graph manager
+
+2. Copy the file `API key` presented to you into the root `.env` file
+   
+   IMPORTANT: `server/.env` is to be used ONLY for this purpose, all other
+   configurations should be applied in `server/src/config/.env-<ENVIRONMENT>`
+
+3. The `server/apollo.config.js` file is already configured with the
+   aforementioned `service name` and `endpoint` (which must contain the 
+   `/graphql` when on localhost, at least)
+
+4. Run this command in the root of `/server`: `npx apollo service:push`
+5. You should now be able to view metrics on this server in the dashboard
+6. You should re-run the aforementioned command as the schema changes
+
 #### Database Setup
 The database server must be running in order for the server to start.
 
@@ -155,7 +179,11 @@ If you are having build issues, I suggest setting an environment variable
 #### Testing the Server
 
 If you want to run unit tests, first create the `.env-test` file in
-`server/src/config`, similarly to how you created `.env-development`.
+`server/src/config`, similarly to how you created `.env-development`. This file
+is `required` when running testing locally. Note that the `yarn run test:*`
+commands do not explicitly set `NODE_ENV` to `test`. This is so that these
+commands can be recycled in the `CI/CD` pipeline; you must set `NODE_ENV=test`
+in your `.env-test` file.
 
 Then run either of the following commands:
 
@@ -321,3 +349,10 @@ NOTE: This does not apply to the testing environment because the google API
 requests are mocked out. This should also not apply to production because
 the session should be properly managed between the front-end and back-end
 without the `same-origin` issue described in the linked issue.
+
+#### Continuous Integration Pipeline (CI/CD)
+View the `.travis.yml` file in the root of the project. Note that the test
+command does not explicitly set the `NODE_ENV` environment variable. This
+must be explicitly set in the `CI/CD` configuration (the aforementioned `.yml`
+file). That way, when running the `yarn run test:*` commands, the correct
+environment is used.

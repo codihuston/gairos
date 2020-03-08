@@ -19,11 +19,7 @@ export default {
         description
       });
     },
-    deleteMyCalendar: async (
-      parent,
-      { summary, description },
-      { me, dataSources }
-    ) => {
+    deleteMyCalendar: async (parent, args, { me, dataSources }) => {
       return await dataSources.CalendarAPI.deleteCalendar(me.calendarId);
     },
     createMyCalendarReminder: async (

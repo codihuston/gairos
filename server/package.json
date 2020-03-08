@@ -24,13 +24,12 @@
     "TESTING    ": "----------------------------------------------------------",
     "lint:test": "eslint ./src/api/**/**/*.spec.js --config .eslintrc-test.json",
     "test": "npm-run-all lint:test test:unit test:int test:e2e",
-    "test:unit": "cross-env NODE_ENV=test DEBUG=server:*,test:* jest .\\**\\unit.spec.js --config jest.config.json",
-    "test:int": "cross-env NODE_ENV=test DEBUG=server:*,test:* jest .\\**\\int.spec.js --config jest.config.json",
-    "test:e2e": "cross-env NODE_ENV=test DEBUG=server:*,test:* jest .\\**\\e2e.spec.js --config jest.config.json",
+    "test:unit": "jest --config jest.config.unit.json",
+    "test:int": "jest --config jest.config.int.json",
+    "test:e2e": "jest --config jest.config.e2e.json",
     "watch:test": "nodemon --config nodemon-test.json",
     "db:seed:test": "sequelize-cli db:seed:all --env test",
     "CI-CD      ": "----------------------------------------------------------",
-    "ci": "cross-env NODE_ENV=ci test",
     "db:seed:ci": "sequelize-cli db:seed:all --env ci"
   },
   "dependencies": {

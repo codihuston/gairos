@@ -1,7 +1,8 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { ListGroup } from "react-bootstrap";
 
-export default function CalendarList({ calendars, onClick }) {
+function CalendarList({ calendars, onClick }) {
   return (
     <ListGroup
       style={{
@@ -24,3 +25,15 @@ export default function CalendarList({ calendars, onClick }) {
     </ListGroup>
   );
 }
+
+CalendarList.propTypes = {
+  calendars: PropTypes.arrayOf(
+    PropTypes.shape({
+      summary: PropTypes.string,
+      description: PropTypes.string
+    })
+  ),
+  onClick: PropTypes.func
+};
+
+export default CalendarList;

@@ -34,7 +34,7 @@ try {
     dialect: process.env.DB_DIALECT
   };
 
-  if (!env.includes("prod")) {
+  if (!(env.includes("prod") || env.includes("ci"))) {
     console.log(
       "Sequelize-Cli is using the following db config options for environment [",
       env,

@@ -1,6 +1,7 @@
 import React from "react";
+import PropTypes from "prop-types";
 
-export default function Dropdown({
+function Dropdown({
   isVisible,
   options,
   displayMember,
@@ -14,7 +15,7 @@ export default function Dropdown({
     handleBlur();
   };
 
-  if (!options.length) return <div>"{query}" not found!</div>;
+  if (!options.length) return <div>&ldquo;{query}&rdquo; not found!</div>;
   if (isVisible) {
     return (
       <div
@@ -51,3 +52,14 @@ export default function Dropdown({
   }
   return null;
 }
+
+Dropdown.propTypes = {
+  isVisible: PropTypes.bool,
+  options: PropTypes.arrayOf(PropTypes.object),
+  displayMember: PropTypes.string,
+  query: PropTypes.string,
+  handleSelect: PropTypes.func,
+  handleBlur: PropTypes.func
+};
+
+export default Dropdown;

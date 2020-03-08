@@ -1,9 +1,11 @@
-import React, { useState, useRef, Fragment, useEffect } from "react";
+import React, { useState, Fragment, useEffect } from "react";
+import PropTypes from "prop-types";
 import { Modal, Button, Alert, Form, Container, Row } from "react-bootstrap";
 import { toast } from "react-toastify";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
+import TaskHistoryPropTypes from "../../prop-types/task-history";
 import { component as Loading } from "../loading";
 import UpdateTaskHistory from "../../graphql/mutations/hooks/update-my-task-history";
 import { GET_MY_TASK_HISTORY as query } from "../../graphql/queries";
@@ -11,7 +13,7 @@ import { GET_MY_TASK_HISTORY as query } from "../../graphql/queries";
 /**
  * Uses uncontrolled inputs in order to use default values
  */
-export default ({ show, handleClose, taskHistory }) => {
+function TaskHistoryUpdateModal({ show, handleClose, taskHistory }) {
   const [mutate, { loading }] = UpdateTaskHistory();
   const [startTime, setStartDate] = useState(new Date());
   const [endTime, setEndDate] = useState(new Date());
@@ -166,4 +168,12 @@ export default ({ show, handleClose, taskHistory }) => {
       </Modal.Body>
     </Modal>
   );
+}
+
+TaskHistoryUpdateModal.propTypes = {
+  show: PropTypes.bool,
+  handleClose: PropTypes.func,
+  taskHistory: TaskHistoryPropTypes
 };
+
+export default TaskHistoryUpdateModal;

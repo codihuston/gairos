@@ -70,28 +70,28 @@ export default function Home() {
             <Button
               variant="outline-secondary"
               className={showSeconds ? "bg-primary text-white" : null}
-              onClick={e => setShowSeconds(!showSeconds)}
+              onClick={() => setShowSeconds(!showSeconds)}
             >
               Seconds
             </Button>
             <Button
               variant="outline-secondary"
               className={showMinutes ? "bg-primary text-white" : null}
-              onClick={e => setShowMinutes(!showMinutes)}
+              onClick={() => setShowMinutes(!showMinutes)}
             >
               Minutes
             </Button>
             <Button
               variant="outline-secondary"
               className={showHours ? "bg-primary text-white" : null}
-              onClick={e => setShowHours(!showHours)}
+              onClick={() => setShowHours(!showHours)}
             >
               Hours
             </Button>
             <Button
               variant="outline-secondary"
               className={showDays ? "bg-primary text-white" : null}
-              onClick={e => setShowDays(!showDays)}
+              onClick={() => setShowDays(!showDays)}
             >
               Days
             </Button>
@@ -101,7 +101,7 @@ export default function Home() {
                 showWeeks ? "bg-primary text-white" : null,
                 "rounded-right"
               ]}
-              onClick={e => setShowWeeks(!showWeeks)}
+              onClick={() => setShowWeeks(!showWeeks)}
             >
               Weeks
             </Button>

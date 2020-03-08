@@ -53,7 +53,7 @@ export default resolveGraphqlDefinitions()
     app.use(
       session({
         // generate unique ids for sessions
-        genid: function(req) {
+        genid: function() {
           return uuid();
         },
         name: `${process.env.APP_NAME}.${process.env.NODE_ENV}`,
@@ -89,13 +89,17 @@ export default resolveGraphqlDefinitions()
     debug("GraphQL typeDefs:", typeDefs);
     debug("GraphQL resolvers:", resolvers);
     debug("GraphQL dataSources:", dataSources);
+
     const server = new ApolloServer({
+      engine: {
+        apiKey: process.env.ENGINE_API_KEY
+      },
       // enable debug for development environment only
       debug: isDevelopmentEnvironment,
       typeDefs,
       resolvers,
       dataSources,
-      context: async ({ req, res }) => {
+      context: async ({ req }) => {
         let user = null;
         const { session } = req;
 
@@ -173,7 +177,7 @@ export default resolveGraphqlDefinitions()
     });
 
     // error handler
-    app.use(function(err, req, res, next) {
+    app.use(function(err, req, res) {
       // set locals, only providing error in development
       res.locals.message = err.message;
       res.locals.error = req.app.get("env") === "development" ? err : {};

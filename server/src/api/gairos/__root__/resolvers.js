@@ -14,7 +14,7 @@ export default {
   GraphQLTime,
   GraphQLDateTime,
   Query: {
-    version: combineResolvers(isAuthenticated, (parent, args, context) => {
+    version: combineResolvers(isAuthenticated, () => {
       return process.env.APP_VERSION;
     })
   },
@@ -23,7 +23,7 @@ export default {
    * a placeholder, and does not actually mutate anything
    */
   Mutation: {
-    version: combineResolvers(isAuthenticated, (parent, args, context) => {
+    version: combineResolvers(isAuthenticated, () => {
       return process.env.APP_VERSION;
     })
   }

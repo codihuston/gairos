@@ -4,6 +4,7 @@
   "setupFiles": [
     "./src/test/index.js"
   ],
+  "testRegex": "int.spec\\.js$",
   "testEnvironment": "node",
   "transform": {
     "^.+\\.js$": "babel-jest"

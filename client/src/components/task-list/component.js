@@ -1,9 +1,12 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { ListGroup } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/pro-duotone-svg-icons";
 
-export default function TaskList({ children, tasks }) {
+import TaskPropTypes from "../../prop-types/task";
+
+function TaskList({ children, tasks }) {
   if (!tasks.length) return <div>Add a task above!</div>;
   return (
     <div>
@@ -27,3 +30,10 @@ export default function TaskList({ children, tasks }) {
     </div>
   );
 }
+
+TaskList.propTypes = {
+  children: PropTypes.arrayOf(PropTypes.object),
+  tasks: PropTypes.arrayOf(TaskPropTypes)
+};
+
+export default TaskList;
