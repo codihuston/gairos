@@ -11,6 +11,7 @@ import init, { sequelize } from ".";
 async function main() {
   await init();
 
+  // TODO: if the database already exists, DO NOT SYNC
   const shouldSyncDb = !isProductionEnvironment;
   if (shouldSyncDb) {
     console.log("Syncing database...");
