@@ -1,5 +1,5 @@
 import uuid from "uuid/v4";
-import { models } from "../../src/db";
+import { models } from "../";
 
 export default {
   up: async (queryInterface, Sequelize) => {

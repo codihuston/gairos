@@ -1,5 +1,5 @@
-import { models } from "../../src/db";
-import { defaultUsers as users } from "../../src/test/utils";
+import { models } from "../";
+import { defaultUsers as users } from "../../test/utils";
 
 export default {
   up: async (queryInterface, Sequelize) => {

@@ -4,4 +4,5 @@
  */
 require("@babel/register");
 
-module.exports = require("./config");
+const { opts } = require("./config");
+module.exports = opts;
