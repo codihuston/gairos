@@ -79,8 +79,6 @@ const model = (sequelize, DataTypes) => {
   );
 
   User.associate = models => {
-    models.user.hasMany(models.message, { onDelete: "CASCADE" });
-
     models.user.belongsToMany(models.task, {
       through: models.userTask,
       foreignKey: "userId",

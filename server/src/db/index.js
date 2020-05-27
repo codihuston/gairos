@@ -27,7 +27,7 @@ export const sequelize = new Sequelize(
 const models = {};
 const modelPaths = glob.sync(join(__dirname, "/models/*.js"));
 
-debug(`Found ${modelPaths.length} models`);
+debug(`Found [${modelPaths.length}] models`);
 
 // import sequelize models
 for (const modelPath of modelPaths) {
