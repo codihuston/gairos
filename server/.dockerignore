@@ -1,0 +1,6 @@
+node_modules
+dist
+.env-production
+.env-ci
+.env-development
+.env-test

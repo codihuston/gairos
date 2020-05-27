@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sql-deployment
+spec:
+  selector:
+    matchLabels:
+      app: sql-deployment
+  template:
+    metadata:
+      labels:
+        app: sql-deployment
+    spec:
+      containers:
+      - name: sql-deployment
+        image: postgres:12.3
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "0.2"
+        ports:
+        - containerPort: 5432
+        volumeMounts:
+          - name: sql-volume
+            mountPath: /var/lib/postgresql/data
+            # subpath fixes issues with some dbms like postgres
+            subPath: postgres
+        env:
+          - name: POSTGRES_PASSWORD
+            value: root
+      volumes:
+        - name: sql-volume
+          # Change this path if you want to mount the db elsewhere in Windows!
+          #   - The `/run/desktop` token is used to access the docker desktop 
+          #   mount # path.
+          #   - The `/mnt/host` token is defined in `wsl.conf` in Windows wsl
+          #   (and is the default value). If you have multiple developers on
+          #   one machine, change this path to keep separate instances!
+          #   - This will keep your db persistent across reboots!
+          hostPath:
+            # for windows
+            path: /run/desktop/mnt/host/c/windows/temp/gairos-k8s
+            # for mac/linux
+            type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sql-load-balancer
+spec:
+  type: LoadBalancer
+  ports:
+    - name: sql-loadbalancer
+      port: 5432
+      targetPort: 5432
+      protocol: TCP
+  selector:
+    app: sql-deployment
