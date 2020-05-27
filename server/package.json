@@ -36,6 +36,19 @@
     "CI-CD      ": "----------------------------------------------------------",
     "db:seed:ci": "sequelize-cli db:seed:all --env ci"
   },
+  "babel": {
+    "presets": [[
+      "@babel/preset-env",
+      {
+        "targets": {
+          "node": "current"
+        }
+      }
+    ]],
+    "ignore": [
+      ".gitignore"
+    ]
+  },
   "dependencies": {
     "apollo-datasource": "^0.6.4",
     "apollo-errors": "^1.9.0",
