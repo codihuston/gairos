@@ -23,18 +23,15 @@ spec:
               memory: "512Mi"
               cpu: "0.2"
           ports:
-            - containerPort: 5000
+            - containerPort: 80
           env:
+            # app config
             - name: APP_NAME
               value: gairos
             - name: APP_PORT
-              value: "5000"
+              value: "80"
             - name: APP_VERSION
               value: "0.0.1"
-            - name: APP_NAME
-              value: "gairos"
-            - name: APP_PORT
-              value: "5000"
             # used for password hashing
             - name: APP_SECRET
               value: CHANGE_ME
@@ -42,12 +39,23 @@ spec:
               value: CHANGE_ME
             - name: APP_SALT_ROUNDS
               value: "10"
+            # jwt config
             - name: JWT_SECRET
               value: CHANGE_ME
             - name: JWT_ISS
               value: http://localhost
             - name: JWT_EXPIRES_IN
               value: "3600"
+            # client config (TODO: UPDATE / REMOVE)
+            - name: APP_CLIENT_HTTP_SCHEME
+              value: http
+            - name: APP_CLIENT_HOST
+              value: localhost
+            - name: APP_CLIENT_PORT
+              value: "80"
+            - name: APP_CLIENT_LOGIN_URI
+              value: login
+            # db config
             - name: DROP_COLLECTIONS_BEFORE_EACH_TEST
               value: "1"
             - name: DB_USER
@@ -71,6 +79,5 @@ spec:
               value: CHANGE_ME
             - name: GOOGLE_CLIENT_SECRET
               value: CHANGE_ME
-            # TODO: this needs to be revisted
             - name: GOOGLE_CALLBACK_URL
-              value: http://localhost:5000/auth/google/cb
+              value: http://localhost/api/auth/google/cb
