@@ -34,14 +34,10 @@ if (loaded) {
 else if (!existsSync(path)) {
   if (shouldExit) {
     console.error(
-      "FATAL: Configuration does not exist for this environment at:",
+      "WARNING: Configuration does not exist for this environment at:",
       path,
-      ". Please see the documentation regarding the '.env' file!"
+      ". Will assume environment variables are defined in context!"
     );
-    console.error(
-      "Force exiting, as the corresponding .env file must exist for this environment!"
-    );
-    process.exit(1);
   } else {
     // the configuration does not exist (Production, CI/CD); optional for these
   }

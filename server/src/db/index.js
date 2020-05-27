@@ -53,7 +53,7 @@ export default async () => {
      * For example, postgres and mysql both have a default database of the same
      * names upon initialization of each service.
      */
-    console.log(`Initializing the database '${process.env.DB_NAME}'`);
+    console.log(`Initializing the database '${process.env.DB_NAME}', conn string`);
 
     const tempConnection = new Sequelize(connectionString);
     await tempConnection.queryInterface.createDatabase(process.env.DB_NAME);
@@ -69,55 +69,56 @@ export default async () => {
     }
   }
 
-  try {
-    const eraseDatabaseOnSync =
-      process.env.DB_SYNC_WITH_SEQUELIZE.toLowerCase() == "true" &&
-      !process.env.NODE_ENV.toLowerCase().includes("prod");
-    const exitIfSeedersFail =
-      process.env.FAIL_BUILD_IF_SEEDERS_FAIL.toLowerCase() == "true";
+  // TODO: migrate this into a npm run command
+  // try {
+  //   const eraseDatabaseOnSync =
+  //     process.env.DB_SYNC_WITH_SEQUELIZE.toLowerCase() == "true" &&
+  //     !process.env.NODE_ENV.toLowerCase().includes("prod");
+  //   const exitIfSeedersFail =
+  //     process.env.FAIL_BUILD_IF_SEEDERS_FAIL.toLowerCase() == "true";
 
-    /**
-     * For developer experience, if this option is on, the database will be
-     * re-built on every build EXCEPT FOR when the environment is PRODUCTION!
-     *
-     * If the database is wiped, seeders will also be ran.
-     */
-    console.log("Please wait while connecting to the database...");
-    console.log("Sequelize sync option is set to", eraseDatabaseOnSync);
-    console.log(
-      "Sequelize logging option is set to",
-      !(isProductionEnvironment || isCIEnvironment)
-    );
+  //   /**
+  //    * For developer experience, if this option is on, the database will be
+  //    * re-built on every build EXCEPT FOR when the environment is PRODUCTION!
+  //    *
+  //    * If the database is wiped, seeders will also be ran.
+  //    */
+  //   console.log("Please wait while connecting to the database...");
+  //   console.log("Sequelize sync option is set to", eraseDatabaseOnSync);
+  //   console.log(
+  //     "Sequelize logging option is set to",
+  //     !(isProductionEnvironment || isCIEnvironment)
+  //   );
 
-    await sequelize.sync({
-      force: eraseDatabaseOnSync,
-      logging: !(isProductionEnvironment || isCIEnvironment)
-    });
+  //   await sequelize.sync({
+  //     force: eraseDatabaseOnSync,
+  //     logging: !(isProductionEnvironment || isCIEnvironment)
+  //   });
 
-    console.log("Database connection succeeded!");
+  //   console.log("Database connection succeeded!");
 
-    /**
-     * Execute seeders if the database was emptied.
-     *
-     * IMPORTANT: this utilizes this repository's `package.json` file
-     * to execute the seeders asynchronously--the npm script MUST match
-     * the name of NODE_ENV in order to successfully executed:
-     *
-     * For example: db:seed:NODE_ENV
-     *
-     * NOTE: If the database fails to be seeded, the build process WILL
-     * fail and be halted if and only if process.env.FAIL_BUILD_IF_SEEDERS_FAIL
-     * is true set to true
-     */
-    if (eraseDatabaseOnSync && !isProductionEnvironment) {
-      console.log("Please wait while executing database seeders *ASYNC*...");
+  //   /**
+  //    * Execute seeders if the database was emptied.
+  //    *
+  //    * IMPORTANT: this utilizes this repository's `package.json` file
+  //    * to execute the seeders asynchronously--the npm script MUST match
+  //    * the name of NODE_ENV in order to successfully executed:
+  //    *
+  //    * For example: db:seed:NODE_ENV
+  //    *
+  //    * NOTE: If the database fails to be seeded, the build process WILL
+  //    * fail and be halted if and only if process.env.FAIL_BUILD_IF_SEEDERS_FAIL
+  //    * is true set to true
+  //    */
+  //   if (eraseDatabaseOnSync && !isProductionEnvironment) {
+  //     console.log("Please wait while executing database seeders *ASYNC*...");
 
-      const res = execSync(`yarn run db:seed:${process.env.NODE_ENV}`, {
-        cwd: resolve(__dirname, "..", ".."), // server root
-        stdio: "inherit"
-      });
-    }
-  } catch (e) {
-    throw e;
-  }
+  //     const res = execSync(`yarn run db:seed:${process.env.NODE_ENV}`, {
+  //       cwd: resolve(__dirname, "..", ".."), // server root
+  //       stdio: "inherit"
+  //     });
+  //   }
+  // } catch (e) {
+  //   throw e;
+  // }
 };

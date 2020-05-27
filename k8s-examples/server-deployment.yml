@@ -18,10 +18,10 @@ spec:
           resources:
             requests:
               memory: "256Mi"
-              cpu: "0.1"
+              cpu: "0.2"
             limits:
               memory: "512Mi"
-              cpu: "0.1"
+              cpu: "0.2"
           ports:
             - containerPort: 5000
           env:
@@ -29,3 +29,48 @@ spec:
               value: gairos
             - name: APP_PORT
               value: "5000"
+            - name: APP_VERSION
+              value: "0.0.1"
+            - name: APP_NAME
+              value: "gairos"
+            - name: APP_PORT
+              value: "5000"
+            # used for password hashing
+            - name: APP_SECRET
+              value: CHANGE_ME
+            - name: APP_SESSION_SECRET
+              value: CHANGE_ME
+            - name: APP_SALT_ROUNDS
+              value: "10"
+            - name: JWT_SECRET
+              value: CHANGE_ME
+            - name: JWT_ISS
+              value: http://localhost
+            - name: JWT_EXPIRES_IN
+              value: "3600"
+            - name: DROP_COLLECTIONS_BEFORE_EACH_TEST
+              value: "1"
+            - name: DB_USER
+              value: postgres
+            - name: DB_PASSWORD
+              value: root
+            - name: DB_HOST
+              value: sql-cluster-ip-service
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_NAME
+              value: development
+            # sequelize options
+            - name: DB_SYNC_WITH_SEQUELIZE
+              value: "false"
+            - name: DB_DIALECT
+              value: postgres
+            - name: FAIL_BUILD_IF_SEEDERS_FAIL
+              value: "true"
+            - name: GOOGLE_CLIENT_ID
+              value: CHANGE_ME
+            - name: GOOGLE_CLIENT_SECRET
+              value: CHANGE_ME
+            # TODO: this needs to be revisted
+            - name: GOOGLE_CALLBACK_URL
+              value: http://localhost:5000/auth/google/cb
