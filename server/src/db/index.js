@@ -25,10 +25,13 @@ export const sequelize = new Sequelize(
 );
 
 const models = {};
-const modelPaths = glob.sync(join(__dirname, "../api/**/model.js"));
+const modelPaths = glob.sync(join(__dirname, "/models/*.js"));
+
+debug(`Found ${modelPaths.length} models`);
 
 // import sequelize models
 for (const modelPath of modelPaths) {
+  debug(`Loading model from: ${modelPath}`);
   const model = sequelize.import(modelPath);
   models[model.name] = model;
 }
