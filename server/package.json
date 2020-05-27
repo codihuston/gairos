@@ -22,9 +22,9 @@
     "TESTING    ": "----------------------------------------------------------",
     "lint:test": "eslint ./src/api/**/**/*.spec.js --config .eslintrc-test.json",
     "test": "npm-run-all test:unit test:int test:e2e",
-    "test:unit": "jest --config jest.config.unit.json",
-    "test:int": "jest --config jest.config.int.json",
-    "test:e2e": "jest --config jest.config.e2e.json",
+    "test:unit": "cross-env NODE_ENV=test DEBUG=server:*,test:* jest .*.unit.spec.js",
+    "test:int": "cross-env NODE_ENV=test DEBUG=server:*,test:* jest .*.int.spec.js",
+    "test:e2e": "cross-env NODE_ENV=test DEBUG=server:*,test:* jest .*.e2e.spec.js",
     "test:db:sync": "cross-env NODE_ENV=test babel-node ./src/db/sync.js",
     "test:db:migrate": "cross-env NODE_ENV=test sequelize-cli db:migrate",
     "test:db:seed": "cross-env NODE_ENV=test sequelize-cli db:seed:all",
@@ -56,6 +56,17 @@
       "src/api/**/test/*.spec.js"
     ],
     "ext": "js, html, css, json, graphql, ts"
+  },
+  "jest": {
+    "testTimeout": 10000,
+    "verbose": true,
+    "setupFiles": [
+      "./src/test/index.js"
+    ],
+    "testEnvironment": "node",
+    "transform": {
+      "^.+\\.js$": "babel-jest"
+    }
   },
   "dependencies": {
     "apollo-datasource": "^0.6.4",
