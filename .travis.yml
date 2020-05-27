@@ -30,9 +30,7 @@ jobs:
         - DB_HOST=localhost
         - DB_PORT=54320
         - DB_NAME=ci
-        - DB_SYNC_WITH_SEQUELIZE=false
         - DB_DIALECT=postgres
-        - FAIL_BUILD_IF_SEEDERS_FAIL=true
         - DOCKER_COMPOSE_FILE=docker-compose-ci.yml
       script: 
         - ls -la

@@ -56,11 +56,6 @@ click "APIs & services" > Dashboard
 
 As an attempt to approve developer experience, you can either set:
 
-- `DB_SYNC_WITH_SEQUELIZE` to `true` or `false`.
-    
-    `Note:` This option will be set forcibly to `false` if the `NODE_ENV` matches
-`*prod*`
-
 - `DEV_AUTO_LOGIN` to `true` or `false`, which will intialize a session as
 using the first seeded user when you make your first request to the server.
 This is useful to prevent having to log in manually each time. 
@@ -162,10 +157,8 @@ The order in which the server is built looks like this
 1. lint (via `eslint`)
 1. create database, see `server/src/db` for details (may error out if db exists, but does
 not stop build process. This is expected behavior)
-1. run server with babel-node (`server/bin/www.js`) to support `import/export` 
+1. run server with babel-node (`server/bin/www.js`) to support `import/export`
 in the node environment
-    1. in `server/src/db`, conditionally truncate/sync database and execute seeders
-    asynchronously based on `DB_SYNC_WITH_SEQUELIZE`
 
 #### Debugging the Server
 

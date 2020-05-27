@@ -3,7 +3,7 @@ module.exports = {
   service: {
     name: "gairos-development",
     endpoint: {
-      url: "http://localhost:8000/graphql"
+      url: "http://localhost/api/graphql"
     }
   }
 };

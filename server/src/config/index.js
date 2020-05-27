@@ -1,48 +1,74 @@
-import { config } from "dotenv";
+import { config, parse } from "dotenv";
 import { resolve } from "path";
-import { existsSync } from "fs";
+import { existsSync, readFileSync } from "fs";
+import {
+  isProductionEnvironment,
+  isCiEnvironment,
+  isDevelopmentEnvironment,
+} from "../utils";
+import debugLib from "debug";
 
-const root = resolve(__dirname);
+const debug = debugLib("server:config");
+const root = resolve(__dirname + "/../../");
+const exampleConfig = ".env-example";
+
 let path = "";
 let loaded = false;
-let shouldExit = true;
 
-console.log("Current node environment: " + process.env.NODE_ENV);
+function validateEnvironmentVariables() {
+  let isValid = true;
 
-switch (process.env.NODE_ENV.toLowerCase()) {
-  case "production":
-    shouldExit = false;
-    path = resolve(root, ".env");
-    break;
-  case "ci":
-    shouldExit = false;
-    path = resolve(root, ".env-ci");
-    break;
-  case "test":
-    path = resolve(root, ".env-test");
-    break;
-  default:
-    path = resolve(root, ".env-development");
-    break;
+  // add any required environment variables
+  const defaultConfig = parse(readFileSync(resolve(root, exampleConfig)));
+  const requiredKeys = Object.keys(defaultConfig || []);
+
+  for (var i = 0; i < requiredKeys.length; i++) {
+    const k = requiredKeys[i];
+    const v = defaultConfig[k];
+    // if a key is defined in `.env-example`, but HAS NO value, it is OPTIONAL
+    if (process.env && k && !v) {
+      debug(`WARNING: Optional environment variable '${k}' is not set!`);
+    }
+    // if a key is defined in `.env-example`, and HAS a value, it is REQUIRED
+    else if (process.env && k && !process.env[k]) {
+      console.error(`FATAL: Required environment variable '${k}' is not set!`);
+      isValid = false;
+    }
+  }
+
+  return isValid;
+}
+
+if (isProductionEnvironment) {
+  path = resolve(root, ".env");
+} else if (isCiEnvironment) {
+  path = resolve(root, ".env-ci");
+} else if (isDevelopmentEnvironment) {
+  path = resolve(root, ".env-development");
+} else {
+  path = resolve(root, ".env-test");
 }
 
 if (loaded) {
   // no-op. already loaded
 }
-
 // load the appropriate .env file
 else if (!existsSync(path)) {
-  if (shouldExit) {
-    console.error(
-      "WARNING: Configuration does not exist for this environment at:",
-      path,
-      ". Will assume environment variables are defined in context!"
-    );
-  } else {
-    // the configuration does not exist (Production, CI/CD); optional for these
-  }
+  debug(
+    "WARNING: Configuration does not exist for this environment at:",
+    path,
+    ". Will assume environment variables are defined in context!"
+  );
 } else {
   config({ path: path });
   loaded = true;
-  console.log("Configuration loaded from:", path);
+  debug("Configuration loaded from:", path);
+}
+
+if (!validateEnvironmentVariables()) {
+  console.error(
+    "Cannot start server because required environment variables are missing.",
+    "Check your environment variables!"
+  );
+  process.exit(1);
 }

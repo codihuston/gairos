@@ -69,12 +69,8 @@ spec:
             - name: DB_NAME
               value: development
             # sequelize options
-            - name: DB_SYNC_WITH_SEQUELIZE
-              value: "false"
             - name: DB_DIALECT
               value: postgres
-            - name: FAIL_BUILD_IF_SEEDERS_FAIL
-              value: "true"
             - name: GOOGLE_CLIENT_ID
               value: CHANGE_ME
             - name: GOOGLE_CLIENT_SECRET

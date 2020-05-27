@@ -111,9 +111,6 @@ export default resolveGraphqlDefinitions()
          * Note:
          *  - the defined user session below is overridden if you hit
          *  the /auth/google endpoint
-         *  - that seeders are only ran if process.env.DB_SYNC_WITH_SEQUELIZE
-         *  is set to true (default). It is recommended to set that environment
-         *  variable to true at least once when setting up your dev environment
          */
         if (!isProductionEnvironment && shouldAutoLogin && !req.session.user) {
           user = await models.user.findOne({
