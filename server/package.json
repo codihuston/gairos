@@ -13,13 +13,9 @@
     "db:seed:production": "sequelize-cli db:seed:all --env production",
     "DEVELOPMENT": "----------------------------------------------------------",
     "lint": "eslint . --config .eslintrc-development.json",
-    "dev": "npm run server:dev",
-    "server:dev": "cross-env NODE_ENV=development npm-run-all server",
-    "server": "babel-node ./src/bin/www",
-    "dev:debug": "npm run server:dev:debug",
-    "server:dev:debug": "cross-env NODE_ENV=development DEBUG=server:* npm-run-all server",
-    "watch": "nodemon --config nodemon.json",
-    "watch:debug": "nodemon --exec \"npm run server:dev:debug\"",
+    "dev": "nodemon",
+    "dev:watch": "cross-env NODE_ENV=development DEBUG=server:* npm-run-all dev:serve",
+    "dev:serve": "babel-node ./src/bin/www",
     "dev:db:sync": "cross-env NODE_ENV=development babel-node ./src/db/sync.js",
     "dev:db:migrate": "cross-env NODE_ENV=development sequelize-cli db:migrate",
     "dev:db:seed": "cross-env NODE_ENV=development sequelize-cli db:seed:all",
@@ -29,7 +25,6 @@
     "test:unit": "jest --config jest.config.unit.json",
     "test:int": "jest --config jest.config.int.json",
     "test:e2e": "jest --config jest.config.e2e.json",
-    "watch:test": "nodemon --config nodemon-test.json",
     "test:db:sync": "cross-env NODE_ENV=test babel-node ./src/db/sync.js",
     "test:db:migrate": "cross-env NODE_ENV=test sequelize-cli db:migrate",
     "test:db:seed": "cross-env NODE_ENV=test sequelize-cli db:seed:all",
@@ -48,6 +43,19 @@
     "ignore": [
       ".gitignore"
     ]
+  },
+  "nodemonConfig": {
+    "exec": "npm run dev:watch",
+    "watch": [
+      "src/*",
+      "public/*"
+    ],
+    "ignore": [
+      "node_modules",
+      "src/test/*.js",
+      "src/api/**/test/*.spec.js"
+    ],
+    "ext": "js, html, css, json, graphql, ts"
   },
   "dependencies": {
     "apollo-datasource": "^0.6.4",
