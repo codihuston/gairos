@@ -23,7 +23,7 @@ import { sequelize, models } from "./db";
 import {
   isProductionEnvironment,
   isDevelopmentEnvironment,
-  shouldAutoLogin
+  shouldAutoLogin,
 } from "./utils";
 
 const debug = debugLib("server:app");
@@ -31,18 +31,18 @@ const SequelizeStore = ConnectSessionStore(session.Store);
 
 // TODO: implement feat to persist these in storage (for scalability?)
 const corsWhitelist = [
-  `${process.env.APP_CLIENT_HTTP_SCHEME}://${process.env.APP_CLIENT_HOST}:${process.env.APP_CLIENT_PORT}`
+  `${process.env.APP_CLIENT_HTTP_SCHEME}://${process.env.APP_CLIENT_HOST}:${process.env.APP_CLIENT_PORT}`,
 ];
 
 // cors config required for the express app AND apollo-server
 const corsMiddleware = {
   // TODO: configure for prod environment
   credentials: true,
-  origin: corsWhitelist
+  origin: corsWhitelist,
 };
 
 export default resolveGraphqlDefinitions()
-  .then(result => {
+  .then((result) => {
     const { typeDefs, resolvers, dataSources } = result;
     var app = express();
 
@@ -64,9 +64,9 @@ export default resolveGraphqlDefinitions()
         store: new SequelizeStore({
           // defaults: expiry is 24 hours; expired sessions removed evey 15 mins
           db: sequelize,
-          table: "session"
+          table: "session",
         }),
-        cookie: { secure: isProductionEnvironment }
+        cookie: { secure: isProductionEnvironment },
       })
     );
 
@@ -92,7 +92,7 @@ export default resolveGraphqlDefinitions()
 
     const server = new ApolloServer({
       engine: {
-        apiKey: process.env.ENGINE_API_KEY
+        apiKey: process.env.ENGINE_API_KEY,
       },
       // enable debug for development environment only
       debug: isDevelopmentEnvironment,
@@ -115,11 +115,12 @@ export default resolveGraphqlDefinitions()
         if (!isProductionEnvironment && shouldAutoLogin && !req.session.user) {
           user = await models.user.findOne({
             where: {
-              id: users[0].id
+              id: users[0].id,
             },
-            raw: true
+            raw: true,
           });
           req.session.isAuthenticated = true;
+          debug(`Auto-logging in as ${user.username}`);
         }
         // otherwise, confirm that the user in session exists
         else {
@@ -127,16 +128,16 @@ export default resolveGraphqlDefinitions()
             // load the user for this session
             user = await models.user.findOne({
               where: {
-                id: req.session.user.id
+                id: req.session.user.id,
               },
-              raw: true
+              raw: true,
             });
 
             if (user) {
               // set the google refresh token (in case of expiry)
               oauth2Client.setCredentials({
                 refresh_token: user.refreshToken,
-                access_token: req.session.tokens.access_token
+                access_token: req.session.tokens.access_token,
               });
             } else {
               debug(
@@ -156,16 +157,16 @@ export default resolveGraphqlDefinitions()
         // pass context into our resolvers
         return {
           session: req.session,
-          me: req.session.user ? req.session.user : null
+          me: req.session.user ? req.session.user : null,
         };
-      }
+      },
     });
 
     // apply our web server as middleware to apollo-server
     server.applyMiddleware({
       app,
       // apply cors
-      cors: corsMiddleware
+      cors: corsMiddleware,
     });
 
     // catch 404 and forward to error handler
@@ -185,14 +186,14 @@ export default resolveGraphqlDefinitions()
       res.json({
         errors: [
           {
-            message: err.message
-          }
-        ]
+            message: err.message,
+          },
+        ],
       });
     });
 
     return app;
   })
-  .catch(e => {
+  .catch((e) => {
     console.error("Failed to build the application:", e);
   });

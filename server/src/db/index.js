@@ -1,6 +1,5 @@
 import Sequelize from "sequelize";
-import { execSync } from "child_process";
-import { join, resolve } from "path";
+import { join } from "path";
 import debugLib from "debug";
 import glob from "glob";
 
@@ -20,7 +19,10 @@ export const sequelize = new Sequelize(
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: process.env.DB_DIALECT,
-    logging: !(isProductionEnvironment || isCIEnvironment)
+    logging:
+      !(isProductionEnvironment || isCIEnvironment) === false
+        ? false
+        : console.log,
   }
 );
 
@@ -56,7 +58,7 @@ export default async () => {
      * For example, postgres and mysql both have a default database of the same
      * names upon initialization of each service.
      */
-    console.log(`Initializing the database '${process.env.DB_NAME}', conn string`);
+    console.log(`Initializing the database '${process.env.DB_NAME}'`);
 
     const tempConnection = new Sequelize(connectionString);
     await tempConnection.queryInterface.createDatabase(process.env.DB_NAME);
