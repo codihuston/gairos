@@ -92,7 +92,7 @@ function onListening() {
     server.on("error", onError);
     server.on("listening", onListening);
   } catch (e) {
-    console.error("FATAL: Failed building the server", e);
+    console.error("FATAL: Failed starting the server", e);
     process.exit(1);
   }
 })();
