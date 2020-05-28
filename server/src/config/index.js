@@ -5,6 +5,7 @@ import {
   isProductionEnvironment,
   isCiEnvironment,
   isDevelopmentEnvironment,
+  isTestEnvironment,
 } from "../utils";
 import debugLib from "debug";
 
@@ -21,20 +22,32 @@ function validateEnvironmentVariables() {
   // add any required environment variables
   const defaultConfig = parse(readFileSync(resolve(root, exampleConfig)));
   const requiredKeys = Object.keys(defaultConfig || []);
+  let warnings = [];
+  let errors = [];
 
   for (var i = 0; i < requiredKeys.length; i++) {
     const k = requiredKeys[i];
     const v = defaultConfig[k];
+
+    if (!isProductionEnvironment || !isCiEnvironment) {
+      debug(`${k}=${v}`);
+    }
+
     // if a key is defined in `.env-example`, but HAS NO value, it is OPTIONAL
     if (process.env && k && !v) {
-      debug(`WARNING: Optional environment variable '${k}' is not set!`);
+      warnings.push(
+        `WARNING: Optional environment variable '${k}' is not set!`
+      );
     }
     // if a key is defined in `.env-example`, and HAS a value, it is REQUIRED
     else if (process.env && k && !process.env[k]) {
-      console.error(`FATAL: Required environment variable '${k}' is not set!`);
+      errors.push(`FATAL: Required environment variable '${k}' is not set!`);
       isValid = false;
     }
   }
+
+  warnings.map((w) => debug(w));
+  errors.map((e) => console.error(e));
 
   return isValid;
 }
