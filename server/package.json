@@ -25,9 +25,9 @@
     "test:unit": "cross-env NODE_ENV=test DEBUG=server:*,test:* jest .*.unit.spec.js",
     "test:int": "cross-env NODE_ENV=test DEBUG=server:*,test:* jest .*.int.spec.js",
     "test:e2e": "cross-env NODE_ENV=test DEBUG=server:*,test:* jest .*.e2e.spec.js",
-    "test:db:sync": "cross-env NODE_ENV=test babel-node ./src/db/sync.js",
-    "test:db:migrate": "cross-env NODE_ENV=test sequelize-cli db:migrate",
-    "test:db:seed": "cross-env NODE_ENV=test sequelize-cli db:seed:all",
+    "test:db:sync": "cross-env NODE_ENV=test DEBUG=server:*,test:* babel-node ./src/db/sync.js",
+    "test:db:migrate": "cross-env NODE_ENV=test DEBUG=server:*,test:* sequelize-cli db:migrate",
+    "test:db:seed": "cross-env NODE_ENV=test DEBUG=server:*,test:* sequelize-cli db:seed:all",
     "CI-CD      ": "----------------------------------------------------------",
     "db:seed:ci": "sequelize-cli db:seed:all --env ci"
   },
