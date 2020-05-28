@@ -1,12 +1,11 @@
 import { createTestClient } from "apollo-server-testing";
 import debugLib from "debug";
 import moment from "moment";
-
-import DatabaseConnector from "../../../../db";
+import DatabaseConnector from "../../../../db"; // eslint-disable-line
 import {
   getDefaultContext,
   buildApolloServer,
-  createTestUser
+  createTestUser,
 } from "../../../../test/utils";
 import { mockResponses, mockQueries, mockMutations } from ".";
 
@@ -20,11 +19,14 @@ let userTaskHistory = null;
 describe("user integration tests", function() {
   // pre-configure the test environment
   beforeAll(async () => {
+    const debug = debugLib("test:create test user");
     // use try/catch in async tests to handle unhandled promise rejections
     try {
-      await expect(DatabaseConnector()).resolves.toBeUndefined();
+      debug("Please wait while creating a user...");
       user = await createTestUser();
       expect(user).toEqual(expect.any(Object));
+
+      debug("Successfully created test user ->", user);
 
       // always return to ensure promises resolve before all tests
       return user;
@@ -46,14 +48,14 @@ describe("user integration tests", function() {
           name: "FAKE TAG",
           description: "FAKE DESCRIPTION",
           foregroundColor: "#ffffff",
-          backgroundColor: "#000000"
+          backgroundColor: "#000000",
         };
         // set user in context as expected by the apollo server
         const context = getDefaultContext({ me: user });
 
         // create an instance of the server
         const { server, typeDefs, dataSources } = await buildApolloServer({
-          context
+          context,
         });
 
         debug("context", context({ req: null, res: null }));
@@ -64,7 +66,7 @@ describe("user integration tests", function() {
         // submit gql query/mutation
         const res = await mutate({
           mutation,
-          variables
+          variables,
         });
 
         debug("result", JSON.stringify(res, null, 4));
@@ -98,14 +100,14 @@ describe("user integration tests", function() {
         const variables = {
           name: "FAKE TASK",
           description: "FAKE DESCRIPTION",
-          eventColorId: "1"
+          eventColorId: "1",
         };
         // set user in context as expected by the apollo server
         const context = getDefaultContext({ me: user });
 
         // create an instance of the server
         const { server, typeDefs, dataSources } = await buildApolloServer({
-          context
+          context,
         });
 
         debug("context", context({ req: null, res: null }));
@@ -116,7 +118,7 @@ describe("user integration tests", function() {
         // submit gql query/mutation
         const res = await mutate({
           mutation,
-          variables
+          variables,
         });
 
         debug("result", JSON.stringify(res, null, 4));
@@ -152,7 +154,7 @@ describe("user integration tests", function() {
           userTaskId: userTask.id,
           eventId: "FAKE ID",
           startTime: nowAsISO,
-          endTime: nowAsISO
+          endTime: nowAsISO,
         };
         // define the expected response
         const expected = Object.assign({}, variables);
@@ -163,7 +165,7 @@ describe("user integration tests", function() {
 
         // create an instance of the server
         const { server, typeDefs, dataSources } = await buildApolloServer({
-          context
+          context,
         });
 
         // mock the 3rd party API used in this call
@@ -182,7 +184,7 @@ describe("user integration tests", function() {
         // submit gql query/mutation
         const res = await mutate({
           mutation,
-          variables
+          variables,
         });
 
         debug("result", JSON.stringify(res, null, 4));
@@ -225,7 +227,7 @@ describe("user integration tests", function() {
           userTaskId: userTask.id,
           eventColorId: "2",
           startTime: nowAsISO,
-          endTime: nowAsISO
+          endTime: nowAsISO,
         };
         // define the expected response
         const expected = Object.assign({}, variables);
@@ -236,7 +238,7 @@ describe("user integration tests", function() {
 
         // create an instance of the server
         const { server, typeDefs, dataSources } = await buildApolloServer({
-          context
+          context,
         });
 
         // mock the 3rd party API used in this call
@@ -260,7 +262,7 @@ describe("user integration tests", function() {
         // submit gql query/mutation
         const res = await mutate({
           mutation,
-          variables
+          variables,
         });
 
         debug("result", JSON.stringify(res, null, 4));
@@ -282,14 +284,14 @@ describe("user integration tests", function() {
         const mutationName = "deleteMyTaskHistory";
         const mutation = mockMutations[mutationName];
         const variables = {
-          id: userTaskHistory.id
+          id: userTaskHistory.id,
         };
         // set user in context as expected by the apollo server
         const context = getDefaultContext({ me: user });
 
         // create an instance of the server
         const { server, typeDefs, dataSources } = await buildApolloServer({
-          context
+          context,
         });
 
         debug("context", context({ req: null, res: null }));
@@ -307,7 +309,7 @@ describe("user integration tests", function() {
         // submit gql query/mutation
         const res = await mutate({
           mutation,
-          variables
+          variables,
         });
 
         debug("result", JSON.stringify(res, null, 4));
@@ -331,7 +333,7 @@ describe("user integration tests", function() {
         const mutation = mockMutations[mutationName];
         const variables = {
           userTagId: userTag.id,
-          name: "NEW TAG NAME"
+          name: "NEW TAG NAME",
         };
         // define the expected response
         const expected = Object.assign({}, variables);
@@ -342,7 +344,7 @@ describe("user integration tests", function() {
 
         // create an instance of the server
         const { server, typeDefs, dataSources } = await buildApolloServer({
-          context
+          context,
         });
 
         debug("context", context({ req: null, res: null }));
@@ -353,7 +355,7 @@ describe("user integration tests", function() {
         // submit gql query/mutation
         const res = await mutate({
           mutation,
-          variables
+          variables,
         });
 
         debug("result", JSON.stringify(res, null, 4));
@@ -384,7 +386,7 @@ describe("user integration tests", function() {
           isPublic: false,
           isArchived: true,
           foregroundColor: "#000000",
-          backgroundColor: "#ffffff"
+          backgroundColor: "#ffffff",
         };
         // define the expected response
         const expected = Object.assign({}, variables);
@@ -395,7 +397,7 @@ describe("user integration tests", function() {
 
         // create an instance of the server
         const { server, typeDefs, dataSources } = await buildApolloServer({
-          context
+          context,
         });
 
         debug("context", context({ req: null, res: null }));
@@ -406,7 +408,7 @@ describe("user integration tests", function() {
         // submit gql query/mutation
         const res = await mutate({
           mutation,
-          variables
+          variables,
         });
 
         debug("result", JSON.stringify(res, null, 4));
@@ -431,14 +433,14 @@ describe("user integration tests", function() {
         const mutationName = "deleteMyTag";
         const mutation = mockMutations[mutationName];
         const variables = {
-          userTagId: userTag.id
+          userTagId: userTag.id,
         };
         // set user in context as expected by the apollo server
         const context = getDefaultContext({ me: user });
 
         // create an instance of the server
         const { server, typeDefs, dataSources } = await buildApolloServer({
-          context
+          context,
         });
 
         debug("context", context({ req: null, res: null }));
@@ -449,7 +451,7 @@ describe("user integration tests", function() {
         // submit gql query/mutation
         const res = await mutate({
           mutation,
-          variables
+          variables,
         });
 
         debug("result", JSON.stringify(res, null, 4));
@@ -473,7 +475,7 @@ describe("user integration tests", function() {
         const mutation = mockMutations[mutationName];
         const variables = {
           userTaskId: userTask.id,
-          name: "NEW TASK NAME"
+          name: "NEW TASK NAME",
         };
         // define the expected response
         const expected = Object.assign({}, variables);
@@ -484,7 +486,7 @@ describe("user integration tests", function() {
 
         // create an instance of the server
         const { server, typeDefs, dataSources } = await buildApolloServer({
-          context
+          context,
         });
 
         debug("context", context({ req: null, res: null }));
@@ -495,7 +497,7 @@ describe("user integration tests", function() {
         // submit gql query/mutation
         const res = await mutate({
           mutation,
-          variables
+          variables,
         });
 
         debug("result", JSON.stringify(res, null, 4));
@@ -525,7 +527,7 @@ describe("user integration tests", function() {
           description: "UPDATED DESCRIPTION",
           isPublic: false,
           isArchived: true,
-          eventColorId: "1"
+          eventColorId: "1",
         };
         // define the expected response
         const expected = Object.assign({}, variables);
@@ -537,7 +539,7 @@ describe("user integration tests", function() {
 
         // create an instance of the server
         const { server, typeDefs, dataSources } = await buildApolloServer({
-          context
+          context,
         });
 
         debug("context", context({ req: null, res: null }));
@@ -548,7 +550,7 @@ describe("user integration tests", function() {
         // submit gql query/mutation
         const res = await mutate({
           mutation,
-          variables
+          variables,
         });
 
         debug("result", JSON.stringify(res, null, 4));
@@ -570,14 +572,14 @@ describe("user integration tests", function() {
         const mutationName = "deleteMyTask";
         const mutation = mockMutations[mutationName];
         const variables = {
-          userTaskId: userTask.id
+          userTaskId: userTask.id,
         };
         // set user in context as expected by the apollo server
         const context = getDefaultContext({ me: user });
 
         // create an instance of the server
         const { server, typeDefs, dataSources } = await buildApolloServer({
-          context
+          context,
         });
 
         debug("context", context({ req: null, res: null }));
@@ -588,7 +590,7 @@ describe("user integration tests", function() {
         // submit gql query/mutation
         const res = await mutate({
           mutation,
-          variables
+          variables,
         });
 
         debug("result", JSON.stringify(res, null, 4));
@@ -617,7 +619,7 @@ describe("user integration tests", function() {
           calendarId: "FAKE ID",
           calendarColorId: "3",
           scheduleCalendarId: "FAKE ID",
-          scheduleCalendarColorId: "4"
+          scheduleCalendarColorId: "4",
         };
         // define the expected response
         const expected = Object.assign({}, variables);
@@ -627,7 +629,7 @@ describe("user integration tests", function() {
 
         // create an instance of the server
         const { server, typeDefs, dataSources } = await buildApolloServer({
-          context
+          context,
         });
 
         debug("context", context({ req: null, res: null }));
@@ -638,7 +640,7 @@ describe("user integration tests", function() {
         // submit gql query/mutation
         const res = await mutate({
           mutation,
-          variables
+          variables,
         });
 
         debug("result", JSON.stringify(res, null, 4));

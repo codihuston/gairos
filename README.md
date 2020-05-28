@@ -171,34 +171,7 @@ If you are having build issues, I suggest setting an environment variable
 
 #### Testing the Server
 
-If you want to run unit tests, first create the `.env-test` file in
-`server/src/config`, similarly to how you created `.env-development`. This file
-is `required` when running testing locally. Note that the `yarn run test:*`
-commands do not explicitly set `NODE_ENV` to `test`. This is so that these
-commands can be recycled in the `CI/CD` pipeline; you must set `NODE_ENV=test`
-in your `.env-test` file.
-
-Then run either of the following commands:
-
-1. `yarn run test`
-1. `yarn run watch:test` will re-run tests when you make file changes; see
-`nodemon-test.json` for which files are being watched
-
-Note:
-
-1. if your development server is currently running when attempting to run tests,
-and if your `.env-test` has your test server listening on the same port, the
-tests cannot run. It is recommended to run only one environment at a time at
-this moment; otherwise, configure your `.env-test` differently. 
-
-    `Note: they may use the same DB_* credentials, it is just the APP_*
-    variables that I am referring to`
-
-1. either of the above testing options will print debug messages that use
-the `debug npm module`. The messages, when printed, will include the
-test suite name, and name of the test itself in hopes to make the logs more
-readable, assisting with debugging. See `server/test` for how that utilize this
-logger.
+See the `server\src\test\README.md` file for more information.
 
 #### Actually Developing
 
@@ -343,9 +316,51 @@ requests are mocked out. This should also not apply to production because
 the session should be properly managed between the front-end and back-end
 without the `same-origin` issue described in the linked issue.
 
-#### Continuous Integration Pipeline (CI/CD)
-View the `.travis.yml` file in the root of the project. Note that the test
-command does not explicitly set the `NODE_ENV` environment variable. This
-must be explicitly set in the `CI/CD` configuration (the aforementioned `.yml`
-file). That way, when running the `yarn run test:*` commands, the correct
-environment is used.
+#### Continuous Integration Pipeline (CI/CD) - WORK IN PROGRESS
+
+View the `.travis.yml` file in the root of the project.
+
+The problem with integration tests is providing a database at CI/CD time. In
+general, the CI/CD pipeline will look like so:
+
+1. Build images of `client`, and `server`
+1. Run unit tests
+1. Run integration tests; when running these tests on the `server` component, we
+need to ensure that either:
+
+    1. We provide connection credentials in the environment variables which
+    point to testing servers that are out side of the CI/CD context
+
+    1. We spring up a database within the CI/CD context to be used for testing.
+    This is the option that I'll likely go for. This means that we need to also
+    ensure that the new test database is:
+
+        1. Is created
+
+        1. The database schema is synced to our models
+
+    Integration tests on the `client` component should really just consist of
+    testing multiple components together, so we don't need to worry about any
+    external connections for it.
+
+1. Run end-to-end tests; this might be far too out of scope for this project
+for now. I'd like to implement Contract Testing
+
+With this being said, in order to initialize the database when using the
+docker image that was created for the `server` component, we need to run
+something like the following commands in order:
+
+```cmd
+# create the server image
+docker build -t some-repo/server-test -f ./server/Dockerfile.dev ./server
+
+# create a db instance
+docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword `
+  -d postgres
+
+# create and sync the database
+docker run some-repo/server-test yarn run test:db:sync
+
+# run the tests
+docker run some-repo/server-test yarn run test:int
+```

@@ -4,10 +4,12 @@
  * Module dependencies.
  */
 
-import config from "../config"; // eslint-disable-line
-import app from "../app";
 import http from "http";
-import DatabaseConnector from "../db";
+import app from "../app";
+// init environment variables, if they aren't already
+import config from "../config"; // eslint-disable-line
+// connect to the database
+import DatabaseConnector from "../db"; // eslint-disable-line
 
 const port = normalizePort(process.env.APP_PORT || "3000");
 let server = null;
@@ -79,11 +81,6 @@ function onListening() {
      * Create HTTP server.
      */
     server = http.createServer(appInstance);
-
-    /**
-     * Connect to the database.
-     */
-    await DatabaseConnector();
 
     /**
      * Listen on provided port, on all network interfaces.

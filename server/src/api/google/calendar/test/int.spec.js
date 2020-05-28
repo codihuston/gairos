@@ -17,9 +17,9 @@ describe("GraphQL Queries", function() {
       context: () => ({
         user: {
           id: 1,
-          username: "fake user"
-        }
-      })
+          username: "fake user",
+        },
+      }),
     });
 
     // fetch the API to test
