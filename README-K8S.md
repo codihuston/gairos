@@ -75,7 +75,8 @@ Otherwise, use the provided `ingress-nginx-config-example.yml` file as such:
     1. The variables here will NOT overwrite any environment variables
     pre-defined in said `k8s` files, as the `.env-*` files are ignored from the docker image build process, and will never appear in the `k8s` Pods
 
-    1. The purpose of doing this step is so that the commands used to set up the database (discussed later in this step-by-step) or run tests for the server will work (see: Testing the Server)
+    1. The purpose of doing this step is so that the commands used to set up the database (discussed later in this step-by-step) or run tests for the server can be
+    ran from your local machine (see: Testing the Server)
 
     > Note: Any `REQUIRED` variables that exist in the `.env-example` file also should be defined in the `k8s-dev/*-deployments.yml` files!
 
@@ -169,7 +170,7 @@ dependencies for the `server`.
         yarn run dev:db:seed
         ```
 
-### Testing the Project
+### Testing the Server
 
 Testing will only happen in the following two cases and environments:
 
