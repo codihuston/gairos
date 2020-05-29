@@ -38,10 +38,10 @@ spec:
             - name: REACT_APP_API_DOMAIN
               value: localhost
             - name: REACT_APP_API_PORT
-              value: "8000"
+              value: "80"
             - name: REACT_APP_API_AUTH_URL
-              value: auth/google
+              value: api/auth/google
             - name: REACT_APP_API_LOGOUT_URL
-              value: auth/logout
+              value: api/auth/logout
             - name: REACT_APP_API_GRAPHQL_URL
-              value: graphql
+              value: api/graphql
