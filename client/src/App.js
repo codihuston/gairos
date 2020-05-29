@@ -48,7 +48,7 @@ function App({ apolloClient, isLoading }) {
 
 App.propTypes = {
   apolloClient: PropTypes.object,
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
 };
 
 export default App;

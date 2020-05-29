@@ -10,6 +10,15 @@ build:
         dockerfile: Dockerfile.dev
       sync:
         '***/*.js': .
+    - image: codihuston/gairos-client
+      context: client
+      docker:
+        dockerfile: Dockerfile.dev
+      sync:
+        '***/*.js': .
+        '***/*.css': .
+        '***/*.scss': .
+        '***/*.html': .
 deploy:
   kubectl:
     manifests:

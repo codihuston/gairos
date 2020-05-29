@@ -10,7 +10,7 @@ export default function Login() {
       <div
         className="m-auto text-center"
         style={{
-          width: "50vh"
+          width: "50vh",
         }}
       >
         <h1 className="text-center">Welcome to {APP_NAME}!</h1>

@@ -1,0 +1,9 @@
+ARG FONTAWESOME_NPM_AUTH_TOKEN
+FROM node:alpine
+WORKDIR "/app"
+COPY ./package.json .
+COPY ./.npmrc .npmrc
+RUN npm install
+COPY . .
+RUN rm -f .npmrc
+CMD ["npm", "run", "dev"]

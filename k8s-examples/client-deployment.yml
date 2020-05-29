@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: client
+  template:
+    metadata:
+      labels:
+        component: client
+    spec:
+      containers:
+        - name: client
+          image: codihuston/gairos-client
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "0.2"
+            limits:
+              memory: "512Mi"
+              cpu: "0.2"
+          ports:
+            - containerPort: 3000
+          env:
+            # build config
+            - name: CI
+              value: "true"
+            - name: FONTAWESOME_NPM_AUTH_TOKEN
+              value: "CHANGE_ME"
+            # app config
+            - name: REACT_APP_NAME
+              value: Gairos
+            - name: REACT_APP_API_HTTP_SCHEME
+              value: http
+            - name: REACT_APP_API_DOMAIN
+              value: localhost
+            - name: REACT_APP_API_PORT
+              value: "8000"
+            - name: REACT_APP_API_AUTH_URL
+              value: auth/google
+            - name: REACT_APP_API_LOGOUT_URL
+              value: auth/logout
+            - name: REACT_APP_API_GRAPHQL_URL
+              value: graphql
