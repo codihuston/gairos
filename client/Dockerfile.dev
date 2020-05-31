@@ -1,8 +1,13 @@
-ARG FONTAWESOME_NPM_AUTH_TOKEN
+# WARNING: never push the images built from
+# this file to the cloud, as the secret stored in ARG 
+# will be visible in `docker history <img_id>.
+# This is intended only for local development. This 
+# security issue is handled  when building @ CI/CD time!
 FROM node:alpine
+ARG FONTAWESOME_NPM_AUTH_TOKEN
 WORKDIR "/app"
 COPY ./package.json .
-COPY ./.npmrc .npmrc
+COPY ./.npmrc .
 RUN npm install
 COPY . .
 RUN rm -f .npmrc

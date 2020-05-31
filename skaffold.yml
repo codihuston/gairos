@@ -14,6 +14,8 @@ build:
       context: client
       docker:
         dockerfile: Dockerfile.dev
+        buildArgs:
+          FONTAWESOME_NPM_AUTH_TOKEN: "{{.FONTAWESOME_NPM_AUTH_TOKEN}}"
       sync:
         '***/*.js': .
         '***/*.css': .

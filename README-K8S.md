@@ -62,11 +62,19 @@ Otherwise, use the provided `ingress-nginx-config-example.yml` file as such:
     See `k8s-dev/README.md` if you are operating in a different environment
     for additional instructions
 
-1. Copy the contents of `server/.env-example` to:
+1. Initialize secure environment variables. You can do this in your bash
+profile (Linux) or user/machine-level environment variables (Windows)
 
-    1. `server/.env-development`
+    1. `FONTAWESOME_NPM_AUTH_TOKEN=GET_KEY_FROM_REPO_OWNER`.
 
-    1. `server/.env-test`
+    > NOTE: This is used to authenticate to the fontawesome pro
+    registry, `and is required when building the client application.`
+
+1. Copy the contents of...
+
+    1. `server/.env-example` to `server/.env-development` and `server/.env-test`
+
+    1. `client/.env-example` to `client/.env-development` and `client/.env-test`
 
     A few things to know about these files:
 
@@ -80,11 +88,13 @@ Otherwise, use the provided `ingress-nginx-config-example.yml` file as such:
 
     > Note: Any `REQUIRED` variables that exist in the `.env-example` file also should be defined in the `k8s-dev/*-deployments.yml` files!
 
-1. Install dependencies for each project. Below is an example of installing
-dependencies for the `server`.
+1. Install dependencies for each project.
 
     ```cmd
     cd server
+    yarn install
+
+    cd client
     yarn install
     ```
 
@@ -127,6 +137,7 @@ dependencies for the `server`.
 
     The applications in this project are served on `localhost` as follows:
 
+    1. Client / front-end app: `localhost`
     1. API Server: `localhost/api`
     1. SQL Server:
         1. For connecting from within the Kubernetes cluster (API server / etc.), use: `sql-cluster-ip-service` and port `3306`. (See the `sql-cluster-ip-service.yml` and `sql-deployment.yml` files)
