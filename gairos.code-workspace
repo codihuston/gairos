@@ -6,6 +6,8 @@
   ],
   "settings": {
     // Set the default
+    "eslint.enable": true,
+    "eslint.alwaysShowStatus": true,
     "editor.formatOnSave": false,
     // Enable per-language
     "[javascript]": {
