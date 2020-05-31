@@ -181,20 +181,28 @@ profile (Linux) or user/machine-level environment variables (Windows)
         yarn run dev:db:seed
         ```
 
-### Testing the Server
+### Testing the Project
 
-Testing will only happen in the following two cases and environments:
+You can run tests as follows:
 
-1. Locally
+1. The ideal option: run tests Locally (on your host machine, while your pods are running)
+
+    `IMPORTANT:` Be sure that your dependencies are installed locally. Also
+    recall that your `.env-*` files must be configured as mentioned
+    previously in order for the tests that need to access external resouces
+    (e.g. the database).
+
+    The reason this is the preferred method is because the testing database
+    can be kept entirely separate from the `development` database.
 
     Simply run `yarn run test` in the directory of the application that you
     want to test.
 
-    > Note: Your tests should not include the use of any external resources.
-    Those should be mocked out. That is, calls to to a database should not
-    literally be executed. You would test what would happen if such a call
-    failed/succeeded. Unit and Integration tests should test smaller and
-    larger pieces of the codebase
+    > Note: Unit tests should not rely on external sources.
+    
+    > Note: Integration tests should test larger pieces of the codebase, and
+    sometimes, it may be appropriate to read/write to/from external services
+    (e.g. the database)
 
     > Note: The End-to-End tests should be implemented
     in by Testing Server (which this repo does not provide) during CI/CD. That
@@ -202,10 +210,38 @@ Testing will only happen in the following two cases and environments:
     configure such a database for such environment, exactly how the
     `yarn dev:db:*` commands do
 
-1. In the CI/CD pipeline
+  1. A secondary option: within the context of the pods
 
-    1. At some point in the pipeline you should build all of the
-    `<application>/Dockerfile.dev` files with the `npm run test` command set as
-    the image Default Command
-    1. You should then run each of those images, stopping the pipeline if
-    any of those fail unexpectedly
+      The reason that this is the secondary option is because, if you
+      run the tests from within the pods, the tests will be run using the
+      environment variables defined within said pods. Remember that the
+      `.env-*` files are not applied to the pods out-of-box, and that those
+      variables are defined in the `k8s-dev` files.
+
+      That is, if you run tests in the pods initialized from the `skaffold`
+      setup, those pods will contain the environment variables for the
+      `development` environment, and therefore your integration tests
+      may write to that database!
+
+      ```cmd
+      > kubectl get pods
+
+      NAME                                 READY   STATUS    RESTARTS   AGE
+      client-deployment-5dbd5ccd7f-nv8q5   1/1     Running   0          11m
+      server-deployment-747bfc4578-jfwd5   1/1     Running   0          11m
+      sql-deployment-5b8d4c57b-75q9c       1/1     Running   0          11m
+
+      # test the client
+      > kubectl exec -it client-deployment-5dbd5ccd7f-nv8q5 yarn run test
+
+      # test the server
+      > kubectl exec -it server-deployment-747bfc4578-jfwd5 yarn run test
+      ```
+
+  1. In the CI/CD pipeline
+
+      1. At some point in the pipeline you should build all of the
+      `<application>/Dockerfile.dev` files with the `npm run test` command set as the image Default Command. Be sure to inject the necessary
+      environment variables when running the image
+      1. You should then run each of those images, stopping the pipeline if
+      any of those fail unexpectedly
